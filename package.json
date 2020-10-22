@@ -14,8 +14,10 @@
     "@quasar/extras": "^1.0.0",
     "@vue/composition-api": "^0.6.4",
     "axios": "^0.18.1",
+    "change-case": "^4.1.1",
     "core-js": "^3.6.5",
     "git-commit-msg-linter": "^3.0.0",
+    "pluralize": "^8.0.0",
     "quasar": "^1.0.0",
     "standard-version": "^9.0.0",
     "vue-text-highlight": "^2.0.10"
