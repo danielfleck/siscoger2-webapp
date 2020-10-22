@@ -1,0 +1,59 @@
+<template>
+  <q-tab-panel name="rel_situacao">
+    <q-btn color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancias/inserir"/>
+    <Table
+      label="Rel. Situação"
+      :data="data"
+      :columns="columns"
+      actions
+      @delete="onDelete"
+      @edit="onEdit"
+    />
+  </q-tab-panel>
+</template>
+
+<script lang="ts">
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import Table from 'components/pages/Table.vue'
+import { get, deleteData } from 'src/libs/api'
+import { confirmMsg } from 'src/libs/dialog'
+
+export default defineComponent({
+  name: 'RelSituacao',
+  components: { Table },
+  setup (_, { root }) {
+    const vars = reactive({
+      data: [],
+      columns: [
+        { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
+        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
+        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left' },
+        { name: 'actions', label: 'Ações', field: 'actions' }
+      ],
+    })
+    const functions = {
+      async loadData () {
+        const { data } = await get('sindicancias')
+        vars.data = Object.freeze(data)
+      },
+      onEdit (row: any) {
+        void root.$router.push(`/sindicancias/editar/${row.id_sindicancia}`)
+      },
+      onDelete (row: any) {
+        console.log(row.id_sindicancia)
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          await deleteData(`sindicancias/${row.id_sindicancia}`)
+          void this.loadData()
+        })
+      },
+    }
+    void functions.loadData()
+
+    return {
+      ...toRefs(vars),
+      ...functions
+    }
+  }
+})
+</script>
