@@ -17,7 +17,8 @@
     "core-js": "^3.6.5",
     "git-commit-msg-linter": "^3.0.0",
     "quasar": "^1.0.0",
-    "standard-version": "^9.0.0"
+    "standard-version": "^9.0.0",
+    "vue-text-highlight": "^2.0.10"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
