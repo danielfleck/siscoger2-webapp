@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.2.0...v0.3.0) (2020-10-22)
+
+
+### Features
+
+* add form components ([519c493](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/519c49371c1fc67fed3ae72d467aeca19138b7ff))
+
 ## [0.2.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.1.0...v0.2.0) (2020-10-22)
 
 
