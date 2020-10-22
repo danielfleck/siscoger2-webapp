@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.4.0...v0.5.0) (2020-10-22)
+
+
+### Features
+
+* add subform components ([f9a9601](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/f9a9601400706ef3927799fd3237ee203fdacffe))
+
 ## [0.4.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.3.0...v0.4.0) (2020-10-22)
 
 
