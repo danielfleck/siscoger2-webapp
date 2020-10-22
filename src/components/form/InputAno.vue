@@ -1,0 +1,110 @@
+<template>
+  <q-select 
+  :dense="denseVal" 
+  hide-bottom-space
+  clearable
+  outlined
+  v-model="_value"
+  emit-value
+  map-options
+  :options="options"
+  ref="root"
+  :label="label"
+  @blur="validable = true"
+  @validate="validate"
+  :error-message="errorMsg"
+  :error="!isValid"
+  :disable="disable" 
+  />
+</template>
+
+<script lang="ts">
+import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
+import { postograd} from 'src/config/selects'
+
+declare type Mixed = number | string
+export default defineComponent({
+  name: 'PostoGrad',
+  props: {
+    label: {
+      type: String,
+      default: 'Ano'
+    },
+    value: {
+      default: ''
+    },
+    disable: {
+      type: Boolean,
+      default: false
+    },
+    required: {
+      type: Boolean,
+      default: false
+    },
+    select: {
+      type: Boolean,
+      default: false
+    },
+    all: {
+      type: Boolean,
+      default: false
+    },
+    start: {
+      type: Number,
+      default: 2007
+    },
+    end: {
+      type: Number, 
+      default: () => new Date().getFullYear()
+    },
+  },
+  setup (props, { root, emit, refs }) {
+    const vars = reactive({
+      errorMsg: '',
+      validable: false,
+      denseVal: computed(() => root.$store.state.configs.dense),
+      isValid: computed(() => {
+        if (!vars.validable) return true
+        if (props.required && !vars._value) {
+          vars.errorMsg = `${props.label} é obrigatório`
+          return false
+        }
+        return true
+      }),
+      _value: computed({
+        get: () => props.value,
+        set: value => emit('input', value)
+      }),
+      options: [] as Mixed[]
+    })
+
+    const functions = {
+      validate () {
+        vars.validable = true
+        refs.root.validate()
+        return vars.isValid
+      },
+      getOptions () {
+        const start = props.end || new Date().getFullYear()
+        const end = props.start || 2007
+        const tam = start - end
+        const options: Mixed[] = Array.from({length: tam}, (value, index) => start - index)
+        if (props.select) options.unshift('')
+        if (props.all) options.unshift('todos')
+        vars.options = options
+      }
+    }
+    watch(() => vars._value, () => vars.validable = true)
+    void functions.getOptions()
+
+    return {
+      ...toRefs(vars),
+      ...functions
+    }
+  }
+})
+</script>
+
+<style>
+
+</style>
