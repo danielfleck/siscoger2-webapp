@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.10.0...v0.11.0) (2020-10-22)
+
+
+### Features
+
+* add routes ([a317761](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/a317761b1fac7410839d899a1e4283d8d88a142c))
+
 ## [0.10.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.9.0...v0.10.0) (2020-10-22)
 
 
