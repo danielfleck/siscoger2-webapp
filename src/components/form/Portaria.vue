@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { toLowercase, ucFirst } from 'src/filters'
 import { post } from 'src/libs/api'
@@ -116,9 +117,9 @@ export default defineComponent({
           const response = await post(`${proc}/portarias`, {
             cdopm: props.cdopm,
             portaria_numero: value
-          })
+          }, { silent: true })
 
-          if (response) {
+          if (response?.proc) {
             refs.dialog.show()
             vars.msg = {
               proc: ucFirst(props.proc),
@@ -129,7 +130,7 @@ export default defineComponent({
       }
     }
 
-    watch(() => vars._value, () => vars.validable = true)
+    watch(() => vars._value, () => (vars.validable = true))
     watch(() => props.cdopm, () => functions.checkDuplicated(vars._value))
 
     return {

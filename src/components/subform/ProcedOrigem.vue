@@ -105,7 +105,7 @@ export default defineComponent({
     })
     const functions = {
       async loadData () {
-        vars.registers = await post('ligacoes/search', props.data)
+        vars.registers = await post('ligacoes/search', props.data, { silent: true })
         return true
       },
       async create () {

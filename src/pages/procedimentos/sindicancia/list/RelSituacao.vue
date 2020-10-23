@@ -34,7 +34,7 @@ export default defineComponent({
     })
     const functions = {
       async loadData () {
-        const { data } = await get('sindicancias')
+        const data = await get('sindicancias')
         vars.data = Object.freeze(data)
       },
       onEdit (row: any) {

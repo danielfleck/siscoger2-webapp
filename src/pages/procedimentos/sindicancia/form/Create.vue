@@ -84,7 +84,7 @@
   </page>
 </template>
 <script lang="ts">
-import { defineComponent, computed, toRefs, ref } from '@vue/composition-api'
+import { defineComponent, toRefs, ref } from '@vue/composition-api'
 import {
   Page,
   ProcedOrigem,
@@ -143,13 +143,13 @@ export default defineComponent({
     OPM,
     Portaria
   },
-  setup (_, { refs, root }) {
+  setup (_, { refs }) {
     const sindicante = ref(false)
     const functions = {
       async add () {
         if (validate(refs, fields)) {
-          if (vars?.register?.id) this.update(vars?.register?.id)
-          else this.create()
+          if (vars?.register?.id) await this.update(vars?.register?.id)
+          else await this.create()
         }
       },
       async create () {
