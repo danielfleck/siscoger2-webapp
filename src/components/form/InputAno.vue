@@ -20,11 +20,10 @@
 
 <script lang="ts">
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
-import { postograd } from 'src/config/selects'
 
 declare type Mixed = number | string
 export default defineComponent({
-  name: 'PostoGrad',
+  name: 'InputAno',
   props: {
     label: {
       type: String,
@@ -92,10 +91,11 @@ export default defineComponent({
         if (props.select) options.unshift('')
         if (props.all) options.unshift('todos')
         vars.options = options
+        return true
       }
     }
-    watch(() => vars._value, () => vars.validable = true)
-    void functions.getOptions()
+    watch(() => vars._value, () => (vars.validable = true))
+    functions.getOptions()
 
     return {
       ...toRefs(vars),

@@ -71,7 +71,7 @@ export default defineComponent({
       }
     }
 
-    watch(() => vars._value, () => vars.validable = true)
+    watch(() => vars._value, () => (vars.validable = true))
 
     return {
       ...toRefs(vars),

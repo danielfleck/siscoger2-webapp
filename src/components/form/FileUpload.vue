@@ -53,10 +53,14 @@
 
 <script lang="ts">
 /* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import BtnStack from 'components/form/BtnStack.vue'
+import { getDense } from 'src/store/utils'
 
 export default defineComponent({
   name: 'FileUpload',
@@ -67,24 +71,25 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props, { root, refs }) {
+  setup (props, { root }) {
     const vars = reactive({
       files: [] as File[],
       uploadProgress: [] as any[],
-      uploading: null as any,
+      uploading: null as never,
       register: {
         data_arquivo: '',
         obs: ''
       }
     })
     const computeds = {
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       isUploading: computed(() => vars.uploading !== null),
       canUpload: computed(() => vars.files.length)
     }
     const functions = {
-      cancelFile (index: any) {
+      cancelFile (index: number) {
         vars.files.splice(index, 1)
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         vars.uploadProgress[index] = {
           ...vars.uploadProgress[index],
           percent: 0,
@@ -92,7 +97,7 @@ export default defineComponent({
           color: 'orange-2'
         }
       },
-      getIcon (file: any) {
+      getIcon (file: File) {
         if (file?.type.indexOf('video/') === 0) return 'movie'
         if (file?.type.indexOf('image/') === 0) return 'photo'
         if (file?.type.indexOf('audio/') === 0) return 'audiotrack'
@@ -136,6 +141,7 @@ export default defineComponent({
             done = false
           }
 
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-return
           return {
             ...progress,
             error,
@@ -144,6 +150,7 @@ export default defineComponent({
           }
         })
 
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         vars.uploading = done !== true ? setTimeout(this.__updateUploadProgress, 300) : null
       },
       onBeforeUnmount () {

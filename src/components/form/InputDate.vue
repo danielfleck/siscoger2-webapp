@@ -92,16 +92,16 @@ export default defineComponent({
       },
       getCurrentDate () {
         if (props.defaultToday) vars._value = getCurrentDate()
+        return null
       },
       castDate (date: any) {
-        const n = changeDate(date, 'fr-ca')
-        return date
+        return changeDate(date, 'fr-ca')
       }
     }
 
-    void functions.getCurrentDate()
+    functions.getCurrentDate()
 
-    watch(() => vars._value, () => vars.validable = true)
+    watch(() => vars._value, () => (vars.validable = true))
 
     return {
       ...toRefs(vars),
