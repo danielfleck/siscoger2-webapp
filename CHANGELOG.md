@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.14.3](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.2...v0.14.3) (2020-10-23)
+
+
+### Bug Fixes
+
+* create sindicancia ([b4d2ed9](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/b4d2ed9281978d60116ac36220503b7630b3979f))
+
 ### [0.14.2](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.1...v0.14.2) (2020-10-23)
 
 
