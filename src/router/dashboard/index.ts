@@ -11,7 +11,7 @@ export default [
           { path: 'pendencias-fatd', component: () => import('pages/dashboard/Fatd.vue') },
           { path: 'pendencias-ipm', component: () => import('pages/dashboard/Ipm.vue') },
           { path: 'pendencias-sindicancia', component: () => import('pages/dashboard/Sindicancia.vue') },
-          { path: 'pendencias-cd', component: () => import('pages/dashboard/Cd.vue') },
+          { path: 'pendencias-cd', component: () => import('pages/dashboard/Cd.vue') }
         ]
       }
     ]

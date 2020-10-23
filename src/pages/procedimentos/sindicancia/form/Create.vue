@@ -103,23 +103,23 @@ import {
   InputNumber,
   InputSN,
   OPM,
-  Portaria,
+  Portaria
 } from 'components/index'
 import { post, put } from 'src/libs/api'
 
 import { vars } from './index'
 import { validate } from 'src/libs/validator'
 const fields = [
-  'motivo_cancelamento', 
-  'doc_origem_txt', 
-  'opm', 
-  'portaria_numero', 
-  'sintese_txt', 
-  'portaria_data', 
-  'prorogacao_dias', 
+  'motivo_cancelamento',
+  'doc_origem_txt',
+  'opm',
+  'portaria_numero',
+  'sintese_txt',
+  'portaria_data',
+  'prorogacao_dias',
   'motivo_outros',
-  'sindicante',
-  ]
+  'sindicante'
+]
 
 export default defineComponent({
   name: 'Form',

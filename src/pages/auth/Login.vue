@@ -41,11 +41,11 @@
               <div class="text-center text-dark">ou</div>
             <q-btn id="btnToogle" :disable="!ldapIsActive" color="green-7" class="full-width" :label="ldap ? 'Login com SISCOGER' : 'Login via Expresso'" @click="changeMode"/>
             <q-tooltip
-              v-if="!ldapIsActive" 
+              v-if="!ldapIsActive"
               :target="btnToogle"
               content-class="bg-black"
             >
-              Conexão com Expresso encontra-se fora do ar<br/> 
+              Conexão com Expresso encontra-se fora do ar<br/>
               assim que for reestabelecida essa opção estará<br/>
               disponível novamente
             </q-tooltip>
@@ -68,7 +68,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import { validate, resetValidation } from 'src/libs/validator'
-const fields = ['rg', 'pass','username']
+const fields = ['rg', 'pass', 'username']
 
 export default defineComponent({
   name: 'Login',
@@ -100,7 +100,7 @@ export default defineComponent({
 
     void functions.verifyIfLdapIsActive()
 
-    return { 
+    return {
       ...toRefs(vars),
       ...functions
     }

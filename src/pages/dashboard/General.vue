@@ -36,13 +36,13 @@ export default defineComponent({
       dataTransferencias: [],
       columnsTransferencias: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
       ],
       dataComportamento: [],
       columnsComportamento: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-      ],
+        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
+      ]
     })
     const functions = {
       // async loadData () {

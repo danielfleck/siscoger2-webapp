@@ -85,8 +85,6 @@
       </q-tab-panel>
     </q-tab-panels>
 
-
-
   </page>
 </template>
 
@@ -150,7 +148,7 @@ export default defineComponent({
         }
         vars.onSubmit = false
       },
-      checkDuplicated (value: String) {
+      checkDuplicated (value: string) {
         if (value === '1212/12') refs.dialog.show()
       },
       changeHasSindicante (value: boolean) {

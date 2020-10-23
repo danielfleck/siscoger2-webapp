@@ -3,13 +3,13 @@
 import { Loading, LocalStorage } from 'quasar'
 import axios, { AxiosResponse } from 'axios'
 import { transations } from 'src/config'
-import PrettyLog from '@emersonbraun/pretty-log'
+// import PrettyLog from '@emersonbraun/pretty-log'
 import { errorNotify, successNotify } from './notify'
 
 const getCompleteURL = (URL: string) => {
   const cleanURL = URL.charAt(0) === '/' ? URL.slice(1, URL.length) : URL
   return `http://127.0.0.1:8888/${cleanURL}`
-} 
+}
 
 declare interface Headers {
   Accept: string,
@@ -32,7 +32,6 @@ const getToken = () => {
 
 export const setToken = (token: string) => {
   LocalStorage.set('token', token)
-  return
 }
 
 const setHeaders = (file = false) => {
@@ -60,11 +59,6 @@ const getReturnType = (status: number) => (
   status >= 200 && status < 300 ? 'success' : 'error'
 )
 
-const getMessage = (method, status, message: string) => {
-  if (message) return message
-  return transations[method][status]
-}
-
 function logResponse (response: any) {
   const mainData = {
     method: response.config.method,
@@ -74,106 +68,97 @@ function logResponse (response: any) {
     message: response.statusText,
     'data (count)': response.data.length || 0
   }
-  PrettyLog.success(`Response ${mainData.path}:`)
+  // PrettyLog.success(`Response ${mainData.path}:`)
   console.table(mainData)
 }
 
 function setResponse (response: AxiosResponse, { debug = false }): Response {
-  redirectIfNotLogged (response)
-  if (debug) logResponse (response)
-  delete response.headers.Authorization //remove token of response
+  redirectIfNotLogged(response)
+  if (debug) logResponse(response)
+  delete response.headers.Authorization // remove token of response
   return response.data
 }
 
-export async function get (URL: string, {silent = true, msg = '',debug = false} = {}): Promise<Response> {
+export async function get (URL: string, { silent = true, msg = '', debug = false } = {}): Promise<Response> {
   Loading.show()
   const headers = setHeaders()
   if (debug) console.time('⌚️ time to get request')
 
   try {
-
     const response = await axios.get(getCompleteURL(URL), { headers })
     if (debug) console.timeEnd('⌚️ time to get request')
-    if (!silent) successNotify(getMessage('get', 'success', msg))
+    if (!silent) successNotify(transations.get.success)
     Loading.hide()
 
-    return setResponse(response, {debug})
+    return setResponse(response, { debug })
   } catch (e) {
-
     if (debug) console.timeEnd('⌚️ time to get request')
     if (!silent) errorNotify(transations.get.error)
-    PrettyLog.error(`Error to get ${URL}`, e)
+    // PrettyLog.error(`Error to get ${URL}`, e)
     Loading.hide()
 
     return []
   }
 }
 
-export async function post (URL: string, data: unknown, {file = false, silent = false, msg = '',debug = false} = {}): Promise<Response> {
+export async function post (URL: string, data: unknown, { file = false, silent = false, msg = '', debug = false } = {}): Promise<Response> {
   Loading.show()
   const headers = setHeaders(file)
   if (debug) console.time('⌚️ time to post request')
 
   try {
-
     const response = await axios.post(getCompleteURL(URL), data, { headers })
     if (debug) console.timeEnd('⌚️ time to post request')
-    if (!silent) successNotify(getMessage('post', 'success', msg))
+    if (!silent) successNotify(transations.post.success)
     Loading.hide()
 
-    return setResponse(response, {debug})
+    return setResponse(response, { debug })
   } catch (e) {
-
     if (debug) console.timeEnd('⌚️ time to post request')
-    PrettyLog.error(`Error to post ${URL}`, e)
+    // PrettyLog.error(`Error to post ${URL}`, e)
     Loading.hide()
     return []
   }
 }
 
-export async function put (URL: string, data: unknown ,{silent = false, msg = '',debug = false} = {}): Promise<Response> {
+export async function put (URL: string, data: unknown, { silent = false, msg = '', debug = false } = {}): Promise<Response> {
   Loading.show()
   const headers = setHeaders()
   if (debug) console.time('⌚️ time to put request')
 
   try {
-
     const response = await axios.put(getCompleteURL(URL), data, { headers })
     if (debug) console.timeEnd('⌚️ time to put request')
-    if (!silent) successNotify(getMessage('put', 'success', msg))
+    if (!silent) successNotify(transations.put.success)
     Loading.hide()
 
-    return setResponse(response, {debug})
+    return setResponse(response, { debug })
   } catch (e) {
-
     if (debug) console.timeEnd('⌚️ time to put request')
-    PrettyLog.error(`Error to put ${URL}`, e)
+    // PrettyLog.error(`Error to put ${URL}`, e)
     Loading.hide()
 
     return []
   }
 }
 
-export async function deleteData (URL: string, {silent = false, msg = '',debug = false} = {}): Promise<Response> {
+export async function deleteData (URL: string, { silent = false, msg = '', debug = false } = {}): Promise<Response> {
   Loading.show()
   const headers = setHeaders()
   if (debug) console.time('⌚️ time to delete request')
 
   try {
-
     const response = await axios.delete(getCompleteURL(URL), { headers })
     if (debug) console.timeEnd('⌚️ time to delete request')
-    if (!silent) successNotify(getMessage('delete','success', msg))
+    if (!silent) successNotify(transations.delete.success)
     Loading.hide()
 
-    return setResponse(response, {debug})
+    return setResponse(response, { debug })
   } catch (e) {
-
     if (debug) console.timeEnd('⌚️ time to delete request')
-    PrettyLog.error(`Error to delete ${URL}`, e)
+    // PrettyLog.error(`Error to delete ${URL}`, e)
     Loading.hide()
-    
+
     return []
   }
 }
-

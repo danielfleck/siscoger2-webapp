@@ -1,6 +1,6 @@
 <template>
-  <q-select 
-  :dense="denseVal" 
+  <q-select
+  :dense="denseVal"
   hide-bottom-space
   clearable
   outlined
@@ -14,13 +14,13 @@
   @validate="validate"
   :error-message="errorMsg"
   :error="!isValid"
-  :disable="disable" 
+  :disable="disable"
   />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
-import { 
+import {
   andamentoCogerFATD,
   andamentoCogerIPM,
   andamentoCogerSindicancia,
@@ -57,7 +57,7 @@ export default defineComponent({
     required: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -88,32 +88,19 @@ export default defineComponent({
       getOptions () {
         const type = props.type.toLowerCase()
         switch (type) {
-          case 'fatd':
-            vars.options = andamentoCogerFATD
-          case 'ipm':
-            vars.options = andamentoCogerIPM
-          case 'sindicancia':
-            vars.options = andamentoCogerSindicancia
-          case 'cd':
-            vars.options = andamentoCogerCD
-          case 'cj':
-            vars.options = andamentoCogerCJ
-          case 'adl':
-            vars.options = andamentoCogerADL
-          case 'iso':
-            vars.options = andamentoCogerISO
-          case 'it':
-            vars.options = andamentoCogerIT
-          case 'pad':
-            vars.options = andamentoCogerPAD
-          case 'sai':
-            vars.options = andamentoCogerSAI
-          case 'desercao':
-            vars.options = andamentoCogerDesercao
-          case 'apfd':
-            vars.options = andamentoCogerAPFD       
-          default:
-            vars.options = andamentoCogerSindicancia
+          case 'fatd': vars.options = andamentoCogerFATD; return true
+          case 'ipm': vars.options = andamentoCogerIPM; return true
+          case 'sindicancia': vars.options = andamentoCogerSindicancia; return true
+          case 'cd': vars.options = andamentoCogerCD; return true
+          case 'cj': vars.options = andamentoCogerCJ; return true
+          case 'adl': vars.options = andamentoCogerADL; return true
+          case 'iso': vars.options = andamentoCogerISO; return true
+          case 'it': vars.options = andamentoCogerIT; return true
+          case 'pad': vars.options = andamentoCogerPAD; return true
+          case 'sai': vars.options = andamentoCogerSAI; return true
+          case 'desercao': vars.options = andamentoCogerDesercao; return true
+          case 'apfd': vars.options = andamentoCogerAPFD; return true
+          default: vars.options = andamentoCogerSindicancia; return true
         }
       }
     }

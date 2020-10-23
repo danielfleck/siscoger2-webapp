@@ -1,7 +1,7 @@
 <template>
-  <q-select 
+  <q-select
     hide-bottom-space
-    clearable 
+    clearable
     outlined
     v-model="_value"
     emit-value
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import { tipoBoletim} from 'src/config/selects'
+import { tipoBoletim } from 'src/config/selects'
 
 export default defineComponent({
   name: 'TipoBoletim',
@@ -26,7 +26,7 @@ export default defineComponent({
     value: {
       type: String,
       default: ''
-    },
+    }
   },
   setup (props, { root, emit }) {
     return {
@@ -35,7 +35,7 @@ export default defineComponent({
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)
-      }),
+      })
     }
   }
 })

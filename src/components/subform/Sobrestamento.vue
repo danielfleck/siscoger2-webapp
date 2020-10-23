@@ -27,11 +27,11 @@
         <InputText label="Publicação Término" v-model="register.publicacao_termino" ref="publicacao_termino" :required="Boolean(register.termino_data)" tooltip="Ex: Despacho n° 2.144/2018"/>
       </div>
       <div class="q-pa-xs col-12">
-        <q-btn 
-          color="primary" 
-          @click="register.id ? update(register) : create()" 
-          :label="register.id ? 'Editar' : 'Inserir'" 
-          class="full-width" 
+        <q-btn
+          color="primary"
+          @click="register.id ? update(register) : create()"
+          :label="register.id ? 'Editar' : 'Inserir'"
+          class="full-width"
           :icon="register.id ? 'fa fa-pen' : 'fa fa-plus'"
           />
       </div>
@@ -103,21 +103,21 @@ const cleanRegister = {
   publicacao_inicio: '',
   termino_data: '',
   doc_controle_termino: '',
-  publicacao_termino: '',
+  publicacao_termino: ''
 }
 
-const fields = ['motivo','motivo_outros','inicio_data','doc_controle_inicio','publicacao_inicio']
+const fields = ['motivo', 'motivo_outros', 'inicio_data', 'doc_controle_inicio', 'publicacao_inicio']
 
 export default defineComponent({
   name: 'Sobrestamentos',
-  components: {InputText, InputSelect, InputDate, BtnStack},
+  components: { InputText, InputSelect, InputDate, BtnStack },
   props: {
     label: {
       type: String,
       default: 'Sobrestamentos'
     },
     proc: {
-      type: String,
+      type: String
     },
     id_proc: {
       type: Number,
@@ -137,7 +137,7 @@ export default defineComponent({
         publicacao_inicio: '',
         termino_data: '',
         doc_controle_termino: '',
-        publicacao_termino: '',
+        publicacao_termino: ''
       },
       registers: [] as Array<Register>,
       motivoSobrestamento
@@ -163,12 +163,12 @@ export default defineComponent({
         root.$q.dialog(confirmMsg).onOk(() => {
           vars.registers.splice(found, 1)
         })
-      },
+      }
     }
 
     return {
       ...toRefs(vars),
-      ...functions,
+      ...functions
     }
   }
 })

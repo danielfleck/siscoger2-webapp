@@ -46,18 +46,18 @@ export default defineComponent({
       dataAbertura: [],
       columnsAbertura: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
       ],
       dataPrazos: [],
       columnsPrazos: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
       ],
       dataPunicao: [],
       columnsPunicao: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-      ],
+        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
+      ]
     })
     const functions = {
       // async loadData () {

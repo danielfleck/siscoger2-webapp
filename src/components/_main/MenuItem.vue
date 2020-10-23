@@ -64,10 +64,10 @@ export default defineComponent({
         vars.active = props.title
       }
     }
-    return { 
+    return {
       ...toRefs(vars),
       ...functions
-     }
+    }
   }
 })
 </script>

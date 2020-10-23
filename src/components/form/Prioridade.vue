@@ -1,11 +1,11 @@
 <template>
-  <q-toggle 
-    v-bind="$attrs" 
+  <q-toggle
+    v-bind="$attrs"
     v-on="$listeners"
     ref="root"
-    v-model="_value" 
+    v-model="_value"
     :label="label"
-    hide-bottom-space 
+    hide-bottom-space
     :dense="denseVal"
   />
 </template>
@@ -32,7 +32,7 @@ export default defineComponent({
     disable: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -51,7 +51,7 @@ export default defineComponent({
         get: () => props.value,
         set: value => emit('input', value)
       }),
-      localePTBR,
+      localePTBR
     })
 
     const functions = {
@@ -63,7 +63,7 @@ export default defineComponent({
     }
 
     watch(() => vars._value, () => vars.validable = true)
-    
+
     return {
       ...toRefs(vars),
       ...functions

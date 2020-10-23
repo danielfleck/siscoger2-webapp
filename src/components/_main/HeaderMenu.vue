@@ -65,27 +65,28 @@
 
 <script lang="ts">
 import { appVersion } from '../../config/app'
+import { getFab, getDense } from 'src/store/utils'
 import { defineComponent, ref, computed } from '@vue/composition-api'
 export default defineComponent({
   name: 'HeaderMenu',
   setup (_, { root }) {
     const version = ref(appVersion)
     const pendences = ref([
-      { label: 'Gerais', qtd: 10, color: 'negative', link: '/'},
-      { label: 'FATD', qtd: 15, color: 'negative', link: '/pendencias-fatd'},
-      { label: 'IPM', qtd: 0, color: 'positive', link: '/pendencias-ipm'},
-      { label: 'Sindicância', qtd: 8, color: 'amber', link: '/pendencias-sindicancia'},
-      { label: 'CD', qtd: 3, color: 'amber', link: '/pendencias-cd'}
+      { label: 'Gerais', qtd: 10, color: 'negative', link: '/' },
+      { label: 'FATD', qtd: 15, color: 'negative', link: '/pendencias-fatd' },
+      { label: 'IPM', qtd: 0, color: 'positive', link: '/pendencias-ipm' },
+      { label: 'Sindicância', qtd: 8, color: 'amber', link: '/pendencias-sindicancia' },
+      { label: 'CD', qtd: 3, color: 'amber', link: '/pendencias-cd' }
     ])
     return {
       version,
       pendences,
       dense: computed({
-        get: () => root.$store.state.configs.dense,
+        get: () => getDense(root),
         set: () => root.$store.dispatch('configs/toogleDense')
       }),
       fab: computed({
-        get: () => root.$store.state.configs.fab,
+        get: () => getFab(root),
         set: () => root.$store.dispatch('configs/toogleFab')
       }),
       dark: computed({

@@ -1,15 +1,15 @@
 <template>
-  <q-table 
+  <q-table
     :grid="$q.screen.xs"
     :columns="columns"
     :data="getFilteredValuesData"
     row-key="name"
     no-data-label="Sem resultados"
     no-results-label="Sem resultados"
-    :dense="dense"  
-    :flat="flat" 
+    :dense="dense"
+    :flat="flat"
     :bordered="bordered"
-    :square="square" 
+    :square="square"
     :filter="filter"
     :title="label"
   >
@@ -36,10 +36,10 @@
       <!-- table filters -->
       <q-tr :props="props" class="ignore-elements" v-if="columns_filter && data.length">
         <q-th :key="col.name" v-for="col in props.cols" style="padding: 2px;">
-          <q-input 
-          outlined 
+          <q-input
+          outlined
           dense
-          class="q-pl-xs q-pr-xs" 
+          class="q-pl-xs q-pr-xs"
           v-model="filterData[col.field]"
           >
             <template v-if="filterData[col.field]" v-slot:append>
@@ -52,14 +52,14 @@
     </template>
 
     <template v-slot:top-right="props" v-if="fullscreen || global_search">
-      <q-input 
-        v-if="global_search" 
-        clearable 
-        outlined 
-        dense 
-        debounce="300" 
-        v-model="filter" 
-        class="q-mr-md" 
+      <q-input
+        v-if="global_search"
+        clearable
+        outlined
+        dense
+        debounce="300"
+        v-model="filter"
+        class="q-mr-md"
         placeholder="Buscar"
         >
         <template v-slot:append>
@@ -97,7 +97,7 @@
         Exportar em formato CSV
         </q-tooltip>
       </q-btn>
-      
+
       <q-btn
         class="bg-grey-2 q-mr-sm" icon="fas fa-file-excel"
         no-caps v-if="excel"
@@ -134,27 +134,27 @@
 </template>
 
 <script>
-import {uid} from 'quasar'
-import {exportFile} from 'quasar'
+import { uid, exportFile } from 'quasar'
+
 import TextHighlight from 'vue-text-highlight'
-function wrapCsvValue(val, formatFn) {
-    let formatted = formatFn !== void 0
-        ? formatFn(val)
-        : val;
-    formatted = formatted === void 0 || formatted === null
-        ? ''
-        : String(formatted)
-    formatted = formatted.split('"').join('""');
-    /**
+function wrapCsvValue (val, formatFn) {
+  let formatted = formatFn !== void 0
+    ? formatFn(val)
+    : val
+  formatted = formatted === void 0 || formatted === null
+    ? ''
+    : String(formatted)
+  formatted = formatted.split('"').join('""')
+  /**
      * Excel accepts \n and \r in strings, but some other CSV parsers do not
      * Uncomment the next two lines to escape new lines
      */
-    // .split('\n').join('\\n')
-    // .split('\r').join('\\r')
-    return `"${formatted}"`
+  // .split('\n').join('\\n')
+  // .split('\r').join('\\r')
+  return `"${formatted}"`
 }
 export default {
-  name: "Table",
+  name: 'Table',
   components: { TextHighlight },
   props: {
     label: {
@@ -208,9 +208,9 @@ export default {
     columns_filter: {
       type: Boolean,
       default: true
-    },
+    }
   },
-  data() {
+  data () {
     return {
       filterData: {},
       columnOptions: {},
@@ -223,114 +223,112 @@ export default {
     }
   },
   computed: {
-    getFilteredData() {
+    getFilteredData () {
       const hasData = (item, column, self) => {
         const content = self.filterData[column]?.toLowerCase()
         return item[column]?.toString()?.toLowerCase()?.indexOf(content) == -1
       }
-      let self = this;
-      const table_columns = this.columns.map((column) => column.field);
-      let tableData = this.data.filter((item) => {
+      const self = this
+      const table_columns = this.columns.map((column) => column.field)
+      const tableData = this.data.filter((item) => {
         for (let i = 0; i < table_columns.length; i++) {
           const column = table_columns[i]
-            if (self.filterData[column] == '')
-                continue;
-            if (column in self.filterData && hasData(item, column, self)) {
-                return false;
-            }
+          if (self.filterData[column] == '') { continue }
+          if (column in self.filterData && hasData(item, column, self)) {
+            return false
+          }
         }
         return true
-      });
+      })
       return tableData
     },
-    getFilteredValuesData() {
-      let self = this;
+    getFilteredValuesData () {
+      const self = this
       const hasData = (item, selectedItem, self) => {
         const content = item[selectedItem]?.toString()?.toLowerCase()
         return self.columnOptionsSelected[selectedItem]?.indexOf(content) == -1
       }
-      this.columnOptionsSelected = Object.assign({}, this.columnOptionsSelected);
-      let tableData = this.getFilteredData.filter((item) =>{
+      this.columnOptionsSelected = Object.assign({}, this.columnOptionsSelected)
+      const tableData = this.getFilteredData.filter((item) => {
         for (let i = 0; i < self.columns.length; i++) {
           const selectedItem = self.columns[i].field
-            if (self.columnOptionsSelected[selectedItem].length == 0)
-                continue;
-            if (hasData(item, selectedItem, self)) {
-                return false;
-            }
+          if (self.columnOptionsSelected[selectedItem].length == 0) { continue }
+          if (hasData(item, selectedItem, self)) {
+            return false
+          }
         }
         return true
-      });
-      return tableData;
-    },
+      })
+      return tableData
+    }
   },
   watch: {
-    'selectedProp':function () {
-      this.$emit('selected-val',this.selectedProp)
+    selectedProp: function () {
+      this.$emit('selected-val', this.selectedProp)
     }
   },
-  created() {
+  created () {
     if (this.selection === undefined) {
-        this.selectionProp = 'none';
+      this.selectionProp = 'none'
     } else {
-        this.selectionProp = this.selection;
+      this.selectionProp = this.selection
     }
     if (this.label === undefined) {
-        this.name = 'Download';
+      this.name = 'Download'
     } else {
-        this.name = this.label;
+      this.name = this.label
     }
     if (this.selected === undefined) {
-        this.selectedProp = [];
+      this.selectedProp = []
     } else {
-        this.selectedProp = this.selected;
+      this.selectedProp = this.selected
     }
-    let self = this;
-    self.columnOptions = {};
+    const self = this
+    self.columnOptions = {}
     self.columns.filter(function (item) {
-        self.columnOptions[item.field] = [];
-        self.$set(self.columnOptionsSelected, item.field, []);
-        self.filterFlags[item.field] = false;
-        return item
-    });
+      self.columnOptions[item.field] = []
+      self.$set(self.columnOptionsSelected, item.field, [])
+      self.filterFlags[item.field] = false
+      return item
+    })
     self.data.filter(function (item) {
-        self.columns.filter(function (column) {
-            self.columnOptions[column.field].push({
-                label: item[column.field].toString(),
-                value: item[column.field].toString().toLowerCase().replace(/_/g, '_')
-            })
-        });
-    });
+      self.columns.filter(function (column) {
+        self.columnOptions[column.field].push({
+          label: item[column.field].toString(),
+          value: item[column.field].toString().toLowerCase().replace(/_/g, '_')
+        })
+      })
+    })
     self.columns.filter(function (column) {
-        self.columnOptions[column.field] = [...new Map(self.columnOptions[column.field].map(item =>
-            [item['value'], item])).values()];
-    });
+      self.columnOptions[column.field] = [...new Map(self.columnOptions[column.field].map(item =>
+        [item.value, item])).values()]
+    })
   },
   methods: {
-    exportTable(type) {
-        // naive encoding to csv format
-        const content = [this.columns.map(col => wrapCsvValue(col.label))].concat(
-            this.data.map(row => this.columns.map(col => wrapCsvValue(
-                typeof col.field === 'function'
-                    ? col.field(row)
-                    : row[col.field === void 0 ? col.name : col.field],
-                col.format
-            )).join(','))
-        ).join('\r\n')
-        const status = exportFile(
-            this.label+'.' + type,
-            content,
-            'text/' + type
-        )
-        if (status !== true) {
-            this.$q.notify({
-                message: 'Browser denied file download...',
-                color: 'negative',
-                icon: 'warning'
-            })
-        }
-    },
-  },
+    exportTable (type) {
+      // naive encoding to csv format
+      const content = [this.columns.map(col => wrapCsvValue(col.label))].concat(
+        this.data.map(row => this.columns.map(col => wrapCsvValue(
+          typeof col.field === 'function'
+            ? col.field(row)
+            : row[col.field === void 0 ? col.name : col.field],
+          col.format
+        )).join(','))
+      ).join('\r\n')
+      const status = exportFile(
+        this.label + '.' + type,
+        content,
+        'text/' + type
+      )
+      if (status !== true) {
+        this.$q.notify({
+          message: 'Browser denied file download...',
+          color: 'negative',
+          icon: 'warning'
+        })
+      }
+    }
+  }
 }
 </script>
 

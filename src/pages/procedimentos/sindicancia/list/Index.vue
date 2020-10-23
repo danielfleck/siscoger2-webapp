@@ -56,17 +56,17 @@ export default defineComponent({
         { link: '/sindicancias/resultado', label: 'Resultado' },
         { link: '/sindicancias/apagados', label: 'Apagados' }
       ],
-      tab: 'lista',
+      tab: 'lista'
     })
     const functions = {
       onClick () {
         console.log('clicked')
       }
     }
-    return { 
-      ...toRefs(vars), 
+    return {
+      ...toRefs(vars),
       ...functions,
-      fab: computed(() => root.$store.state.configs.fab) 
+      fab: computed(() => root.$store.state.configs.fab)
     }
   }
 })

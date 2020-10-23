@@ -1,6 +1,6 @@
 <template>
-  <q-select 
-  :dense="denseVal" 
+  <q-select
+  :dense="denseVal"
   hide-bottom-space
   clearable
   outlined
@@ -14,7 +14,7 @@
   @validate="validate"
   :error-message="errorMsg"
   :error="!isValid"
-  :disable="disable" 
+  :disable="disable"
   />
 </template>
 
@@ -42,7 +42,7 @@ export default defineComponent({
     required: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -60,7 +60,7 @@ export default defineComponent({
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)
-      }),
+      })
     })
 
     const functions = {
@@ -68,7 +68,7 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
-      },
+      }
     }
 
     watch(() => vars._value, () => vars.validable = true)

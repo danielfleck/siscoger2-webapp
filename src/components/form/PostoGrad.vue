@@ -1,6 +1,6 @@
 <template>
-  <q-select 
-  :dense="denseVal" 
+  <q-select
+  :dense="denseVal"
   hide-bottom-space
   clearable
   outlined
@@ -14,13 +14,13 @@
   @validate="validate"
   :error-message="errorMsg"
   :error="!isValid"
-  :disable="disable" 
+  :disable="disable"
   />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
-import { postograd} from 'src/config/selects'
+import { postograd } from 'src/config/selects'
 
 export default defineComponent({
   name: 'PostoGrad',
@@ -40,7 +40,7 @@ export default defineComponent({
     required: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({

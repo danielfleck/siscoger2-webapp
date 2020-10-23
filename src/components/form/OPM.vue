@@ -1,5 +1,5 @@
 <template>
-  <q-select 
+  <q-select
   hide-bottom-space
   clearable outlined
   v-model="_value"
@@ -7,7 +7,7 @@
   map-options
   :options="options"
   :dense="denseVal"
-  :label="label" 
+  :label="label"
   ref="root"
   @blur="validable = true"
   @validate="validate"
@@ -38,7 +38,7 @@ export default defineComponent({
     disable: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -57,7 +57,7 @@ export default defineComponent({
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)
-      }),
+      })
     })
 
     const functions = {
@@ -69,7 +69,7 @@ export default defineComponent({
     }
 
     watch(() => vars._value, () => vars.validable = true)
-    
+
     return {
       ...toRefs(vars),
       ...functions

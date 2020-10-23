@@ -6,7 +6,7 @@
         <ProcedTipos v-model="register.origem_proc" label="Processo/Procedimento" ref="origem_proc" required/>
       </div>
       <div class="q-pa-xs col-3">
-        <InputText label="Referência" v-model="Number(register.origem_sjd_ref)" ref="origem_sjd_ref" mask="######" required/>
+        <InputText label="Referência" v-model="register.origem_sjd_ref" ref="origem_sjd_ref" mask="######" required/>
       </div>
       <div class="q-pa-xs col-3">
         <InputAno v-model="register.origem_sjd_ref_ano" ref="origem_sjd_ref_ano" required/>
@@ -44,6 +44,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable camelcase */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { procedTipos } from 'src/config/selects'
 import { validate } from 'src/libs/validator'
@@ -58,7 +59,7 @@ import { confirmMsg } from 'src/libs/dialog'
 const fields = ['origem_proc', 'origem_sjd_ref', 'origem_sjd_ref_ano']
 
 export interface Register {
-  id: any
+  id?: number
   origem_proc: string
   origem_sjd_ref: number | null
   origem_sjd_ref_ano: number | null
@@ -68,7 +69,7 @@ const cleanRegister = {
   id: 0,
   origem_proc: '',
   origem_sjd_ref: null,
-  origem_sjd_ref_ano: null,
+  origem_sjd_ref_ano: null
 }
 
 export default defineComponent({
@@ -77,7 +78,7 @@ export default defineComponent({
     ProcedTipos,
     InputText,
     InputAno,
-    BtnStack,
+    BtnStack
   },
   props: {
     label: {
@@ -95,8 +96,8 @@ export default defineComponent({
         id: 0,
         origem_proc: '',
         origem_sjd_ref: null,
-        origem_sjd_ref_ano: null,
-      } as Register,
+        origem_sjd_ref_ano: null
+      },
       procedTipos,
       registers: [] as Array<Register>,
       disabled: true,
@@ -104,14 +105,14 @@ export default defineComponent({
     })
     const functions = {
       async loadData () {
-        const { data } = await post('ligacoes/search', props.data)
-        vars.registers = data
+        vars.registers = await post('ligacoes/search', props.data)
+        return true
       },
       async create () {
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
-          const data = { ...props.data, ...vars.register}
-          const response = post('ligacoes', data)
+          const data = { ...props.data, ...vars.register }
+          const response = await post('ligacoes', data)
           if (response) {
             this.loadData()
             vars.register = cleanRegister
@@ -121,14 +122,14 @@ export default defineComponent({
       edit (register: Register) {
         vars.register = register
       },
-      update (register: Register) {
+      async update (register: Register) {
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
-          const data = { ...props.data, ...vars.register}
-          const { id } = vars.register
-          const response = put(`ligacoes/${id}`, data)
+          const data = { ...props.data, ...register }
+          const response = await put(`ligacoes/${register?.id}`, data)
           if (response) {
-            this.loadData()
+            // eslint-disable-next-line no-void
+            void this.loadData()
             vars.register = cleanRegister
           }
         }
@@ -142,12 +143,13 @@ export default defineComponent({
       }
     }
 
+    // eslint-disable-next-line no-void
     void functions.loadData()
 
     return {
       ...toRefs(vars),
       ...functions,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => root.$store.state.configs.dense)
     }
   }
 })

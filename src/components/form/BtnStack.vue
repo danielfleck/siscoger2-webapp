@@ -1,5 +1,5 @@
 <template>
-  <q-btn 
+  <q-btn
   :dense="denseVal"
   :stack="!denseVal"
   :label="label"
@@ -22,7 +22,7 @@ export default defineComponent({
       required: true
     },
     icon: {
-      type: String,
+      type: String
     },
     required: {
       type: Boolean,
@@ -35,7 +35,7 @@ export default defineComponent({
     loading: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root }) {
     return {

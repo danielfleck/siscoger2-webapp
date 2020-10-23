@@ -1,6 +1,5 @@
 import { defineComponent, reactive, computed, toRefs } from '@vue/composition-api'
 
-
 const bread = [{ label: 'Sindicância', link: '/sindicancia' }]
 import { localePTBR } from 'src/config/app'
 import { andamentoSindicancia, andamentoCogerSindicancia, tipoBoletim, prorogacao, motivoAberturaSindicancia } from 'src/config/selects'
@@ -43,4 +42,3 @@ export const vars = reactive({
   hasSindicante: false,
   onSubmit: false
 })
-

@@ -77,12 +77,12 @@ const cleanRegister = {
   rg: '',
   nome: '',
   cargo: '',
-  resultado: '',
+  resultado: ''
 }
 
 export default defineComponent({
   name: 'Acusado',
-  components: {InputText,PostoGrad,ResultadoAcusado,BtnStack},
+  components: { InputText, PostoGrad, ResultadoAcusado, BtnStack },
   props: {
     label: {
       type: String,
@@ -103,7 +103,7 @@ export default defineComponent({
     unique: {
       type: Boolean,
       default: false
-    },
+    }
     // proc: {
     //   type: String,
     //   required: true
@@ -114,7 +114,6 @@ export default defineComponent({
     // }
   },
 
-  
   setup (props, { root, refs }) {
     const vars = reactive({
       register: {
@@ -122,7 +121,7 @@ export default defineComponent({
         rg: '',
         nome: '',
         cargo: '',
-        resultado: '',
+        resultado: ''
       },
       registers: [] as Array<Register>,
       disabled: true,
@@ -157,7 +156,7 @@ export default defineComponent({
     return {
       ...toRefs(vars),
       ...functions,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => root.$store.state.configs.dense)
     }
   }
 })

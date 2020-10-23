@@ -744,7 +744,7 @@ export const postograd: Option[] = [
   { value: 'MAJ', label: 'MAJ' },
   { value: 'TENCEL', label: 'TENCEL' },
   { value: 'CEL', label: 'CEL' },
-  { value: 'CELAGREG', label: 'CELAGREG' },
+  { value: 'CELAGREG', label: 'CELAGREG' }
 ]
 
 export const procedTipos: Option[] = [
@@ -761,7 +761,7 @@ export const procedTipos: Option[] = [
   { value: 'adl', label: 'ADL' },
   { value: 'pad', label: 'PAD' },
   { value: 'sai', label: 'SAI' },
-  { value: 'proc_outros', label: 'PROC. OUTROS' },
+  { value: 'proc_outros', label: 'PROC. OUTROS' }
 ]
 
 export const motivoAberturaSindicancia: Option[] = [
@@ -769,5 +769,5 @@ export const motivoAberturaSindicancia: Option[] = [
   { value: 'Ato de bravura', label: 'Ato de bravura' },
   { value: 'Atestado de origem', label: 'Atestado de origem' },
   { value: 'Apuração de infração', label: 'Apuração de infração' },
-  { value: 'Outro', label: 'Outro' },
+  { value: 'Outro', label: 'Outro' }
 ]

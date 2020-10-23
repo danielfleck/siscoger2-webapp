@@ -61,7 +61,7 @@ export default defineComponent({
     tooltip: {
       type: String,
       default: ''
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -83,7 +83,7 @@ export default defineComponent({
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)
-      }),
+      })
     })
 
     const functions = {

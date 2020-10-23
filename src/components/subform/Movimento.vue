@@ -9,11 +9,11 @@
         <InputText label="Descrição" ref="descricao" v-model="register.descricao" :minLength="50" autogrow required/>
       </div>
       <div class="q-pa-xs col-12">
-        <q-btn 
-          color="primary" 
-          @click="register.id ? update(register) : create()" 
-          :label="register.id ? 'Editar' : 'Inserir'" 
-          class="full-width" 
+        <q-btn
+          color="primary"
+          @click="register.id ? update(register) : create()"
+          :label="register.id ? 'Editar' : 'Inserir'"
+          class="full-width"
           :icon="register.id ? 'fa fa-pen' : 'fa fa-plus'"
           />
       </div>
@@ -69,21 +69,21 @@ const cleanRegister = {
   cdopm: '',
   rg: '',
   data: '',
-  descricao: '',
+  descricao: ''
 }
 
 const fields = ['data', 'descricao']
 
 export default defineComponent({
   name: 'Movimento',
-  components: {InputText, InputDate, BtnStack},
+  components: { InputText, InputDate, BtnStack },
   props: {
     label: {
       type: String,
       default: 'Movimentos'
     },
     proc: {
-      type: String,
+      type: String
     },
     id_proc: {
       type: Number,
@@ -97,9 +97,9 @@ export default defineComponent({
         cdopm: '',
         rg: '',
         data: '',
-        descricao: '',
+        descricao: ''
       },
-      registers: [] as Array<Register>,
+      registers: [] as Array<Register>
     })
     const functions = {
       create () {
@@ -122,12 +122,12 @@ export default defineComponent({
         root.$q.dialog(confirmMsg).onOk(() => {
           vars.registers.splice(found, 1)
         })
-      },
+      }
     }
 
     return {
       ...toRefs(vars),
-      ...functions,
+      ...functions
     }
   }
 })

@@ -49,7 +49,7 @@ export default defineComponent({
     InputRG,
     InputText,
     PostoGrad,
-    BtnStack,
+    BtnStack
   },
   props: {
     label: {
@@ -63,10 +63,9 @@ export default defineComponent({
     required: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, refs, emit }) {
-
     const vars: any = reactive({
       validable: false,
       register: {
@@ -89,7 +88,7 @@ export default defineComponent({
         return true
       }),
       requireds: computed(() => Boolean(vars.register.rg) && Boolean(vars.register.nome) && Boolean(vars.register.cargo)),
-      denseVal: computed(() => root.$store.state.configs.dense),   
+      denseVal: computed(() => root.$store.state.configs.dense)
     })
 
     const functions = {
@@ -107,7 +106,7 @@ export default defineComponent({
       },
       async update (id: number) {
         return await put(`envolvidos/${id}`, vars.register, { silent: true })
-      },
+      }
     }
 
     return {

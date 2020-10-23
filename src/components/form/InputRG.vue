@@ -1,5 +1,5 @@
 <template>
-  <q-input 
+  <q-input
     hide-bottom-space
     clearable
     v-model="_value"
@@ -42,7 +42,7 @@ export default defineComponent({
     autogrow: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -60,7 +60,7 @@ export default defineComponent({
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)
-      }),
+      })
     })
 
     const functions = {
@@ -72,7 +72,7 @@ export default defineComponent({
     }
 
     watch(() => vars._value, () => vars.validable = true)
-    
+
     return {
       ...toRefs(vars),
       ...functions

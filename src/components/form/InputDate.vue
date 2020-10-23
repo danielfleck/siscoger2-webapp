@@ -1,13 +1,13 @@
 <template>
   <q-input
-    hide-bottom-space 
-    :dense="denseVal" 
-    outlined 
+    hide-bottom-space
+    :dense="denseVal"
+    outlined
     clearable
-    v-model="_value" 
+    v-model="_value"
     :label="label"
-    mask="##/##/####" 
-    v-bind="$attrs" 
+    mask="##/##/####"
+    v-bind="$attrs"
     v-on="$listeners"
     ref="root"
     @blur="validable = true"
@@ -19,11 +19,11 @@
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-          <q-date 
-          :locale="localePTBR" 
-          v-model="_value" 
-          @input="closeCalendar" 
-          today-btn 
+          <q-date
+          :locale="localePTBR"
+          v-model="_value"
+          @input="closeCalendar"
+          today-btn
           mask="DD/MM/YYYY"/>
         </q-popup-proxy>
       </q-icon>
@@ -59,7 +59,7 @@ export default defineComponent({
     defaultToday: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -78,7 +78,7 @@ export default defineComponent({
         get: () => props.value,
         set: value => emit('input', functions.castDate(value))
       }),
-      localePTBR,
+      localePTBR
     })
 
     const functions = {
@@ -100,9 +100,9 @@ export default defineComponent({
     }
 
     void functions.getCurrentDate()
-    
+
     watch(() => vars._value, () => vars.validable = true)
-    
+
     return {
       ...toRefs(vars),
       ...functions

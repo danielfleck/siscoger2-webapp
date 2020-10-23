@@ -1,6 +1,6 @@
 <template>
-  <q-select 
-  :dense="denseVal" 
+  <q-select
+  :dense="denseVal"
   hide-bottom-space
   clearable
   outlined
@@ -14,13 +14,13 @@
   @validate="validate"
   :error-message="errorMsg"
   :error="!isValid"
-  :disable="disable" 
+  :disable="disable"
   />
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
-import { postograd} from 'src/config/selects'
+import { postograd } from 'src/config/selects'
 
 declare type Mixed = number | string
 export default defineComponent({
@@ -54,9 +54,9 @@ export default defineComponent({
       default: 2007
     },
     end: {
-      type: Number, 
+      type: Number,
       default: () => new Date().getFullYear()
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -88,7 +88,7 @@ export default defineComponent({
         const start = props.end || new Date().getFullYear()
         const end = props.start || 2007
         const tam = start - end
-        const options: Mixed[] = Array.from({length: tam}, (value, index) => start - index)
+        const options: Mixed[] = Array.from({ length: tam }, (value, index) => start - index)
         if (props.select) options.unshift('')
         if (props.all) options.unshift('todos')
         vars.options = options

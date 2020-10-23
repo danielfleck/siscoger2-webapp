@@ -115,7 +115,7 @@ const cleanRegister = {
   email: '',
   idade: '',
   escolaridade: '',
-  situacao: '',
+  situacao: ''
 }
 
 export default defineComponent({
@@ -124,7 +124,7 @@ export default defineComponent({
     InputRG,
     InputText,
     InputSelect,
-    BtnStack,
+    BtnStack
   },
   props: {
     label: {
@@ -148,7 +148,7 @@ export default defineComponent({
         email: '',
         idade: '',
         escolaridade: '',
-        situacao: '',
+        situacao: ''
       },
       registers: [] as Array<Register>,
       disabled: true,
@@ -185,7 +185,7 @@ export default defineComponent({
     return {
       ...toRefs(vars),
       ...functions,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => root.$store.state.configs.dense)
     }
   }
 })

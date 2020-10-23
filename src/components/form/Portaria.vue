@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-input 
+    <q-input
       hide-bottom-space
       clearable
       v-model="_value"
@@ -78,7 +78,7 @@ export default defineComponent({
     autogrow: {
       type: Boolean,
       default: false
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -110,7 +110,7 @@ export default defineComponent({
         refs.root.validate()
         return vars.isValid
       },
-      async checkDuplicated (value: String) {
+      async checkDuplicated (value: string) {
         if (props.proc && props.cdopm) {
           const proc = toLowercase(props.proc, true)
           const response = await post(`${proc}/portarias`, {
@@ -126,12 +126,12 @@ export default defineComponent({
             }
           }
         }
-      },
+      }
     }
 
     watch(() => vars._value, () => vars.validable = true)
     watch(() => props.cdopm, () => functions.checkDuplicated(vars._value))
-    
+
     return {
       ...toRefs(vars),
       ...functions

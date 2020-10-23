@@ -14,12 +14,12 @@ export function validate (refs: any, fields: string[], debug = false):boolean {
     }
     return prevVal && validated
   }, true)
-  if (debug) console.log('Validation is:',valid)
+  if (debug) console.log('Validation is:', valid)
   return valid
 }
 
 export function resetValidation (refs: any, fields: string[]) {
-  fields.map(f => { 
+  fields.map(f => {
     if (refs[f]) refs[f].resetValidation()
   })
   return true

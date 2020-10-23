@@ -30,7 +30,7 @@ export default defineComponent({
         { name: 'cdopm', label: 'OPM', field: 'cdopm' },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ],
+      ]
     })
     const functions = {
       async loadData () {
@@ -46,7 +46,7 @@ export default defineComponent({
           await deleteData(`sindicancias/${row.id_sindicancia}`)
           void this.loadData()
         })
-      },
+      }
     }
     void functions.loadData()
 
