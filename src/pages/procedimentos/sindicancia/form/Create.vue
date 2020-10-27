@@ -84,7 +84,10 @@
   </page>
 </template>
 <script lang="ts">
-import { defineComponent, toRefs, ref } from '@vue/composition-api'
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { defineComponent, toRefs } from '@vue/composition-api'
 import {
   Page,
   ProcedOrigem,
@@ -144,7 +147,6 @@ export default defineComponent({
     Portaria
   },
   setup (_, { refs }) {
-    const sindicante = ref(false)
     const functions = {
       async add () {
         if (validate(refs, fields)) {
