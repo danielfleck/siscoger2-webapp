@@ -18,36 +18,39 @@
         </q-btn-group>
       </div>
     </q-card-section>
-    </q-card-section>
-    <q-card-section v-if="registers.length" class="row">
-      <q-list bordered separator class="q-pa-xs col-12">
-        <q-item clickable v-ripple >
-          <q-item-section>Processo/Procedimento</q-item-section>
-          <q-item-section>Referência</q-item-section>
-          <q-item-section>Ano</q-item-section>
-          <q-item-section>Ações</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple v-for="reg in registers" :key="reg.rg">
-          <q-item-section>{{reg.origem_proc}}</q-item-section>
-          <q-item-section>{{reg.origem_sjd_ref}}</q-item-section>
-          <q-item-section>{{reg.origem_sjd_ref_ano}}</q-item-section>
-          <q-item-section>
-            <q-btn-group spread>
-              <BtnStack label="Editar" icon="fa fa-pen" @click="edit(reg)"/>
-              <BtnStack label="Apagar" icon="fa fa-trash" @click="remove(reg)"/>
-            </q-btn-group>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card-section>
+    <q-expansion-item v-if="registers.length" :label="`${label} - lista`" default-opened>
+      <q-card-section class="row">
+        <q-list bordered separator class="q-pa-xs col-12">
+          <q-item clickable v-ripple >
+            <q-item-section>Processo/Procedimento</q-item-section>
+            <q-item-section>Referência</q-item-section>
+            <q-item-section>Ano</q-item-section>
+            <q-item-section>Ações</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple v-for="reg in registers" :key="reg.id">
+            <q-item-section>{{reg.origem_proc}}</q-item-section>
+            <q-item-section>{{reg.origem_sjd_ref}}</q-item-section>
+            <q-item-section>{{reg.origem_sjd_ref_ano}}</q-item-section>
+            <q-item-section>
+              <q-btn-group spread>
+                <BtnStack label="Editar" icon="fa fa-pen" @click="edit(reg)"/>
+                <BtnStack label="Apagar" icon="fa fa-trash" @click="remove(reg)"/>
+              </q-btn-group>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-expansion-item>
   </q-card>
 </template>
 
 <script lang="ts">
 /* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { procedTipos } from 'src/config/selects'
-import { validate } from 'src/libs/validator'
+import { resetValidation, validate } from 'src/libs/validator'
 
 import ProcedTipos from 'components/form/ProcedTipos.vue'
 import InputText from 'components/form/InputText.vue'
@@ -55,6 +58,7 @@ import InputAno from 'components/form/InputAno.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { deleteData, post, put } from 'src/libs/api'
 import { confirmMsg } from 'src/libs/dialog'
+import { getDense } from 'src/store/utils'
 
 const fields = ['origem_proc', 'origem_sjd_ref', 'origem_sjd_ref_ano']
 
@@ -97,44 +101,43 @@ export default defineComponent({
         origem_proc: '',
         origem_sjd_ref: null,
         origem_sjd_ref_ano: null
-      },
+      } as Register,
       procedTipos,
       registers: [] as Array<Register>,
       disabled: true,
       type: props.label
     })
     const functions = {
-      async loadData () {
+      async loadData (): Promise<void> {
+        resetValidation(refs, fields)
         vars.registers = await post('ligacoes/search', props.data, { silent: true })
-        return true
       },
-      async create () {
+      async create (): Promise<void> {
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
           const data = { ...props.data, ...vars.register }
           const response = await post('ligacoes', data)
           if (response) {
-            this.loadData()
+            await this.loadData()
             vars.register = cleanRegister
           }
         }
       },
-      edit (register: Register) {
+      edit (register: Register): void {
         vars.register = register
       },
-      async update (register: Register) {
+      async update (register: Register): Promise<void> {
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
           const data = { ...props.data, ...register }
           const response = await put(`ligacoes/${register?.id}`, data)
           if (response) {
-            // eslint-disable-next-line no-void
-            void this.loadData()
+            await this.loadData()
             vars.register = cleanRegister
           }
         }
       },
-      remove (register: Register) {
+      remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
           await deleteData(`ligacoes/${register.id}`)
@@ -143,13 +146,13 @@ export default defineComponent({
       }
     }
 
-    // eslint-disable-next-line no-void
-    void functions.loadData()
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    functions.loadData()
 
     return {
       ...toRefs(vars),
       ...functions,
-      denseVal: computed(() => root.$store.state.configs.dense)
+      denseVal: computed(() => getDense(root))
     }
   }
 })
