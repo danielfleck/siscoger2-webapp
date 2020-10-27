@@ -38,7 +38,8 @@
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^6.1.2",
     "git-commit-msg-linter": "^3.0.0",
-    "husky": "^4.3.0"
+    "husky": "^4.3.0",
+    "standard-version": "^9.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",
