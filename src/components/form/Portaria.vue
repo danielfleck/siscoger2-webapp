@@ -45,8 +45,12 @@
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { toLowercase, ucFirst } from 'src/filters'
+import { getDense } from 'src/store/utils'
 import { post } from 'src/libs/api'
 
 export default defineComponent({
@@ -85,7 +89,7 @@ export default defineComponent({
     const vars = reactive({
       errorMsg: '',
       validable: false,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       isValid: computed(() => {
         if (!vars.validable) return true
         if (props.required && !vars._value) {
@@ -114,7 +118,7 @@ export default defineComponent({
       async checkDuplicated (value: string) {
         if (props.proc && props.cdopm) {
           const proc = toLowercase(props.proc, true)
-          const response = await post(`${proc}/portarias`, {
+          const response = await post(`${String(proc)}/portarias`, {
             cdopm: props.cdopm,
             portaria_numero: value
           }, { silent: true })

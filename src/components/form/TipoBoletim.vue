@@ -13,8 +13,12 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed } from '@vue/composition-api'
 import { tipoBoletim } from 'src/config/selects'
+import { getDense } from 'src/store/utils'
 
 export default defineComponent({
   name: 'TipoBoletim',
@@ -31,7 +35,7 @@ export default defineComponent({
   setup (props, { root, emit }) {
     return {
       tipoBoletim,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)

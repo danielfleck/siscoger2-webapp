@@ -32,9 +32,13 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { localePTBR } from 'src/config/app'
-import { changeDate } from 'src/filters'
+import { changeDate, Locales } from 'src/filters'
+import { getDense } from 'src/store/utils'
 import { getCurrentDate } from 'src/utils/mockValues'
 
 export default defineComponent({
@@ -65,7 +69,7 @@ export default defineComponent({
     const vars = reactive({
       errorMsg: '',
       validable: false,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       isValid: computed(() => {
         if (!vars.validable) return true
         if (props.required && !vars._value) {
@@ -75,8 +79,8 @@ export default defineComponent({
         return true
       }),
       _value: computed({
-        get: () => props.value,
-        set: value => emit('input', functions.castDate(value))
+        get: () => functions.castDate(props.value, 'pt-br'),
+        set: value => emit('input', functions.castDate(value, 'fr-ca'))
       }),
       localePTBR
     })
@@ -94,8 +98,8 @@ export default defineComponent({
         if (props.defaultToday) vars._value = getCurrentDate()
         return null
       },
-      castDate (date: any) {
-        return changeDate(date, 'fr-ca')
+      castDate (date: any, type: Locales) {
+        return changeDate(date, type)
       }
     }
 

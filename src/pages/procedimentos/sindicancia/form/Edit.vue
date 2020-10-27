@@ -61,11 +61,11 @@
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required/>
         </div>
-        <ProcedOrigem v-if="register.id" type="sindicancia" :data="{ id_sindicancia: register.id }"/>
-        <Vitima />
-        <Membro v-if="register.id" label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ id_sindicancia: register.id }"/>
-        <Membro label="Escrivão"/>
-        <acusado label="Sindicado"/>
+        <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
+        <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ id_sindicancia: register.id }"/>
+        <Membro label="Escrivão" ref="escrivao" :data="{ id_sindicancia: register.id }"/>
+        <Acusado label="Sindicado" :data="{ id_sindicancia: register.id }"/>
+        <Vitima :data="{ id_sindicancia: register.id }"/>
         <FileUpload label="Relatório do Encarregado"/>
         <FileUpload label="Solução do Comandante"/>
         <FileUpload label="Solução CMT Geral"/>
@@ -89,6 +89,9 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { defineComponent, computed, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
@@ -111,11 +114,22 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { get } from 'src/libs/api'
+import { get, put } from 'src/libs/api'
 
 import { vars } from './index'
 import { validate } from 'src/libs/validator'
-const fields = ['motivo_cancelamento', 'doc_origem_txt', 'opm', 'portaria_numero', 'sintese_txt', 'portaria_data', 'prorogacao_dias', 'motivo_outros']
+import { getDense } from 'src/store/utils'
+const fields = [
+  'motivo_cancelamento',
+  'doc_origem_txt',
+  'opm',
+  'portaria_numero',
+  'sintese_txt',
+  'portaria_data',
+  'prorogacao_dias',
+  'motivo_outros',
+  'sindicante'
+]
 export default defineComponent({
   name: 'Form',
   components: {
@@ -141,32 +155,36 @@ export default defineComponent({
   },
   setup (_, { refs, root }) {
     const functions = {
-      create () {
-        vars.onSubmit = true
-        if (validate(refs, fields) && vars.hasSindicante) {
-          // root.$router.push('/')
+      async create () {
+        if (validate(refs, fields)) {
+          if (!vars.escrivao) {
+            vars.escrivao = await refs.escrivao.handleSubmit()
+          }
+
+          if (!vars.sindicante) {
+            vars.sindicante = await refs.sindicante.handleSubmit()
+          }
+
+          if (vars.sindicante) {
+            vars.register.completo = true
+            await put(`sindicancias/${vars.register.id}`, vars.register)
+          }
         }
-        vars.onSubmit = false
-      },
-      checkDuplicated (value: string) {
-        if (value === '1212/12') refs.dialog.show()
-      },
-      changeHasSindicante (value: boolean) {
-        vars.hasSindicante = value
       },
       async loadData () {
         const { id } = root.$route.params
         if (id) {
-          const { data } = await get(`sindicancias/${id}`)
-          vars.register = data
+          vars.register = await get(`sindicancias/${id}`)
         }
       }
     }
 
+    // eslint-disable-next-line no-void
     void functions.loadData()
+
     return {
       ...toRefs(vars),
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       ...functions
     }
   }

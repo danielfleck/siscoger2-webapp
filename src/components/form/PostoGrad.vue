@@ -19,8 +19,12 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
 import { postograd } from 'src/config/selects'
+import { getDense } from 'src/store/utils'
 
 export default defineComponent({
   name: 'PostoGrad',
@@ -46,7 +50,7 @@ export default defineComponent({
     const vars = reactive({
       errorMsg: '',
       validable: false,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       isValid: computed(() => {
         if (!vars.validable) return true
         if (props.required && !vars._value) {
@@ -70,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    watch(() => vars._value, () => vars.validable = true)
+    watch(() => vars._value, () => (vars.validable = true))
 
     return {
       ...toRefs(vars),

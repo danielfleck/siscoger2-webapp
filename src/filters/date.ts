@@ -1,4 +1,4 @@
-declare type Locales = 'pt-br' | 'en' | 'fr-ca'
+export type Locales = 'pt-br' | 'en' | 'fr-ca'
 export const changeDate = (dateString: string, locale: Locales, extensive = false) => {
   if (!dateString) return ''
   const date = new Date(dateString)

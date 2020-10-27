@@ -53,10 +53,16 @@
 
 <script lang="ts">
 /* eslint-disable camelcase */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import BtnStack from 'components/form/BtnStack.vue'
+import { getDense } from 'src/store/utils'
 
 export default defineComponent({
   name: 'FileUpload',
@@ -67,7 +73,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup (props, { root, refs }) {
+  setup (props, { root }) {
     const vars = reactive({
       files: [] as File[],
       uploadProgress: [] as any[],
@@ -78,12 +84,12 @@ export default defineComponent({
       }
     })
     const computeds = {
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       isUploading: computed(() => vars.uploading !== null),
       canUpload: computed(() => vars.files.length)
     }
     const functions = {
-      cancelFile (index: any) {
+      cancelFile (index: number) {
         vars.files.splice(index, 1)
         vars.uploadProgress[index] = {
           ...vars.uploadProgress[index],
@@ -129,7 +135,7 @@ export default defineComponent({
             return progress
           }
 
-          const percent = Math.min(1, progress.percent + Math.random() / 10)
+          const percent = Math.min(1, Number(progress.percent) + Math.random() / 10)
           const error = percent < 1 && Math.random() > 0.95
 
           if (error === false && percent < 1 && done === true) {
@@ -144,6 +150,7 @@ export default defineComponent({
           }
         })
 
+        // eslint-disable-next-line @typescript-eslint/unbound-method
         vars.uploading = done !== true ? setTimeout(this.__updateUploadProgress, 300) : null
       },
       onBeforeUnmount () {

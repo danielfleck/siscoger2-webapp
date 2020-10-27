@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Loading, LocalStorage } from 'quasar'
@@ -87,7 +90,7 @@ export async function get (URL: string, { silent = true, msg = '', debug = false
   try {
     const response = await axios.get(getCompleteURL(URL), { headers })
     if (debug) console.timeEnd('⌚️ time to get request')
-    if (!silent) successNotify(transations.get.success)
+    if (!silent) successNotify(msg || transations.get.success)
     Loading.hide()
 
     return setResponse(response, { debug })
@@ -109,7 +112,7 @@ export async function post (URL: string, data: unknown, { file = false, silent =
   try {
     const response = await axios.post(getCompleteURL(URL), data, { headers })
     if (debug) console.timeEnd('⌚️ time to post request')
-    if (!silent) successNotify(transations.post.success)
+    if (!silent) successNotify(msg || transations.post.success)
     Loading.hide()
 
     return setResponse(response, { debug })
@@ -129,7 +132,7 @@ export async function put (URL: string, data: unknown, { silent = false, msg = '
   try {
     const response = await axios.put(getCompleteURL(URL), data, { headers })
     if (debug) console.timeEnd('⌚️ time to put request')
-    if (!silent) successNotify(transations.put.success)
+    if (!silent) successNotify(msg || transations.put.success)
     Loading.hide()
 
     return setResponse(response, { debug })
@@ -150,7 +153,7 @@ export async function deleteData (URL: string, { silent = false, msg = '', debug
   try {
     const response = await axios.delete(getCompleteURL(URL), { headers })
     if (debug) console.timeEnd('⌚️ time to delete request')
-    if (!silent) successNotify(transations.delete.success)
+    if (!silent) successNotify(msg || transations.delete.success)
     Loading.hide()
 
     return setResponse(response, { debug })

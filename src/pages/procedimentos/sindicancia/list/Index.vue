@@ -38,6 +38,7 @@
 <script lang="ts">
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
+import { getFab } from 'src/store/utils'
 
 export default defineComponent({
   name: 'Index',
@@ -66,7 +67,7 @@ export default defineComponent({
     return {
       ...toRefs(vars),
       ...functions,
-      fab: computed(() => root.$store.state.configs.fab)
+      fab: computed(() => getFab(root))
     }
   }
 })

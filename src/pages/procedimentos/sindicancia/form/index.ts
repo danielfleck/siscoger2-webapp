@@ -1,4 +1,4 @@
-import { defineComponent, reactive, computed, toRefs } from '@vue/composition-api'
+import { reactive } from '@vue/composition-api'
 
 const bread = [{ label: 'Sindicância', link: '/sindicancia' }]
 import { localePTBR } from 'src/config/app'
@@ -10,6 +10,7 @@ export const vars = reactive({
   tab: 'main',
   loading: false,
   sindicante: false,
+  escrivao: true,
   register: {
     id: 0,
     sintese_txt: null,
@@ -29,7 +30,7 @@ export const vars = reactive({
     prorogacao_dias: 0,
     motivo_abertura: '',
     motivo_outros: '',
-    completo: 0
+    completo: false
   },
   breadcrumbs: bread,
   localePTBR,

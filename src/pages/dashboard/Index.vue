@@ -33,12 +33,12 @@
 
 <script lang="ts">
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
-import { defineComponent, ref, reactive, computed } from '@vue/composition-api'
+import { defineComponent, ref, reactive } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'Index',
   components: { Breadcrumbs },
-  setup (_, { root }) {
+  setup () {
     const module = 'sindicancias'
     const tabs = ref([
       { link: '/', label: 'Gerais', icon: 'fa fa-users', badge: 10 },

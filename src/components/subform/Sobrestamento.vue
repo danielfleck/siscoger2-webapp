@@ -66,7 +66,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
+/* eslint-disable camelcase */
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { confirmMsg } from 'src/libs/dialog'
 import { validate } from 'src/libs/validator'
 import { motivoSobrestamento } from 'src/config/selects'

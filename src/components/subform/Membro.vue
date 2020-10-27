@@ -3,7 +3,7 @@
     <q-card-section class="row">
       <div class="q-pa-xs col-12">{{ label }}</div>
       <div class="q-pa-xs col-3">
-        <InputRG v-model="register.rg" ref="rg" required/>
+        <InputText label="RG" ref="rg" v-model="register.rg" required/>
       </div>
       <div class="q-pa-xs col-3">
         <InputText label="Nome" :disable="disabled" v-model="register.nome" ref="nome" required/>
@@ -24,7 +24,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, computed, watch } from '@vue/composition-api'
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { postograd } from 'src/config/selects'
 import { validate } from 'src/libs/validator'
 import { post, put } from 'src/libs/api'
@@ -33,16 +36,18 @@ import InputRG from 'components/form/InputRG.vue'
 import InputText from 'components/form/InputText.vue'
 import PostoGrad from 'components/form/PostoGrad.vue'
 import BtnStack from 'components/form/BtnStack.vue'
+import { getDense } from 'src/store/utils'
 
 const fields = ['rg', 'nome', 'cargo']
 
-declare type Membro = {
+declare interface Register {
+  id?: number
   rg: string
   nome: string
   cargo: string
   situacao: string
 }
-
+const moduleName = 'envolvidos'
 export default defineComponent({
   name: 'Membro',
   components: {
@@ -63,55 +68,68 @@ export default defineComponent({
     required: {
       type: Boolean,
       default: false
+    },
+    data: {
+      type: Object,
+      required: true
     }
   },
   setup (props, { root, refs, emit }) {
-    const vars: any = reactive({
-      validable: false,
+    const vars = reactive({
       register: {
         rg: '',
         nome: '',
         cargo: '',
         situacao: props.label
-      } as Membro,
+      } as Register,
+      validable: false,
+      disabled: true,
+      postograd
+    })
+
+    const computeds = {
       _value: computed({
         get: () => props.value,
-        set: value => emit('input', vars.isValid)
+        set: () => { emit('input', computeds.isValid); return true }
       }),
-      disabled: true,
-      postograd,
       isValid: computed(() => {
-        if (!vars.validable) return true
-        if (props.required && !vars.requireds) {
+        if (computeds.anyTouched) return false
+        if (props.required && !computeds.requireds) {
           return false
         }
         return true
       }),
       requireds: computed(() => Boolean(vars.register.rg) && Boolean(vars.register.nome) && Boolean(vars.register.cargo)),
-      denseVal: computed(() => root.$store.state.configs.dense)
-    })
+      anyTouched: computed(() => Boolean(vars.register.rg) || Boolean(vars.register.nome) || Boolean(vars.register.cargo))
+    }
 
     const functions = {
       validate () {
         return validate(refs, fields)
       },
-      handleSubmit () {
+      async loadData (): Promise<void> {
+        const response = await post(`${moduleName}/search`, props.data, { silent: true })
+        vars.register = response.length || response[0]
+      },
+      async handleSubmit (): Promise<void> {
         if (this.validate()) {
-          if (vars?.register?.id) this.update(vars?.register?.id)
-          else this.create()
+          if (vars?.register?.id) await this.update(vars?.register?.id)
+          else await this.create()
         }
       },
-      async create () {
-        return await post('envolvidos', vars.register, { silent: true })
+      async create (): Promise<void> {
+        await post(moduleName, vars.register, { silent: true })
       },
-      async update (id: number) {
-        return await put(`envolvidos/${id}`, vars.register, { silent: true })
+      async update (id: number): Promise<void> {
+        await put(`${moduleName}/${id}`, vars.register, { silent: true })
       }
     }
 
     return {
+      ...toRefs(vars),
+      ...computeds,
       ...functions,
-      ...toRefs(vars)
+      denseVal: computed(() => getDense(root))
     }
   }
 })

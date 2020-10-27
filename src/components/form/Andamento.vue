@@ -19,6 +19,9 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
 import {
   andamentoFATD,
@@ -33,6 +36,7 @@ import {
   andamentoSAI,
   Option
 } from 'src/config/selects'
+import { getDense } from 'src/store/utils'
 
 export default defineComponent({
   name: 'PostoGrad',
@@ -61,7 +65,7 @@ export default defineComponent({
     const vars = reactive({
       errorMsg: '',
       validable: false,
-      denseVal: computed(() => root.$store.state.configs.dense),
+      denseVal: computed(() => getDense(root)),
       isValid: computed(() => {
         if (!vars.validable) return true
         if (props.required && !vars._value) {
@@ -88,33 +92,45 @@ export default defineComponent({
         switch (type) {
           case 'fatd':
             vars.options = andamentoFATD
+            return true
           case 'ipm':
             vars.options = andamentoIPM
+            return true
           case 'sindicancia':
             vars.options = andamentoSindicancia
+            return true
           case 'cd':
             vars.options = andamentoCD
+            return true
           case 'cj':
             vars.options = andamentoCJ
+            return true
           case 'adl':
             vars.options = andamentoADL
+            return true
           case 'iso':
             vars.options = andamentoISO
+            return true
           case 'it':
             vars.options = andamentoIT
+            return true
           case 'pad':
             vars.options = andamentoPAD
+            return true
           case 'sai':
             vars.options = andamentoSAI
+            return true
 
           default:
             vars.options = andamentoSindicancia
+            return true
         }
       }
     }
-    void functions.getOptions()
 
-    watch(() => vars._value, () => vars.validable = true)
+    functions.getOptions()
+
+    watch(() => vars._value, () => (vars.validable = true))
 
     return {
       ...toRefs(vars),

@@ -118,6 +118,7 @@ const cleanRegister = {
   situacao: ''
 }
 
+const moduleName = 'ofendidos'
 export default defineComponent({
   name: 'Name',
   components: {
@@ -161,12 +162,12 @@ export default defineComponent({
     const functions = {
       async loadData (): Promise<void> {
         resetValidation(refs, fields)
-        vars.registers = await post('ofendidos/search', props.data, { silent: true })
+        vars.registers = await post(`${moduleName}/search`, props.data, { silent: true })
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...vars.register }
-          const response = await post('ofendidos', data)
+          const response = await post(moduleName, data)
           if (response) {
             vars.register = cleanRegister
             await this.loadData()
@@ -179,7 +180,7 @@ export default defineComponent({
       async update (register: Register): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...register }
-          await put(`ofendidos/${register?.id}`, data)
+          await put(`${moduleName}/${register?.id}`, data)
           vars.register = cleanRegister
           await this.loadData()
         }
@@ -187,7 +188,7 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`ofendidos/${register.id}`)
+          await deleteData(`${moduleName}/${register.id}`)
           vars.registers.splice(found, 1)
         })
       }

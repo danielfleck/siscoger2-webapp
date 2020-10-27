@@ -76,6 +76,7 @@ const cleanRegister = {
   origem_sjd_ref_ano: null
 }
 
+const moduleName = 'ligacoes'
 export default defineComponent({
   name: 'ProcedOrigem',
   components: {
@@ -110,13 +111,13 @@ export default defineComponent({
     const functions = {
       async loadData (): Promise<void> {
         resetValidation(refs, fields)
-        vars.registers = await post('ligacoes/search', props.data, { silent: true })
+        vars.registers = await post(`${moduleName}/search`, props.data, { silent: true })
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
           const data = { ...props.data, ...vars.register }
-          const response = await post('ligacoes', data)
+          const response = await post(moduleName, data)
           if (response) {
             vars.register = cleanRegister
             await this.loadData()
@@ -130,7 +131,7 @@ export default defineComponent({
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
           const data = { ...props.data, ...register }
-          const response = await put(`ligacoes/${register?.id}`, data)
+          const response = await put(`${moduleName}/${register?.id}`, data)
           if (response) {
             vars.register = cleanRegister
             await this.loadData()
@@ -140,7 +141,7 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`ligacoes/${register.id}`)
+          await deleteData(`${moduleName}/${register.id}`)
           vars.registers.splice(found, 1)
         })
       }

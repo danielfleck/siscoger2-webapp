@@ -49,23 +49,25 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { resultadoAcusado, postograd } from 'src/config/selects'
-import { confirmMsg } from 'src/libs/dialog'
 import { validate, resetValidation } from 'src/libs/validator'
 
 import InputText from 'components/form/InputText.vue'
 import PostoGrad from 'components/form/PostoGrad.vue'
 import ResultadoAcusado from 'components/form/ResultadoAcusado.vue'
 import BtnStack from 'components/form/BtnStack.vue'
+import { getDense } from 'src/store/utils'
+import { confirmMsg } from 'src/libs/dialog'
+import { deleteData, post, put } from 'src/libs/api'
+
 const fields = ['rg', 'nome', 'cargo']
-// const situacao = {
-//   sindicancia: 'Sindicado'
-// }
-const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
 
 export interface Register{
-  id: any
+  id?: number
   rg: string
   nome: string
   cargo: string
@@ -80,6 +82,7 @@ const cleanRegister = {
   resultado: ''
 }
 
+const moduleName = 'envolvidos'
 export default defineComponent({
   name: 'Acusado',
   components: { InputText, PostoGrad, ResultadoAcusado, BtnStack },
@@ -103,15 +106,11 @@ export default defineComponent({
     unique: {
       type: Boolean,
       default: false
+    },
+    data: {
+      type: Object,
+      required: true
     }
-    // proc: {
-    //   type: String,
-    //   required: true
-    // },
-    // id_proc: {
-    //   type: Number,
-    //   default: 0
-    // }
   },
 
   setup (props, { root, refs }) {
@@ -122,41 +121,55 @@ export default defineComponent({
         nome: '',
         cargo: '',
         resultado: ''
-      },
+      } as Register,
       registers: [] as Array<Register>,
       disabled: true,
       resultadoAcusado,
       postograd
     })
     const functions = {
-      create () {
+      async loadData (): Promise<void> {
+        resetValidation(refs, fields)
+        const response = await post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = response.length || response[0]
+      },
+      async create (): Promise<void> {
         if (validate(refs, fields)) {
-          vars.register.id = randomIntFromInterval(1, 999)
-          vars.registers.push(vars.register)
-          resetValidation(refs, fields)
-          vars.register = cleanRegister
+          const data = { ...props.data, ...vars.register }
+          const response = await post(moduleName, data)
+          if (response) {
+            vars.register = cleanRegister
+            await this.loadData()
+          }
         }
       },
       edit (register: Register) {
         vars.register = register
       },
-      update (register: Register) {
-        const found = vars.registers.findIndex(f => f.id === register.id)
-        vars.registers[found] = register
-        vars.register = cleanRegister
-        resetValidation(refs, fields)
+      async update (register: Register): Promise<void> {
+        if (validate(refs, fields)) {
+          const data = { ...props.data, ...register }
+          await put(`${moduleName}/${register?.id}`, data)
+          vars.register = cleanRegister
+          await this.loadData()
+        }
       },
-      remove (register: Register) {
+      remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
-        root.$q.dialog(confirmMsg).onOk(() => {
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          await deleteData(`${moduleName}/${register.id}`)
           vars.registers.splice(found, 1)
         })
       }
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    functions.loadData()
+
     return {
       ...toRefs(vars),
       ...functions,
-      denseVal: computed(() => root.$store.state.configs.dense)
+      denseVal: computed(() => getDense(root))
     }
   }
 })

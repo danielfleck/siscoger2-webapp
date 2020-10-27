@@ -7,6 +7,7 @@
 import { defineComponent } from '@vue/composition-api'
 declare module '@vue/composition-api' {
   interface SetupContext {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     readonly refs: { [key: string]: Vue | Element | Vue[] | Element[] | any };
   }
 }

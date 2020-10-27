@@ -134,9 +134,9 @@
 </template>
 
 <script>
-import { uid, exportFile } from 'quasar'
-
+import { exportFile } from 'quasar'
 import TextHighlight from 'vue-text-highlight'
+
 function wrapCsvValue (val, formatFn) {
   let formatted = formatFn !== void 0
     ? formatFn(val)
@@ -151,23 +151,26 @@ function wrapCsvValue (val, formatFn) {
      */
   // .split('\n').join('\\n')
   // .split('\r').join('\\r')
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   return `"${formatted}"`
 }
+
 export default {
   name: 'Table',
   components: { TextHighlight },
   props: {
     label: {
       type: String,
+      default: '',
       required: true
     },
     data: {
       type: [Array, Object],
-      default: []
+      default: () => ([])
     },
     columns: {
       type: [Array, Object],
-      default: []
+      default: () => ([])
     },
     csv: {
       type: Boolean,
@@ -226,14 +229,15 @@ export default {
     getFilteredData () {
       const hasData = (item, column, self) => {
         const content = self.filterData[column]?.toLowerCase()
-        return item[column]?.toString()?.toLowerCase()?.indexOf(content) == -1
+        return item[column]?.toString()?.toLowerCase()?.indexOf(content) === -1
       }
+
       const self = this
-      const table_columns = this.columns.map((column) => column.field)
+      const tableColumns = this.columns.map((column) => column.field)
       const tableData = this.data.filter((item) => {
-        for (let i = 0; i < table_columns.length; i++) {
-          const column = table_columns[i]
-          if (self.filterData[column] == '') { continue }
+        for (let i = 0; i < tableColumns.length; i++) {
+          const column = tableColumns[i]
+          if (self.filterData[column] === '') { continue }
           if (column in self.filterData && hasData(item, column, self)) {
             return false
           }
@@ -305,7 +309,7 @@ export default {
     })
   },
   methods: {
-    exportTable (type) {
+    exportTable (type = '') {
       // naive encoding to csv format
       const content = [this.columns.map(col => wrapCsvValue(col.label))].concat(
         this.data.map(row => this.columns.map(col => wrapCsvValue(
@@ -316,9 +320,9 @@ export default {
         )).join(','))
       ).join('\r\n')
       const status = exportFile(
-        this.label + '.' + type,
+        `${this.label}.${type}`,
         content,
-        'text/' + type
+        `text/${type}`
       )
       if (status !== true) {
         this.$q.notify({

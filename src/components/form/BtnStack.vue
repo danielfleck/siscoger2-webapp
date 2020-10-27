@@ -11,8 +11,11 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed } from '@vue/composition-api'
-import { localePTBR } from 'src/config/app'
+import { getDense } from 'src/store/utils'
 
 export default defineComponent({
   name: 'InputDate',
@@ -39,7 +42,7 @@ export default defineComponent({
   },
   setup (props, { root }) {
     return {
-      denseVal: computed(() => root.$store.state.configs.dense)
+      denseVal: computed(() => getDense(root))
     }
   }
 })

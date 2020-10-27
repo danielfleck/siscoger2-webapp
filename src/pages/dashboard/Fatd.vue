@@ -36,12 +36,12 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { get } from 'src/libs/api'
+// import { get } from 'src/libs/api'
 
 export default defineComponent({
   name: 'DashboardFATD',
   components: { Table },
-  setup (_, { root }) {
+  setup () {
     const vars = reactive({
       dataAbertura: [],
       columnsAbertura: [

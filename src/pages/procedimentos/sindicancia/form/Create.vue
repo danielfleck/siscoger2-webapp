@@ -63,8 +63,8 @@
       >
         <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
         <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ id_sindicancia: register.id }"/>
-        <Membro label="Escrivão" ref="escrivao"/>
-        <Acusado label="Sindicado"/>
+        <Membro label="Escrivão" ref="escrivao" :data="{ id_sindicancia: register.id }"/>
+        <Acusado label="Sindicado" :data="{ id_sindicancia: register.id }"/>
         <Vitima :data="{ id_sindicancia: register.id }"/>
       </q-step>
 
@@ -168,22 +168,21 @@ export default defineComponent({
           refs.stepper.next()
         }
       },
-      finalize () {
+      async finalize () {
         if (validate(refs, fields)) {
-          const sindicante = refs.sindicante.handleSubmit()
-          console.log(sindicante)
+          if (!vars.escrivao) {
+            vars.escrivao = await refs.escrivao.handleSubmit()
+          }
+
+          if (!vars.sindicante) {
+            vars.sindicante = await refs.sindicante.handleSubmit()
+          }
+
+          if (vars.sindicante) {
+            vars.register.completo = true
+            await put(`sindicancias/${vars.register.id}`, vars.register)
+          }
         }
-        // vars.onSubmit = true
-        // if (vars.hasSindicante) {
-        //   vars.loading = true
-        //   setTimeout(this.fakeLoad, 3000)
-        //   // root.$router.push('/')
-        // }
-        // vars.onSubmit = false
-      },
-      fakeLoad () {
-        vars.loading = false
-        refs.stepper.next()
       },
       previous () {
         refs.stepper.previous()

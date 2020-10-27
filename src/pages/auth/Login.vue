@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import { validate, resetValidation } from 'src/libs/validator'
@@ -95,10 +96,11 @@ export default defineComponent({
       },
       verifyIfLdapIsActive () {
         vars.ldapIsActive = false
+        return true
       }
     }
 
-    void functions.verifyIfLdapIsActive()
+    functions.verifyIfLdapIsActive()
 
     return {
       ...toRefs(vars),
