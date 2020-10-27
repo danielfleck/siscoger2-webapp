@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.14.5](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.4...v0.14.5) (2020-10-27)
+
+
+### Bug Fixes
+
+* **Vitima:** solve eslint problems ([3bf038a](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/3bf038a08756ef21fcac069f5f3aadd8cd3fb010))
+
 ### [0.14.4](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.3...v0.14.4) (2020-10-27)
 
 
