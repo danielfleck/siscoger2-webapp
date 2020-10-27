@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.14.6](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.5...v0.14.6) (2020-10-27)
+
+
+### Bug Fixes
+
+* **Sindicancia-create:** solve eslint problems ([5dffde8](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/5dffde856897c345e98265b44956dae9d0f88a44))
+
 ### [0.14.5](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.4...v0.14.5) (2020-10-27)
 
 
