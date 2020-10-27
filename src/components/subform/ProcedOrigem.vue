@@ -13,7 +13,7 @@
       </div>
       <div class="q-pa-xs col-3">
         <q-btn-group spread>
-          <BtnStack v-if="register.id" label="Editar" icon="fa fa-plus" @click="update(register)"/>
+          <BtnStack v-if="register.id" label="Atualizar" icon="fa fa-pen" @click="update(register)"/>
           <BtnStack v-else label="Inserir" icon="fa fa-plus" @click="create"/>
         </q-btn-group>
       </div>
@@ -118,8 +118,8 @@ export default defineComponent({
           const data = { ...props.data, ...vars.register }
           const response = await post('ligacoes', data)
           if (response) {
-            await this.loadData()
             vars.register = cleanRegister
+            await this.loadData()
           }
         }
       },
@@ -132,8 +132,8 @@ export default defineComponent({
           const data = { ...props.data, ...register }
           const response = await put(`ligacoes/${register?.id}`, data)
           if (response) {
-            await this.loadData()
             vars.register = cleanRegister
+            await this.loadData()
           }
         }
       },

@@ -65,7 +65,7 @@
         <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ id_sindicancia: register.id }"/>
         <Membro label="Escrivão" ref="escrivao"/>
         <Acusado label="Sindicado"/>
-        <Vitima />
+        <Vitima :data="{ id_sindicancia: register.id }"/>
       </q-step>
 
       <template v-slot:navigation>

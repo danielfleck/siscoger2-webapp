@@ -36,64 +36,64 @@
       </template>
       <div class="q-pa-xs col-2">
         <q-btn-group spread>
-          <BtnStack label="Cancelar" icon="fa fa-minus" @click="add = !add"/>
-          <BtnStack v-if="register.id" label="Editar" icon="fa fa-plus" @click="update(register)"/>
+          <BtnStack v-if="register.id" label="Atualizar" icon="fa fa-pen" @click="update(register)"/>
           <BtnStack v-else label="Inserir" icon="fa fa-plus" @click="create"/>
         </q-btn-group>
       </div>
     </q-card-section>
-    </q-card-section>
-    <q-card-section v-if="registers.length" class="row">
-      <q-list bordered separator class="q-pa-xs col-12">
-        <q-item clickable v-ripple >
-          <q-item-section>rg</q-item-section>
-          <q-item-section>nome</q-item-section>
-          <q-item-section>resultado/Grad</q-item-section>
-          <q-item-section>sexo</q-item-section>
-          <q-item-section>fone</q-item-section>
-          <q-item-section>email</q-item-section>
-          <q-item-section>idade</q-item-section>
-          <q-item-section>escolaridade</q-item-section>
-          <q-item-section>situacao</q-item-section>
-          <q-item-section>Ações</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple v-for="vitima in registers" :key="vitima.rg">
-          <q-item-section>{{vitima.rg}}</q-item-section>
-          <q-item-section>{{vitima.nome}}</q-item-section>
-          <q-item-section>{{vitima.resultado}}</q-item-section>
-          <q-item-section>{{vitima.sexo}}</q-item-section>
-          <q-item-section>{{vitima.fone}}</q-item-section>
-          <q-item-section>{{vitima.email}}</q-item-section>
-          <q-item-section>{{vitima.idade}}</q-item-section>
-          <q-item-section>{{vitima.escolaridade}}</q-item-section>
-          <q-item-section>{{vitima.situacao}}</q-item-section>
-          <q-item-section>
-            <q-btn-group spread>
-              <BtnStack label="Editar" icon="fa fa-plus" @click="edit(vitima)"/>
-              <BtnStack label="Apagar" icon="fa fa-plus" @click="remove(vitima)"/>
-            </q-btn-group>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card-section>
+    <q-expansion-item v-if="registers.length" :label="`${label} - lista`" default-opened>
+      <q-card-section class="row">
+        <q-list bordered separator class="q-pa-xs col-12">
+          <q-item clickable v-ripple >
+            <q-item-section>rg</q-item-section>
+            <q-item-section>nome</q-item-section>
+            <q-item-section>sexo</q-item-section>
+            <q-item-section>fone</q-item-section>
+            <q-item-section>email</q-item-section>
+            <q-item-section>idade</q-item-section>
+            <q-item-section>escolaridade</q-item-section>
+            <q-item-section>Ações</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple v-for="vitima in registers" :key="vitima.rg">
+            <q-item-section>{{vitima.rg}}</q-item-section>
+            <q-item-section>{{vitima.nome}}</q-item-section>
+            <q-item-section>{{vitima.sexo}}</q-item-section>
+            <q-item-section>{{vitima.fone}}</q-item-section>
+            <q-item-section>{{vitima.email}}</q-item-section>
+            <q-item-section>{{vitima.idade}}</q-item-section>
+            <q-item-section>{{vitima.escolaridade}}</q-item-section>
+            <q-item-section>
+              <q-btn-group spread>
+                <BtnStack label="Editar" icon="fa fa-pen" @click="edit(vitima)"/>
+                <BtnStack label="Apagar" icon="fa fa-trash" @click="remove(vitima)"/>
+              </q-btn-group>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-expansion-item>
   </q-card>
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { ofendidoResultado, ofendidoSexo, ofendidoEscolaridade, ofendidoSituacao } from 'src/config/selects'
-const randomIntFromInterval = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min)
-import { validate } from 'src/libs/validator'
+import { resetValidation, validate } from 'src/libs/validator'
 
 import InputRG from 'components/form/InputRG.vue'
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 import BtnStack from 'components/form/BtnStack.vue'
+import { getDense } from 'src/store/utils'
+import { confirmMsg } from 'src/libs/dialog'
+import { deleteData, post, put } from 'src/libs/api'
 
 const fields = ['rg', 'nome']
 
 export interface Register{
-  id: any
+  id?: number
   rg: string
   nome: string
   resultado: string
@@ -129,7 +129,11 @@ export default defineComponent({
   props: {
     label: {
       type: String,
-      default: 'vitima'
+      default: 'Vitima'
+    },
+    data: {
+      type: Object,
+      required: true
     }
   },
   setup (props, { root, refs }) {
@@ -149,43 +153,53 @@ export default defineComponent({
         idade: '',
         escolaridade: '',
         situacao: ''
-      },
+      } as Register,
       registers: [] as Array<Register>,
       disabled: true,
       type: props.label
     })
     const functions = {
-      create () {
+      async loadData (): Promise<void> {
+        resetValidation(refs, fields)
+        vars.registers = await post('ofendidos/search', props.data, { silent: true })
+      },
+      async create (): Promise<void> {
         if (validate(refs, fields)) {
-          vars.register.id = randomIntFromInterval(1, 999)
-          vars.registers.push(vars.register)
-          vars.register = cleanRegister
+          const data = { ...props.data, ...vars.register }
+          const response = await post('ofendidos', data)
+          if (response) {
+            vars.register = cleanRegister
+            await this.loadData()
+          }
         }
       },
       edit (register: Register) {
         vars.register = register
       },
-      update (register: Register) {
-        const found = vars.registers.findIndex(f => f.id === register.id)
-        vars.registers[found] = register
-        vars.register = cleanRegister
+      async update (register: Register): Promise<void> {
+        if (validate(refs, fields)) {
+          const data = { ...props.data, ...register }
+          await put(`ofendidos/${register?.id}`, data)
+          vars.register = cleanRegister
+          await this.loadData()
+        }
       },
-      remove (register: Register) {
+      remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
-        root.$q.dialog({
-          title: 'Atenção!',
-          message: 'Você tem certeza que deseja realmente remover?',
-          cancel: true,
-          persistent: true
-        }).onOk(() => {
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          await deleteData(`ofendidos/${register.id}`)
           vars.registers.splice(found, 1)
         })
       }
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    functions.loadData()
+
     return {
       ...toRefs(vars),
       ...functions,
-      denseVal: computed(() => root.$store.state.configs.dense)
+      denseVal: computed(() => getDense(root))
     }
   }
 })
