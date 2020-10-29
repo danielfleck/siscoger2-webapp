@@ -6,7 +6,7 @@
         <InputDate v-model="register.data" label="Data" ref="data" required defaultToday/>
       </div>
       <div class="q-pa-xs col-12">
-        <InputText label="Descrição" ref="descricao" v-model="register.descricao" :minLength="50" autogrow required/>
+        <InputText label="Descrição" ref="descricao" v-model="register.descricao" :minLength="50" autogrow required :lorem="100"/>
       </div>
       <div class="q-pa-xs col-12">
         <q-btn
@@ -46,11 +46,14 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { confirmMsg } from 'src/libs/dialog'
 import { validate } from 'src/libs/validator'
 
-import { randomIntFromInterval } from 'src/utils/mockValues'
+import { deleteData, post, put } from 'src/libs/api'
 
 import InputText from 'components/form/InputText.vue'
 import InputDate from 'components/form/InputDate.vue'
@@ -73,7 +76,7 @@ const cleanRegister = {
 }
 
 const fields = ['data', 'descricao']
-
+const moduleName = 'movimentos'
 export default defineComponent({
   name: 'Movimento',
   components: { InputText, InputDate, BtnStack },
@@ -82,12 +85,9 @@ export default defineComponent({
       type: String,
       default: 'Movimentos'
     },
-    proc: {
-      type: String
-    },
-    id_proc: {
-      type: Number,
-      default: 0
+    data: {
+      type: Object,
+      required: true
     }
   },
   setup (props, { root, refs }) {
@@ -102,28 +102,45 @@ export default defineComponent({
       registers: [] as Array<Register>
     })
     const functions = {
-      create () {
+      async loadData (): Promise<void> {
+        // resetValidation(refs, fields)
+        const response = await post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = response
+      },
+      async create (): Promise<void> {
         if (validate(refs, fields)) {
-          vars.register.id = randomIntFromInterval(1, 999)
-          vars.registers.push(vars.register)
-          vars.register = cleanRegister
+          const data = { ...props.data, ...vars.register }
+          const response = await post(moduleName, data, { complete: true })
+          if (response.returntype === 'success') {
+            vars.register = cleanRegister
+            await this.loadData()
+          }
         }
       },
       edit (register: Register) {
         vars.register = register
       },
-      update (register: Register) {
-        const found = vars.registers.findIndex(f => f.id === register.id)
-        vars.registers[found] = register
-        vars.register = cleanRegister
+      async update (register: Register): Promise<void> {
+        if (validate(refs, fields)) {
+          const data = { ...props.data, ...register }
+          const response = await put(`${moduleName}/${register?.id}`, data, { complete: true })
+          if (response.returntype === 'success') {
+            vars.register = cleanRegister
+            await this.loadData()
+          }
+        }
       },
-      remove (register: Register) {
+      remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
-        root.$q.dialog(confirmMsg).onOk(() => {
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          await deleteData(`${moduleName}/${register.id}`)
           vars.registers.splice(found, 1)
         })
       }
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    functions.loadData()
 
     return {
       ...toRefs(vars),

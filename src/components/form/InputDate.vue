@@ -23,8 +23,8 @@
           :locale="localePTBR"
           v-model="_value"
           @input="closeCalendar"
-          today-btn
-          mask="DD/MM/YYYY"/>
+          mask="DD/MM/YYYY"
+          />
         </q-popup-proxy>
       </q-icon>
     </template>
@@ -39,7 +39,7 @@ import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composi
 import { localePTBR } from 'src/config/app'
 import { changeDate, Locales } from 'src/filters'
 import { getDense } from 'src/store/utils'
-import { getCurrentDate } from 'src/utils/mockValues'
+import { getCurrentDate } from 'src/filters/date'
 
 export default defineComponent({
   name: 'InputDate',
@@ -91,19 +91,27 @@ export default defineComponent({
         refs.root.validate()
         return vars.isValid
       },
+      resetValidation () {
+        vars.validable = false
+        refs.root.resetValidation()
+        return vars.isValid
+      },
+      openCalendar () {
+        refs.qDateProxy.show()
+      },
       closeCalendar () {
+        // vars._value = functions.castDate(props.value, 'pt-br')
+        // emit('input', functions.castDate(value, 'fr-ca'))
         refs.qDateProxy.hide()
       },
-      getCurrentDate () {
-        if (props.defaultToday) vars._value = getCurrentDate()
-        return null
+      getDate () {
+        return getCurrentDate('pt-br')
       },
       castDate (date: any, type: Locales) {
-        return changeDate(date, type)
+        const casted = changeDate(date, type)
+        return casted
       }
     }
-
-    functions.getCurrentDate()
 
     watch(() => vars._value, () => (vars.validable = true))
 

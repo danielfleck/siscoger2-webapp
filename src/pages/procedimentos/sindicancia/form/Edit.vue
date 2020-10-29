@@ -59,29 +59,31 @@
           <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
         </div>
         <div class="q-pa-md col-12">
-          <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required/>
+          <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
-        <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
-        <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ id_sindicancia: register.id }"/>
-        <Membro label="Escrivão" ref="escrivao" :data="{ id_sindicancia: register.id }"/>
-        <Acusado label="Sindicado" :data="{ id_sindicancia: register.id }"/>
-        <Vitima :data="{ id_sindicancia: register.id }"/>
-        <FileUpload label="Relatório do Encarregado"/>
-        <FileUpload label="Solução do Comandante"/>
-        <FileUpload label="Solução CMT Geral"/>
+        <template v-if="register.id">
+          <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
+          <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
+          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
+          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_sindicancia: register.id }"/>
+          <Vitima :data="{ id_sindicancia: register.id }"/>
+          <FileUpload label="Relatório do Encarregado" :data="{ id_sindicancia: register.id }"/>
+          <FileUpload label="Solução do Comandante" :data="{ id_sindicancia: register.id }"/>
+          <FileUpload label="Solução CMT Geral" :data="{ id_sindicancia: register.id }"/>
+        </template>
         <q-btn @click="create" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
 
       <q-tab-panel name="movimentos">
-        <movimento />
+        <movimento :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
       <q-tab-panel name="sobrestamentos">
-        <sobrestamento />
+        <sobrestamento :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
       <q-tab-panel name="arquivos">
-        <arquivo />
+        <arquivo :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
     </q-tab-panels>
 

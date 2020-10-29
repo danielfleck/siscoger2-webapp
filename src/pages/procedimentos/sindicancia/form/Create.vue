@@ -50,7 +50,7 @@
             <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
           </div>
           <div class="q-pa-md col-12">
-            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required/>
+            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :loren="200"/>
           </div>
         </form>
       </q-step>
@@ -61,11 +61,13 @@
         icon="create_new_folder"
         :done="step > 2"
       >
-        <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
-        <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ id_sindicancia: register.id }"/>
-        <Membro label="Escrivão" ref="escrivao" :data="{ id_sindicancia: register.id }"/>
-        <Acusado label="Sindicado" :data="{ id_sindicancia: register.id }"/>
-        <Vitima :data="{ id_sindicancia: register.id }"/>
+        <template v-if="register.id">
+          <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
+          <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
+          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
+          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_sindicancia: register.id }"/>
+          <Vitima :data="{ id_sindicancia: register.id }"/>
+        </template>
       </q-step>
 
       <template v-slot:navigation>
@@ -155,15 +157,17 @@ export default defineComponent({
         }
       },
       async create () {
-        const response = await post('sindicancias', vars.register, { silent: true })
-        if (response) {
+        const response = await post('sindicancias', vars.register, { silent: true, complete: true })
+
+        if (response.returntype === 'success') {
           vars.register = response
           refs.stepper.next()
         }
       },
       async update (id: number) {
-        const response = await put(`sindicancias/${id}`, vars.register, { silent: true })
-        if (response) {
+        const response = await put(`sindicancias/${id}`, vars.register, { silent: true, complete: true })
+
+        if (response.returntype === 'success') {
           vars.register = response
           refs.stepper.next()
         }

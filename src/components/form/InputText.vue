@@ -22,6 +22,9 @@
         </q-tooltip>
       </q-icon>
     </template>
+    <template v-slot:prepend v-if="lorem">
+      <q-icon color="green-9" name="fa fa-check-circle" @click="getLorem"/>
+    </template>
   </q-input>
 </template>
 
@@ -30,6 +33,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
+import { fakeLorem } from 'src/filters'
 import { getDense } from 'src/store/utils'
 
 export default defineComponent({
@@ -65,6 +69,10 @@ export default defineComponent({
     tooltip: {
       type: String,
       default: ''
+    },
+    lorem: {
+      type: Number,
+      default: 0
     }
   },
   setup (props, { root, emit, refs }) {
@@ -95,6 +103,11 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
+      },
+      getLorem () {
+        const value = fakeLorem('words', 50)
+        vars._value = value
+        emit('input', value)
       }
     }
 

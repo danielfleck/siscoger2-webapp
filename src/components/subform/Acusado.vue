@@ -9,7 +9,7 @@
         <InputText :disable="disabled" label="Nome" ref="nome" v-model="register.nome" required/>
       </div>
       <div class="q-pa-xs col-3">
-        <PostoGrad v-model="register.cargo" ref="cargo" required/>
+        <PostoGrad :disable="disabled" v-model="register.cargo" ref="cargo" required/>
       </div>
       <div class="q-pa-xs col-2">
         <ResultadoAcusado v-model="register.resultado" label="Resultado" ref="resultado"/>
@@ -17,34 +17,41 @@
       <div class="q-pa-xs col-2">
          <q-btn-group spread>
           <BtnStack :label="disabled ? 'Liberar' : 'Bloquear'" :icon=" disabled ? 'fa fa-lock' : 'fa fa-lock-open'" @click="disabled = !disabled"/>
-          <BtnStack v-if="register.id" label="Editar" icon="fa fa-plus" @click="update(register)"/>
+          <BtnStack v-if="register.id" label="Atualizar" icon="fa fa-pen" @click="update(register)"/>
           <BtnStack :disable="unique && registers.length" v-else label="Inserir" icon="fa fa-plus" @click="create"/>
         </q-btn-group>
       </div>
     </q-card-section>
-    <q-card-section v-if="registers.length" class="row">
-      <q-list bordered separator class="q-pa-xs col-12">
-        <q-item clickable v-ripple >
-          <q-item-section>RG</q-item-section>
-          <q-item-section>Nome</q-item-section>
-          <q-item-section>Posto/Grad</q-item-section>
-          <q-item-section>Resultado</q-item-section>
-          <q-item-section>Ações</q-item-section>
-        </q-item>
-        <q-item clickable v-ripple v-for="acusado in registers" :key="acusado.rg">
-          <q-item-section>{{acusado.rg}}</q-item-section>
-          <q-item-section>{{acusado.nome}}</q-item-section>
-          <q-item-section>{{acusado.cargo}}</q-item-section>
-          <q-item-section>{{acusado.resultado || 'Não há'}}</q-item-section>
-          <q-item-section>
-            <q-btn-group spread>
-              <BtnStack label="Editar" icon="fa fa-plus" @click="edit(acusado)"/>
-              <BtnStack label="Apagar" icon="fa fa-trash" @click="remove(acusado)"/>
-            </q-btn-group>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card-section>
+    <q-expansion-item
+      v-if="registers.length"
+      :label="`${label} - lista`"
+      default-opened
+      :caption="`Total: ${registers.length}`"
+      >
+      <q-card-section class="row">
+        <q-list bordered separator class="q-pa-xs col-12">
+          <q-item clickable v-ripple >
+            <q-item-section>RG</q-item-section>
+            <q-item-section>Nome</q-item-section>
+            <q-item-section>Posto/Grad</q-item-section>
+            <q-item-section>Resultado</q-item-section>
+            <q-item-section>Ações</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple v-for="acusado in registers" :key="acusado.rg">
+            <q-item-section>{{acusado.rg}}</q-item-section>
+            <q-item-section>{{acusado.nome}}</q-item-section>
+            <q-item-section>{{acusado.cargo}}</q-item-section>
+            <q-item-section>{{acusado.resultado || 'Não há'}}</q-item-section>
+            <q-item-section>
+              <q-btn-group spread>
+                <BtnStack label="Editar" icon="fa fa-pen" @click="edit(acusado)"/>
+                <BtnStack label="Apagar" icon="fa fa-trash" @click="remove(acusado)"/>
+              </q-btn-group>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-card-section>
+    </q-expansion-item>
   </q-card>
 </template>
 
@@ -66,7 +73,7 @@ import { deleteData, post, put } from 'src/libs/api'
 
 const fields = ['rg', 'nome', 'cargo']
 
-export interface Register{
+export interface Register {
   id?: number
   rg: string
   nome: string
@@ -92,7 +99,7 @@ export default defineComponent({
       required: true
     },
     value: {
-      type: String,
+      type: [String, Number, Boolean],
       default: ''
     },
     required: {
@@ -131,27 +138,30 @@ export default defineComponent({
       async loadData (): Promise<void> {
         resetValidation(refs, fields)
         const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = response.length || response[0]
+        vars.registers = response
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...vars.register }
-          const response = await post(moduleName, data)
-          if (response) {
+          const response = await post(moduleName, data, { complete: true })
+          if (response.returntype === 'success') {
             vars.register = cleanRegister
             await this.loadData()
           }
         }
       },
       edit (register: Register) {
+        vars.disabled = true
         vars.register = register
       },
       async update (register: Register): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...register }
-          await put(`${moduleName}/${register?.id}`, data)
-          vars.register = cleanRegister
-          await this.loadData()
+          const response = await put(`${moduleName}/${register?.id}`, data, { complete: true })
+          if (response.returntype === 'success') {
+            vars.register = cleanRegister
+            await this.loadData()
+          }
         }
       },
       remove (register: Register): void {

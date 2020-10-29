@@ -41,7 +41,12 @@
         </q-btn-group>
       </div>
     </q-card-section>
-    <q-expansion-item v-if="registers.length" :label="`${label} - lista`" default-opened>
+    <q-expansion-item
+      v-if="registers.length"
+      :label="`${label} - lista`"
+      default-opened
+      :caption="`Total: ${registers.length}`"
+      >
       <q-card-section class="row">
         <q-list bordered separator class="q-pa-xs col-12">
           <q-item clickable v-ripple >

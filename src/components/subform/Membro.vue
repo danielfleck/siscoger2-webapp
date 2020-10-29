@@ -47,6 +47,15 @@ declare interface Register {
   cargo: string
   situacao: string
 }
+
+const cleanRegister = {
+  id: 0,
+  rg: '',
+  nome: '',
+  cargo: '',
+  resultado: ''
+}
+
 const moduleName = 'envolvidos'
 export default defineComponent({
   name: 'Membro',
@@ -62,7 +71,7 @@ export default defineComponent({
       required: true
     },
     value: {
-      type: Boolean,
+      type: [String, Number, Boolean, Object],
       default: false
     },
     required: {
@@ -89,7 +98,7 @@ export default defineComponent({
 
     const computeds = {
       _value: computed({
-        get: () => props.value,
+        get: () => String(props.value),
         set: () => { emit('input', computeds.isValid); return true }
       }),
       isValid: computed(() => {
@@ -109,7 +118,7 @@ export default defineComponent({
       },
       async loadData (): Promise<void> {
         const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.register = response.length || response[0]
+        vars.register = response.length ? response[0] : cleanRegister
       },
       async handleSubmit (): Promise<void> {
         if (this.validate()) {
@@ -124,6 +133,9 @@ export default defineComponent({
         await put(`${moduleName}/${id}`, vars.register, { silent: true })
       }
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    functions.loadData()
 
     return {
       ...toRefs(vars),
