@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.15.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.7...v0.15.0) (2020-10-29)
+
+
+### Features
+
+* add functions to CRUD Membro, Sobrestamento and Arquivos ([9d483ac](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/9d483acfa61788a1a41f43a783570ac4adfc51ac))
+
 ### [0.14.7](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.6...v0.14.7) (2020-10-27)
 
 
