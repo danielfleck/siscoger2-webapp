@@ -96,7 +96,7 @@ export async function get (URL: string, { silent = true, msg = '', complete = fa
     // PrettyLog.error(`Error to get ${URL}`, e)
     Loading.hide()
 
-    return []
+    return setResponse(e.response, { complete, debug })
   }
 }
 
@@ -116,7 +116,7 @@ export async function post (URL: string, data: unknown, { file = false, silent =
     if (debug) console.timeEnd('⌚️ time to post request')
     // PrettyLog.error(`Error to post ${URL}`, e)
     Loading.hide()
-    return []
+    return setResponse(e.response, { complete, debug })
   }
 }
 
@@ -137,7 +137,7 @@ export async function put (URL: string, data: unknown, { silent = false, msg = '
     // PrettyLog.error(`Error to put ${URL}`, e)
     Loading.hide()
 
-    return []
+    return setResponse(e.response, { complete, debug })
   }
 }
 
@@ -158,6 +158,6 @@ export async function deleteData (URL: string, { silent = false, msg = '', compl
     // PrettyLog.error(`Error to delete ${URL}`, e)
     Loading.hide()
 
-    return []
+    return setResponse(e.response, { complete, debug })
   }
 }
