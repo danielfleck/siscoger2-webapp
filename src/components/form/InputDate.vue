@@ -1,5 +1,6 @@
 <template>
   <q-input
+  stack-label
   type="date"
   hide-bottom-space
   :dense="denseVal"
@@ -56,7 +57,7 @@ import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composi
 import { localePTBR } from 'src/config/app'
 import { changeDate, Locales } from 'src/filters'
 import { getDense } from 'src/store/utils'
-import { getCurrentDate } from 'src/filters/date'
+// import { getCurrentDate } from 'src/filters/date'
 
 export default defineComponent({
   name: 'InputDate',
@@ -121,7 +122,7 @@ export default defineComponent({
       },
       getDate (): void {
         if (!props.value && props.defaultToday) {
-          vars._value = getCurrentDate('fr-ca')
+          vars._value = new Date().toISOString()
         }
       },
       castDate (date: any, type: Locales) {
@@ -130,7 +131,7 @@ export default defineComponent({
       }
     }
 
-    // functions.getDate()
+    functions.getDate()
 
     watch(() => vars._value, () => (vars.validable = true))
 

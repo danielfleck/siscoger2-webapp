@@ -6,6 +6,7 @@
   "author": "EmersonBraun <emersonfbraun@gmail.com>",
   "private": true,
   "scripts": {
+    "start": "quasar dev",
     "lint": "eslint --ext .js,.ts,.vue ./",
     "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
