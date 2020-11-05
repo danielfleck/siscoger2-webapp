@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.15.0...v0.15.1) (2020-11-05)
+
+
+### Bug Fixes
+
+* solve datepicker format ([deabb16](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/deabb16379092a61cb1946e6ae85ce7e8daad991))
+* solve lib api error response ([32d39f9](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/32d39f902edfe45746699a23a7407265f6ac829d))
+
 ## [0.15.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.14.7...v0.15.0) (2020-10-29)
 
 
