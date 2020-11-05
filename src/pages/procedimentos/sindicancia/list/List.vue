@@ -43,12 +43,12 @@ export default defineComponent({
         vars.data = Object.freeze(data)
       },
       onEdit (row: any) {
-        void root.$router.push(`/sindicancias/editar/${row.id_sindicancia}`)
+        void root.$router.push(`/sindicancias/editar/${row.id}`)
       },
       onDelete (row: any) {
-        console.log(row.id_sindicancia)
+        console.log(row.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`sindicancias/${row.id_sindicancia}`)
+          await deleteData(`sindicancias/${row.id}`)
           void this.loadData()
         })
       }

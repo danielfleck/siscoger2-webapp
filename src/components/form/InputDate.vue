@@ -1,14 +1,25 @@
 <template>
   <q-input
+  type="date"
+  hide-bottom-space
+  :dense="denseVal"
+  outlined
+  v-model="_value"
+  :label="label"
+  ref="root"
+  @blur="validable = true"
+  @validate="validate"
+  :error-message="errorMsg"
+  :error="!isValid"
+  :disable="disable"
+  />
+  <!-- <q-input
     hide-bottom-space
     :dense="denseVal"
     outlined
     clearable
     v-model="_value"
     :label="label"
-    mask="##/##/####"
-    v-bind="$attrs"
-    v-on="$listeners"
     ref="root"
     @blur="validable = true"
     @validate="validate"
@@ -18,23 +29,29 @@
     >
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
-        <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+        <q-popup-proxy
+          ref="qDateProxy"
+          transition-show="scale"
+          transition-hide="scale"
+          >
           <q-date
-          :locale="localePTBR"
+          minimal
           v-model="_value"
+          :locale="localePTBR"
           @input="closeCalendar"
           mask="DD/MM/YYYY"
           />
         </q-popup-proxy>
       </q-icon>
     </template>
-  </q-input>
+  </q-input> -->
 </template>
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { localePTBR } from 'src/config/app'
 import { changeDate, Locales } from 'src/filters'
@@ -79,7 +96,7 @@ export default defineComponent({
         return true
       }),
       _value: computed({
-        get: () => functions.castDate(props.value, 'pt-br'),
+        get: () => functions.castDate(props.value, 'fr-ca'),
         set: value => emit('input', functions.castDate(value, 'fr-ca'))
       }),
       localePTBR
@@ -100,18 +117,20 @@ export default defineComponent({
         refs.qDateProxy.show()
       },
       closeCalendar () {
-        // vars._value = functions.castDate(props.value, 'pt-br')
-        // emit('input', functions.castDate(value, 'fr-ca'))
         refs.qDateProxy.hide()
       },
-      getDate () {
-        return getCurrentDate('pt-br')
+      getDate (): void {
+        if (!props.value && props.defaultToday) {
+          vars._value = getCurrentDate('fr-ca')
+        }
       },
       castDate (date: any, type: Locales) {
         const casted = changeDate(date, type)
         return casted
       }
     }
+
+    // functions.getDate()
 
     watch(() => vars._value, () => (vars.validable = true))
 

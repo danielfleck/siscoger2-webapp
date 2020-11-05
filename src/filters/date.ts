@@ -1,8 +1,12 @@
 export type Locales = 'pt-br' | 'en' | 'fr-ca'
+
 export const changeDate = (dateString: string, locale: Locales, extensive = false) => {
   if (!dateString) return ''
-  const date = new Date(dateString)
+  if (['/'].indexOf(dateString)) {
+    dateString = dateString.split('/').reverse().join('-')
+  }
 
+  const date = new Date(dateString)
   const options = { year: 'numeric', month: 'long', day: 'numeric' }
 
   if (extensive) {

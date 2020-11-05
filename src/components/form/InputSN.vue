@@ -33,7 +33,7 @@ export default defineComponent({
       required: true
     },
     value: {
-      type: Number,
+      type: [Number, String, Boolean],
       default: 0
     },
     required: {
@@ -63,7 +63,7 @@ export default defineComponent({
         return true
       }),
       _value: computed({
-        get: () => props.value,
+        get: () => Number(props.value),
         set: value => emit('input', value)
       })
     })
