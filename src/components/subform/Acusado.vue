@@ -61,7 +61,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { resultadoAcusado, postograd } from 'src/config/selects'
-import { validate, resetValidation } from 'src/libs/validator'
+import { validate } from 'src/libs/validator'
 
 import InputText from 'components/form/InputText.vue'
 import PostoGrad from 'components/form/PostoGrad.vue'
@@ -136,7 +136,7 @@ export default defineComponent({
     })
     const functions = {
       async loadData (): Promise<void> {
-        resetValidation(refs, fields)
+        // resetValidation(refs, fields)
         const response = await post(`${moduleName}/search`, props.data, { silent: true })
         vars.registers = response
       },

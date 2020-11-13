@@ -166,7 +166,7 @@ export default defineComponent({
     })
     const functions = {
       async loadData (): Promise<void> {
-        resetValidation(refs, fields)
+        // resetValidation(refs, fields)
         vars.registers = await post(`${moduleName}/search`, props.data, { silent: true })
       },
       async create (): Promise<void> {

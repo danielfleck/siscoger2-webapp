@@ -94,7 +94,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { defineComponent, computed, toRefs } from '@vue/composition-api'
+import { defineComponent, computed, ref, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
@@ -156,18 +156,20 @@ export default defineComponent({
     AndamentoCoger
   },
   setup (_, { refs, root }) {
+    let sindicante = ref(false)
+    let escrivao = ref(true)
     const functions = {
       async create () {
         if (validate(refs, fields)) {
-          if (!vars.escrivao) {
-            vars.escrivao = await refs.escrivao.handleSubmit()
+          if (!escrivao) {
+            escrivao = await refs.escrivao.handleSubmit()
           }
 
-          if (!vars.sindicante) {
-            vars.sindicante = await refs.sindicante.handleSubmit()
+          if (!sindicante) {
+            sindicante = await refs.sindicante.handleSubmit()
           }
 
-          if (vars.sindicante) {
+          if (sindicante) {
             vars.register.completo = true
             await put(`sindicancias/${vars.register.id}`, vars.register)
           }

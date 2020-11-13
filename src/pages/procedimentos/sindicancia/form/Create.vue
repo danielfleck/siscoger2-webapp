@@ -89,7 +89,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { defineComponent, toRefs } from '@vue/composition-api'
+import { defineComponent, ref, toRefs } from '@vue/composition-api'
 import {
   Page,
   ProcedOrigem,
@@ -123,7 +123,8 @@ const fields = [
   'portaria_data',
   'prorogacao_dias',
   'motivo_outros',
-  'sindicante'
+  'sindicante',
+  'escrivao'
 ]
 
 export default defineComponent({
@@ -149,6 +150,8 @@ export default defineComponent({
     Portaria
   },
   setup (_, { refs }) {
+    const sindicante = ref(false)
+    const escrivao = ref(true)
     const functions = {
       async add () {
         if (validate(refs, fields)) {
@@ -159,44 +162,40 @@ export default defineComponent({
       async create () {
         const response = await post('sindicancias', vars.register, { silent: true, complete: true, debug: true })
         if (response.returntype === 'success') {
-          vars.register = response.data
+          vars.register.id = response.data.id
           refs.stepper.next()
           return undefined
         }
       },
       async update (id: number) {
-        const response = await put(`sindicancias/${id}`, vars.register, { silent: true, complete: true })
+        const response = await put(`sindicancias/${id}`, vars.register, { silent: true, complete: true, debug: true })
 
         if (response.returntype === 'success') {
-          vars.register = response
           refs.stepper.next()
         }
       },
-      // async finalize () {
-      //   if (validate(refs, fields)) {
-      //     console.log('here')
-      //     if (!vars.escrivao) {
-      //       vars.escrivao = await refs.escrivao.handleSubmit()
-      //     }
+      async finalize () {
+        if (validate(refs, fields)) {
+          console.log(sindicante.value)
+          const resSindicante = await refs.sindicante.handleSubmit()
+          console.log(resSindicante)
 
-      //     if (!vars.sindicante) {
-      //       vars.sindicante = await refs.sindicante.handleSubmit()
-      //     }
+          const resEscrivao = await refs.escrivao.handleSubmit()
+          console.log(resEscrivao)
 
-      //     if (vars.sindicante) {
-      //       vars.register.completo = true
-      //       await put(`sindicancias/${vars.register.id}`, vars.register)
-      //     }
-      //   }
-      // },
+          if (resSindicante) {
+            vars.register.completo = true
+            await put(`sindicancias/${vars.register.id}`, vars.register)
+          }
+        }
+      },
       previous () {
         refs.stepper.previous()
-      },
-      changeHasSindicante (value: boolean) {
-        vars.hasSindicante = value
       }
     }
     return {
+      sindicante,
+      escrivao,
       ...toRefs(vars),
       ...functions
     }

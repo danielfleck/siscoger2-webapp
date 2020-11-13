@@ -1,16 +1,14 @@
 import { reactive } from '@vue/composition-api'
+import { localePTBR } from 'src/config/app'
+import { opms } from 'src/config/opms'
+import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
 
 const bread = [{ label: 'Sindicância', link: '/sindicancia' }]
-import { localePTBR } from 'src/config/app'
-import { andamentoSindicancia, andamentoCogerSindicancia, tipoBoletim, prorogacao, motivoAberturaSindicancia } from 'src/config/selects'
-import { opms } from 'src/config/opms'
 
 export const vars = reactive({
   step: 1,
   tab: 'main',
   loading: false,
-  sindicante: false,
-  escrivao: true,
   register: {
     id: 0,
     sintese_txt: null,
@@ -40,6 +38,5 @@ export const vars = reactive({
   tipoBoletim,
   prorogacao,
   opms,
-  hasSindicante: false,
   onSubmit: false
 })

@@ -121,7 +121,7 @@ export default defineComponent({
           const response = await post(`${String(proc)}/portarias`, {
             cdopm: props.cdopm,
             portaria_numero: value
-          }, { silent: true })
+          }, { silent: true, load: false })
 
           if (response?.proc) {
             refs.dialog.show()

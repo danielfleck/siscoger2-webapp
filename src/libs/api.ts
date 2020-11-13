@@ -91,8 +91,8 @@ function setResponse (response: AxiosResponse, { complete = false, debug = false
   return response.data
 }
 
-export async function get (URL: string, { silent = true, msg = '', complete = false, debug = false } = {}): Promise<Response> {
-  Loading.show()
+export async function get (URL: string, { silent = true, msg = '', complete = false, load = true, debug = false } = {}): Promise<Response> {
+  if (load) Loading.show()
   const headers = setHeaders()
   if (debug) console.time('⌚️ time to get request')
 
@@ -100,21 +100,21 @@ export async function get (URL: string, { silent = true, msg = '', complete = fa
     const response = await axios.get(getCompleteURL(URL), { headers })
     if (debug) console.timeEnd('⌚️ time to get request')
     if (!silent) successNotify(msg || transations.get.success)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(response, { complete, debug })
   } catch (e) {
     if (debug) console.timeEnd('⌚️ time to get request')
     if (!silent) errorNotify(transations.get.error)
     // PrettyLog.error(`Error to get ${URL}`, e)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(e.response, { complete, debug })
   }
 }
 
-export async function post (URL: string, data: unknown, { file = false, silent = false, msg = '', complete = false, debug = false } = {}): Promise<Response> {
-  Loading.show()
+export async function post (URL: string, data: unknown, { file = false, silent = false, msg = '', complete = false, load = true, debug = false } = {}): Promise<Response> {
+  if (load) Loading.show()
   const headers = setHeaders(file)
   if (debug) console.time('⌚️ time to post request')
 
@@ -122,19 +122,19 @@ export async function post (URL: string, data: unknown, { file = false, silent =
     const response = await axios.post(getCompleteURL(URL), data, { headers })
     if (debug) console.timeEnd('⌚️ time to post request')
     if (!silent) successNotify(msg || transations.post.success)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(response, { complete, debug })
   } catch (e) {
     if (debug) console.timeEnd('⌚️ time to post request')
     // PrettyLog.error(`Error to post ${URL}`, e)
-    Loading.hide()
+    if (load) Loading.hide()
     return setResponse(e.response, { complete, debug })
   }
 }
 
-export async function put (URL: string, data: unknown, { silent = false, msg = '', complete = false, debug = false } = {}): Promise<Response> {
-  Loading.show()
+export async function put (URL: string, data: unknown, { silent = false, msg = '', complete = false, load = true, debug = false } = {}): Promise<Response> {
+  if (load) Loading.show()
   const headers = setHeaders()
   if (debug) console.time('⌚️ time to put request')
 
@@ -142,20 +142,20 @@ export async function put (URL: string, data: unknown, { silent = false, msg = '
     const response = await axios.put(getCompleteURL(URL), data, { headers })
     if (debug) console.timeEnd('⌚️ time to put request')
     if (!silent) successNotify(msg || transations.put.success)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(response, { complete, debug })
   } catch (e) {
     if (debug) console.timeEnd('⌚️ time to put request')
     // PrettyLog.error(`Error to put ${URL}`, e)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(e.response, { complete, debug })
   }
 }
 
-export async function deleteData (URL: string, { silent = false, msg = '', complete = false, debug = false } = {}): Promise<Response> {
-  Loading.show()
+export async function deleteData (URL: string, { silent = false, msg = '', complete = false, load = true, debug = false } = {}): Promise<Response> {
+  if (load) Loading.show()
   const headers = setHeaders()
   if (debug) console.time('⌚️ time to delete request')
 
@@ -163,13 +163,13 @@ export async function deleteData (URL: string, { silent = false, msg = '', compl
     const response = await axios.delete(getCompleteURL(URL), { headers })
     if (debug) console.timeEnd('⌚️ time to delete request')
     if (!silent) successNotify(msg || transations.delete.success)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(response, { complete, debug })
   } catch (e) {
     if (debug) console.timeEnd('⌚️ time to delete request')
     // PrettyLog.error(`Error to delete ${URL}`, e)
-    Loading.hide()
+    if (load) Loading.hide()
 
     return setResponse(e.response, { complete, debug })
   }
