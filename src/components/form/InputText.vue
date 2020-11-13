@@ -14,7 +14,13 @@
     :disable="disable"
     :autogrow="autogrow"
     :mask="mask"
+    :type="type"
     >
+
+    <template v-slot:prepend v-if="icon">
+      <q-icon :name="icon" />
+    </template>
+
     <template v-slot:prepend v-if="tooltip">
       <q-icon color="grey-9" name="fa fa-question-circle" >
         <q-tooltip>
@@ -22,9 +28,11 @@
         </q-tooltip>
       </q-icon>
     </template>
+
     <template v-slot:prepend v-if="lorem">
       <q-icon color="green-9" name="fa fa-check-circle" @click="getLorem"/>
     </template>
+
   </q-input>
 </template>
 
@@ -66,7 +74,15 @@ export default defineComponent({
     mask: {
       type: String
     },
+    type: {
+      type: String,
+      default: 'text'
+    },
     tooltip: {
+      type: String,
+      default: ''
+    },
+    icon: {
       type: String,
       default: ''
     },

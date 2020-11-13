@@ -10,19 +10,19 @@
       <q-card bordered class="q-pa-lg">
         <q-card-section >
           <div class="col-12">
-            <q-input v-if="ldap" ref="username" outlined clearable  v-model="registry.username" placeholder="Digite seu nome de usuário (ex: nome@pm.pr.gov.br)" :rules="[ $rules.required('User name é obrigatório')  ]" >
+            <q-input v-if="ldap" ref="username" outlined clearable  v-model="registry.username" placeholder="Digite seu nome de usuário (ex: nome@pm.pr.gov.br)" :rules="[val => !!val || 'Usuário é obrigatório']" >
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="mail" />
               </template>
             </q-input>
-            <q-input v-else ref="rg" mask="############" outlined clearable  v-model="registry.rg" placeholder="Digite seu RG" :rules="[ $rules.required('RG é obrigatório')  ]" >
+            <q-input v-else ref="rg" mask="############" outlined clearable  v-model="registry.rg" placeholder="Digite seu RG" :rules="[val => !!val || 'Rg é obrigatório']" >
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="fa fa-user" />
               </template>
             </q-input>
           </div>
           <div class="col-12">
-            <q-input ref="pass" outlined clearable  v-model="registry.pass" :type="isPwd ? 'password' : 'text'" placeholder="Digite sua senha" :rules="[ $rules.required('Senha é obrigatória') ]">
+            <q-input ref="pass" outlined clearable  v-model="registry.pass" :type="isPwd ? 'password' : 'text'" placeholder="Digite sua senha" :rules="[val => !!val || 'Senha é obrigatória']">
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="vpn_key" />
               </template>
@@ -42,7 +42,7 @@
             <q-btn id="btnToogle" :disable="!ldapIsActive" color="green-7" class="full-width" :label="ldap ? 'Login com SISCOGER' : 'Login via Expresso'" @click="changeMode"/>
             <q-tooltip
               v-if="!ldapIsActive"
-              :target="btnToogle"
+              target="btnToogle"
               content-class="bg-black"
             >
               Conexão com Expresso encontra-se fora do ar<br/>
