@@ -64,7 +64,7 @@
         <template v-if="register.id">
           <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
           <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
+          <Membro label="Escrivão" v-model="escrivao" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_sindicancia: register.id }"/>
           <Vitima :data="{ id_sindicancia: register.id }"/>
         </template>
@@ -157,11 +157,11 @@ export default defineComponent({
         }
       },
       async create () {
-        const response = await post('sindicancias', vars.register, { silent: true, complete: true })
-
+        const response = await post('sindicancias', vars.register, { silent: true, complete: true, debug: true })
         if (response.returntype === 'success') {
-          vars.register = response
+          vars.register = response.data
           refs.stepper.next()
+          return undefined
         }
       },
       async update (id: number) {
@@ -172,22 +172,23 @@ export default defineComponent({
           refs.stepper.next()
         }
       },
-      async finalize () {
-        if (validate(refs, fields)) {
-          if (!vars.escrivao) {
-            vars.escrivao = await refs.escrivao.handleSubmit()
-          }
+      // async finalize () {
+      //   if (validate(refs, fields)) {
+      //     console.log('here')
+      //     if (!vars.escrivao) {
+      //       vars.escrivao = await refs.escrivao.handleSubmit()
+      //     }
 
-          if (!vars.sindicante) {
-            vars.sindicante = await refs.sindicante.handleSubmit()
-          }
+      //     if (!vars.sindicante) {
+      //       vars.sindicante = await refs.sindicante.handleSubmit()
+      //     }
 
-          if (vars.sindicante) {
-            vars.register.completo = true
-            await put(`sindicancias/${vars.register.id}`, vars.register)
-          }
-        }
-      },
+      //     if (vars.sindicante) {
+      //       vars.register.completo = true
+      //       await put(`sindicancias/${vars.register.id}`, vars.register)
+      //     }
+      //   }
+      // },
       previous () {
         refs.stepper.previous()
       },

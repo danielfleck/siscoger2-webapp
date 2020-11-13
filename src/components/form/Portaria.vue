@@ -116,7 +116,7 @@ export default defineComponent({
         return vars.isValid
       },
       async checkDuplicated (value: string) {
-        if (props.proc && props.cdopm) {
+        if (props.proc && props.cdopm && value.length > 3) {
           const proc = toLowercase(props.proc, true)
           const response = await post(`${String(proc)}/portarias`, {
             cdopm: props.cdopm,

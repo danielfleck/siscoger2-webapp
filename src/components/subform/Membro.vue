@@ -114,13 +114,16 @@ export default defineComponent({
 
     const functions = {
       validate () {
-        return validate(refs, fields)
+        const valid = validate(refs, fields)
+        emit('input', valid)
+        return valid
       },
       async loadData (): Promise<void> {
         const response = await post(`${moduleName}/search`, props.data, { silent: true })
         vars.register = response.length ? response[0] : cleanRegister
       },
       async handleSubmit (): Promise<void> {
+        console.log('here')
         if (this.validate()) {
           if (vars?.register?.id) await this.update(vars?.register?.id)
           else await this.create()
@@ -128,9 +131,11 @@ export default defineComponent({
       },
       async create (): Promise<void> {
         await post(moduleName, vars.register, { silent: true })
+        emit('input', true)
       },
       async update (id: number): Promise<void> {
         await put(`${moduleName}/${id}`, vars.register, { silent: true })
+        emit('input', true)
       }
     }
 

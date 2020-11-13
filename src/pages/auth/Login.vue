@@ -10,19 +10,19 @@
       <q-card bordered class="q-pa-lg">
         <q-card-section >
           <div class="col-12">
-            <q-input v-if="ldap" ref="username" outlined clearable  v-model="registry.username" placeholder="Digite seu nome de usuário (ex: nome@pm.pr.gov.br)" :rules="[val => !!val || 'Usuário é obrigatório']" >
+            <q-input data-cy="username" v-if="ldap" ref="username" outlined clearable  v-model="registry.username" placeholder="Digite seu nome de usuário (ex: nome@pm.pr.gov.br)" :rules="[val => !!val || 'Usuário é obrigatório']" >
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="mail" />
               </template>
             </q-input>
-            <q-input v-else ref="rg" mask="############" outlined clearable  v-model="registry.rg" placeholder="Digite seu RG" :rules="[val => !!val || 'Rg é obrigatório']" >
+            <q-input data-cy="rg" v-else ref="rg" mask="############" outlined clearable  v-model="registry.rg" placeholder="Digite seu RG" :rules="[val => !!val || 'Rg é obrigatório']" >
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="fa fa-user" />
               </template>
             </q-input>
           </div>
           <div class="col-12">
-            <q-input ref="pass" outlined clearable  v-model="registry.pass" :type="isPwd ? 'password' : 'text'" placeholder="Digite sua senha" :rules="[val => !!val || 'Senha é obrigatória']">
+            <q-input data-cy="pass" ref="pass" outlined clearable  v-model="registry.pass" :type="isPwd ? 'password' : 'text'" placeholder="Digite sua senha" :rules="[val => !!val || 'Senha é obrigatória']">
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="vpn_key" />
               </template>
@@ -37,7 +37,7 @@
             </q-input>
           </div>
           <div class="col-12">
-            <q-btn color="light-blue-7" class="full-width" label="Login" @click="login"/>
+            <q-btn data-cy="button" color="light-blue-7" class="full-width" label="Login" @click="login"/>
               <div class="text-center text-dark">ou</div>
             <q-btn id="btnToogle" :disable="!ldapIsActive" color="green-7" class="full-width" :label="ldap ? 'Login com SISCOGER' : 'Login via Expresso'" @click="changeMode"/>
             <q-tooltip

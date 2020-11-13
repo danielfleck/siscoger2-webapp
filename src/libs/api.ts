@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { Loading, LocalStorage } from 'quasar'
 import axios, { AxiosResponse } from 'axios'
+import { Loading, LocalStorage } from 'quasar'
 import { transations } from 'src/config'
 // import PrettyLog from '@emersonbraun/pretty-log'
 import { errorNotify, successNotify } from './notify'
@@ -21,6 +21,16 @@ declare interface Headers {
 }
 
 type Response = any
+
+type MainData = {
+  method: string,
+  path: string,
+  status: number,
+  returntype: string,
+  message: string,
+  'data (count)': number
+  data?: any
+}
 
 const headers = {
   Accept: 'application/json',
@@ -58,15 +68,18 @@ function logResponse (response: AxiosResponse<any>) {
   console.table(mainData)
 }
 
-function getMainDataOfResponse (response: AxiosResponse<any>) {
-  return {
+function getMainDataOfResponse (response: AxiosResponse<any>, withData = false) {
+  console.log(response)
+  const mainData = {
     method: response.config.method,
     path: response.config.url,
     status: response.status,
     returntype: getReturnType(response.status),
     message: response.statusText,
     'data (count)': response.data.length || 0
-  }
+  } as MainData
+  if (withData) mainData.data = response.data
+  return mainData
 }
 
 function setResponse (response: AxiosResponse, { complete = false, debug = false }): Response {
@@ -74,7 +87,7 @@ function setResponse (response: AxiosResponse, { complete = false, debug = false
   if (debug) logResponse(response)
   delete response.headers.Authorization // remove token of response
 
-  if (complete) return getMainDataOfResponse(response)
+  if (complete) return getMainDataOfResponse(response, true)
   return response.data
 }
 
