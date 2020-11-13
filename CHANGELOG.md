@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.15.3](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.15.2...v0.15.3) (2020-11-13)
+
+
+### Bug Fixes
+
+* solve login compatibilities ([2e00679](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/2e006796e6feb7134947ba4f8438f733002867c1))
+
 ### [0.15.2](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.15.1...v0.15.2) (2020-11-05)
 
 
