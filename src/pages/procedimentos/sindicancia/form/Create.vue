@@ -1,5 +1,8 @@
 <template>
-  <page :breadcrumbs="breadcrumbs">
+  <page :breadcrumbs="[
+  { label: 'Lista', link: '/sindicancias/lista' },
+  { label: 'Criar', link: '/sindicancias/inserir' },
+  ]">
     <q-stepper
       v-model="step"
       ref="stepper"
@@ -50,7 +53,7 @@
             <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
           </div>
           <div class="q-pa-md col-12">
-            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :loren="200"/>
+            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
           </div>
         </form>
       </q-step>
@@ -63,8 +66,8 @@
       >
         <template v-if="register.id">
           <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
-          <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
-          <Membro label="Escrivão" v-model="escrivao" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
+          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
+          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_sindicancia: register.id }"/>
           <Vitima :data="{ id_sindicancia: register.id }"/>
         </template>
@@ -73,7 +76,7 @@
       <template v-slot:navigation>
         <q-stepper-navigation>
           <template v-if="step === 1">
-            <q-btn v-if="step === 1" @click="add" color="positive" label="Continuar" :loading="loading" class="full-width" icon="fa fa-arrow-right"/>
+            <q-btn v-if="step === 1" @click="register.id ? update(register.id) : add()" color="positive" label="Continuar" :loading="loading" class="full-width" icon="fa fa-arrow-right"/>
           </template>
           <template v-else>
             <q-btn flat color="white" @click="previous" label="Voltar" class="full-width bg-positive" icon="fa fa-arrow-left"/>
@@ -89,7 +92,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { defineComponent, ref, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import {
   Page,
   ProcedOrigem,
@@ -110,10 +113,12 @@ import {
   OPM,
   Portaria
 } from 'components/index'
+import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
+import { Register } from './index'
 import { post, put } from 'src/libs/api'
 
-import { vars } from './index'
 import { validate } from 'src/libs/validator'
+import { errorNotify } from 'src/libs/notify'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -149,43 +154,75 @@ export default defineComponent({
     OPM,
     Portaria
   },
-  setup (_, { refs }) {
-    const sindicante = ref(false)
-    const escrivao = ref(true)
+  setup (_, { refs, root }) {
+    const vars = reactive({
+      step: 1,
+      tab: 'main',
+      loading: false,
+      register: {
+        id: 0,
+        sintese_txt: '',
+        prioridade: false,
+        id_andamento: 6,
+        id_andamentocoger: '',
+        motivo_cancelamento: '',
+        doc_origem_txt: '',
+        fato_data: '',
+        cdopm: '',
+        portaria_numero: '',
+        portaria_data: '',
+        doc_tipo: '',
+        doc_numero: '',
+        abertura_data: '',
+        prorogacao: '',
+        prorogacao_dias: 0,
+        motivo_abertura: '',
+        motivo_outros: '',
+        completo: false
+      } as Register,
+      andamentoCogerSindicancia,
+      andamentoSindicancia,
+      motivoAberturaSindicancia,
+      prorogacao,
+      tipoBoletim
+    })
+
     const functions = {
-      async add () {
-        if (validate(refs, fields)) {
-          if (vars?.register?.id) await this.update(vars?.register?.id)
-          else await this.create()
-        }
-      },
       async create () {
-        const response = await post('sindicancias', vars.register, { silent: true, complete: true, debug: true })
-        if (response.returntype === 'success') {
-          vars.register.id = response.data.id
-          refs.stepper.next()
-          return undefined
+        if (validate(refs, fields)) {
+          const response = await post('sindicancias', vars.register, { silent: true, complete: true, debug: true })
+          if (response.returntype === 'success') {
+            vars.register.id = response.data.id
+            refs.stepper.next()
+            return undefined
+          }
         }
       },
       async update (id: number) {
-        const response = await put(`sindicancias/${id}`, vars.register, { silent: true, complete: true, debug: true })
+        if (validate(refs, fields)) {
+          const response = await put(`sindicancias/${id}`, vars.register, { silent: true, complete: true, debug: true })
 
-        if (response.returntype === 'success') {
-          refs.stepper.next()
+          if (response.returntype === 'success') {
+            refs.stepper.next()
+          }
         }
+      },
+      async subforms () {
+        const sindicante = await refs.sindicante.getState()
+        if (sindicante === 'toInsert') {
+          errorNotify('Insira o sindicante')
+          return false
+        }
+        return true
       },
       async finalize () {
         if (validate(refs, fields)) {
-          console.log(sindicante.value)
-          const resSindicante = await refs.sindicante.handleSubmit()
-          console.log(resSindicante)
+          const validateSubforms = await this.subforms()
 
-          const resEscrivao = await refs.escrivao.handleSubmit()
-          console.log(resEscrivao)
-
-          if (resSindicante) {
+          if (validateSubforms && vars.register.id) {
             vars.register.completo = true
             await put(`sindicancias/${vars.register.id}`, vars.register)
+            return root.$router.push('/sindicancias/lista')
           }
         }
       },
@@ -194,8 +231,6 @@ export default defineComponent({
       }
     }
     return {
-      sindicante,
-      escrivao,
       ...toRefs(vars),
       ...functions
     }

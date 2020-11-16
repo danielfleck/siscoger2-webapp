@@ -1,5 +1,8 @@
 <template>
-  <page :breadcrumbs="breadcrumbs">
+  <page :breadcrumbs="[
+  { label: 'Lista', link: '/sindicancias/lista' },
+  { label: 'Editar', link: '/sindicancias/editar' },
+  ]">
     <q-tabs
       v-model="tab"
       dense
@@ -63,7 +66,7 @@
         </div>
         <template v-if="register.id">
           <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
-          <Membro label="Sindicante" v-model="sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
+          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_sindicancia: register.id }"/>
           <Vitima :data="{ id_sindicancia: register.id }"/>
@@ -71,7 +74,7 @@
           <FileUpload label="Solução do Comandante" :data="{ id_sindicancia: register.id }"/>
           <FileUpload label="Solução CMT Geral" :data="{ id_sindicancia: register.id }"/>
         </template>
-        <q-btn @click="create" color="primary" label="Salvar" class="full-width"/>
+        <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
 
       <q-tab-panel name="movimentos">
@@ -94,7 +97,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { defineComponent, computed, ref, toRefs } from '@vue/composition-api'
+import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
@@ -117,10 +120,11 @@ import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
 import { get, put } from 'src/libs/api'
-
-import { vars } from './index'
+import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
+import { Register } from './index'
 import { validate } from 'src/libs/validator'
 import { getDense } from 'src/store/utils'
+import { errorNotify } from 'src/libs/notify'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -130,7 +134,8 @@ const fields = [
   'portaria_data',
   'prorogacao_dias',
   'motivo_outros',
-  'sindicante'
+  'sindicante',
+  'escrivao'
 ]
 export default defineComponent({
   name: 'Form',
@@ -156,24 +161,57 @@ export default defineComponent({
     AndamentoCoger
   },
   setup (_, { refs, root }) {
-    let sindicante = ref(false)
-    let escrivao = ref(true)
+    const vars = reactive({
+      step: 1,
+      tab: 'main',
+      loading: false,
+      register: {
+        id: 0,
+        sintese_txt: '',
+        prioridade: false,
+        id_andamento: 6,
+        id_andamentocoger: '',
+        motivo_cancelamento: '',
+        doc_origem_txt: '',
+        fato_data: '',
+        cdopm: '',
+        portaria_numero: '',
+        portaria_data: '',
+        doc_tipo: '',
+        doc_numero: '',
+        abertura_data: '',
+        prorogacao: '',
+        prorogacao_dias: 0,
+        motivo_abertura: '',
+        motivo_outros: '',
+        completo: false
+      } as Register,
+      andamentoCogerSindicancia,
+      andamentoSindicancia,
+      motivoAberturaSindicancia,
+      prorogacao,
+      tipoBoletim
+    })
+
     const functions = {
-      async create () {
+      async update () {
         if (validate(refs, fields)) {
-          if (!escrivao) {
-            escrivao = await refs.escrivao.handleSubmit()
-          }
+          const validateSubforms = await this.subforms()
 
-          if (!sindicante) {
-            sindicante = await refs.sindicante.handleSubmit()
-          }
-
-          if (sindicante) {
+          if (validateSubforms && vars.register.id) {
             vars.register.completo = true
             await put(`sindicancias/${vars.register.id}`, vars.register)
+            return root.$router.push('/sindicancias/lista')
           }
         }
+      },
+      async subforms () {
+        const sindicante = await refs.sindicante.getState()
+        if (sindicante === 'toInsert') {
+          errorNotify('Insira o sindicante')
+          return false
+        }
+        return true
       },
       async loadData () {
         const { id } = root.$route.params

@@ -1,42 +1,24 @@
-import { reactive } from '@vue/composition-api'
-import { localePTBR } from 'src/config/app'
-import { opms } from 'src/config/opms'
+/* eslint-disable camelcase */
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-
-const bread = [{ label: 'Sindicância', link: '/sindicancia' }]
-
-export const vars = reactive({
-  step: 1,
-  tab: 'main',
-  loading: false,
-  register: {
-    id: 0,
-    sintese_txt: null,
-    prioridade: false,
-    id_andamento: 6,
-    id_andamentocoger: null,
-    motivo_cancelamento: null,
-    doc_origem_txt: null,
-    fato_data: null,
-    cdopm: null,
-    portaria_numero: null,
-    portaria_data: null,
-    doc_tipo: null,
-    doc_numero: null,
-    abertura_data: null,
-    prorogacao: null,
-    prorogacao_dias: 0,
-    motivo_abertura: '',
-    motivo_outros: '',
-    completo: false
-  },
-  breadcrumbs: bread,
-  localePTBR,
-  andamentoSindicancia,
-  andamentoCogerSindicancia,
-  motivoAberturaSindicancia,
-  tipoBoletim,
-  prorogacao,
-  opms,
-  onSubmit: false
-})
+export const selects = { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim }
+export type Register = {
+  id?: number
+  sintese_txt: string
+  prioridade: boolean | number
+  id_andamento: 6
+  id_andamentocoger: string | number
+  motivo_cancelamento: string
+  doc_origem_txt: string
+  fato_data: string | Date
+  cdopm: string
+  portaria_numero: string
+  portaria_data: string | Date
+  doc_tipo: string
+  doc_numero: string
+  abertura_data: string | Date
+  prorogacao: string
+  prorogacao_dias: number
+  motivo_abertura: string
+  motivo_outros: string
+  completo: boolean | number
+}

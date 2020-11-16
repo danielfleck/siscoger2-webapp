@@ -3,7 +3,7 @@
     <q-card-section class="row">
       <div class="q-pa-xs col-12">{{ label }}</div>
       <div class="q-pa-xs col-3">
-        <InputText label="RG" ref="rg" :disable="submeted" v-model="register.rg" required/>
+        <InputText label="RG" ref="rg" mask="############" :disable="situation === 'inserted'" v-model="register.rg" required/>
       </div>
       <div class="q-pa-xs col-3">
         <InputText label="Nome" :disable="disabled" v-model="register.nome" ref="nome" required/>
@@ -13,18 +13,16 @@
       </div>
       <div class="q-pa-xs col-3">
          <q-btn-group spread>
-          <!-- <q-btn :label="disabled ? 'Liberar' : 'Bloquear'" :icon=" disabled ? 'fa fa-lock' : 'fa fa-lock-open'" @click="disabled = !disabled"/>
-          <q-btn v-if="requireds && register.id" label="Substituir" icon="fa fa-sync"/> -->
-          <BtnStack v-if="!submeted" :label="disabled ? 'Liberar' : 'Bloquear'" :icon=" disabled ? 'fa fa-lock' : 'fa fa-lock-open'" @click="toogleDisable"/>
-          <BtnStack v-if="requireds && submeted" label="Substituição" icon="fa fa-sync" @click="replace(register)"/>
-          <BtnStack v-if="toReplace" label="Substituir" icon="fa fa-plus" @click="update(register)"/>
-          <BtnStack :disable="submeted" v-else label="Inserir" icon="fa fa-plus" @click="create"/>
+          <BtnStack v-if="situation === 'toInsert' || situation === 'toReplace'" :label="disabled ? 'Liberar' : 'Bloquear'" :icon=" disabled ? 'fa fa-lock' : 'fa fa-lock-open'" @click="toogleDisable"/>
+          <BtnStack v-if="requireds && situation === 'inserted'" label="Substituição" icon="fa fa-sync" @click="toReplace(register)"/>
+          <BtnStack v-if="situation === 'toReplace'" label="Substituir" icon="fa fa-plus" @click="replace()"/>
+          <BtnStack v-if="situation === 'toInsert'" label="Inserir" icon="fa fa-plus" @click="create"/>
         </q-btn-group>
       </div>
     </q-card-section>
     <q-expansion-item
       v-if="registers.length"
-      :label="`${label} - lista`"
+      :label="`${label} - substituídos`"
       default-opened
       :caption="`Total: ${registers.length}`"
       >
@@ -34,13 +32,19 @@
             <q-item-section>RG</q-item-section>
             <q-item-section>Nome</q-item-section>
             <q-item-section>Posto/Grad</q-item-section>
-            <q-item-section>Substituto</q-item-section>
+            <q-item-section>RG substituto</q-item-section>
+            <q-item-section>Ações</q-item-section>
           </q-item>
           <q-item clickable v-ripple v-for="(membro, i) in registers" :key="i">
             <q-item-section>{{membro.rg}}</q-item-section>
             <q-item-section>{{membro.nome}}</q-item-section>
             <q-item-section>{{membro.cargo}}</q-item-section>
             <q-item-section>{{membro.rg_substituto || 'Não há'}}</q-item-section>
+            <q-item-section>
+              <q-btn-group spread>
+                <BtnStack label="Apagar" icon="fa fa-trash" @click="remove(membro)"/>
+              </q-btn-group>
+            </q-item-section>
           </q-item>
         </q-list>
       </q-card-section>
@@ -52,10 +56,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable camelcase */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { postograd } from 'src/config/selects'
 import { validate } from 'src/libs/validator'
-import { post, put } from 'src/libs/api'
+import { deleteData, post, put } from 'src/libs/api'
 
 import InputRG from 'components/form/InputRG.vue'
 import InputText from 'components/form/InputText.vue'
@@ -103,16 +109,6 @@ export default defineComponent({
     }
   },
   setup (props, { root, refs, emit }) {
-    const cleanRegister = {
-      id: 0,
-      rg: '',
-      nome: '',
-      cargo: '',
-      resultado: '',
-      situacao: props.label,
-      rg_substituto: ''
-    } as Register
-
     const vars = reactive({
       register: {
         rg: '',
@@ -121,10 +117,10 @@ export default defineComponent({
         situacao: props.label
       } as Register,
       registers: [] as Array<Register>,
+      substituted: {} as Register,
       validable: false,
       disabled: true,
-      submeted: false,
-      toReplace: false,
+      situation: 'toInsert',
       postograd
     })
 
@@ -146,51 +142,91 @@ export default defineComponent({
 
     const functions = {
       validate () {
-        return validate(refs, fields)
+        if (props.required) {
+          return validate(refs, fields)
+        }
+        return true
+      },
+      getState () {
+        return vars.situation
+      },
+      cleanRegister () {
+        return {
+          id: 0,
+          rg: '',
+          nome: '',
+          cargo: '',
+          resultado: '',
+          situacao: props.label,
+          rg_substituto: ''
+        } as Register
       },
       toogleDisable () {
         vars.disabled = !vars.disabled
-        if (vars.submeted) vars.submeted = false
       },
-      getCurrent (response: Register[]) {
-        if (!response.length) return cleanRegister
+      getCurrent (response: Register[]):Register {
+        if (!response.length) return this.cleanRegister()
         const filtered = response.filter(r => !r.rg_substituto)
         if (filtered) {
-          vars.submeted = true
+          vars.situation = 'inserted'
           return filtered[0]
         }
+        return this.cleanRegister()
+      },
+      getReplaced (response: Register[]):Register[] {
+        if (!response.length) return []
+        const filtered = response.filter(r => r.rg_substituto)
+        if (filtered) return filtered
+        return []
       },
       async loadData (): Promise<void> {
         const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = response
+        vars.registers = this.getReplaced(response)
         vars.register = this.getCurrent(response)
-        console.log(vars.register)
+        // console.log(vars.register)
       },
-      async create (): Promise<boolean> {
+      async create () {
         vars.disabled = true
-        vars.submeted = true
+        vars.situation = 'inserted'
 
         const data = { ...vars.register, ...props.data }
         const response = await post(moduleName, data, { silent: true, complete: true, debug: true })
-        return !!response.success
-      },
-      async update (register: Register): Promise<boolean> {
-        if (vars?.register?.id) {
-          const { id } = vars.register
-          vars.disabled = true
-          vars.submeted = true
-
-          const data = { ...vars.register, ...props.data }
-          const response = await put(`${moduleName}/${id}`, data, { silent: true, complete: true, debug: true })
-          return !!response.success
+        if (response.returntype === 'success') {
+          vars.register.id = response.data.id
+          await this.loadData()
+          return response.data
         }
+        await this.loadData()
         return false
       },
-      async replace (register: Register):Promise<boolean> {
+      async replace (): Promise<boolean> {
+        const substitute = await this.create()
+        console.log(substitute)
+        if (substitute) {
+          const { id } = vars.substituted
+          vars.substituted.rg_substituto = substitute.rg
+          const data = { ...vars.substituted, ...props.data }
+          const response = await put(`${moduleName}/${id}`, data, { silent: true, complete: true, debug: true })
+          await this.loadData()
+          return response.returntype === 'success' ?? false
+        }
+        await this.loadData()
+        return false
+      },
+      toReplace (register: Register) {
+        root.$q.dialog(confirmMsg).onOk(() => {
+          vars.substituted = register
+          console.log(vars.substituted)
+          vars.register = this.cleanRegister()
+          vars.situation = 'toReplace'
+          return true
+        }).onCancel(() => false)
+      },
+      remove (register: Register): void {
+        const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          vars.register = cleanRegister
-          vars.toReplace = true
-          console.log('here')
+          await deleteData(`${moduleName}/${register.id}`)
+          vars.registers.splice(found, 1)
         })
       }
     }

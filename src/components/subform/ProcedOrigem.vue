@@ -55,7 +55,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { procedTipos } from 'src/config/selects'
-import { resetValidation, validate } from 'src/libs/validator'
+import { validate } from 'src/libs/validator'
 
 import ProcedTipos from 'components/form/ProcedTipos.vue'
 import InputText from 'components/form/InputText.vue'

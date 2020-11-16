@@ -5,6 +5,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import { errorNotify } from './notify'
+
 export function validate (refs: any, fields: string[], debug = false):boolean {
   const valid = fields.reduce((prevVal, field: string | number) => {
     const hasField = Boolean(refs[field])
@@ -17,6 +19,7 @@ export function validate (refs: any, fields: string[], debug = false):boolean {
     return prevVal && validated
   }, true)
   if (debug) console.log('Validation is:', valid)
+  if (!valid) errorNotify('Erros no formulário!')
   return valid
 }
 
