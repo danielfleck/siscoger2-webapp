@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.17.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.16.1...v0.17.0) (2020-11-16)
+
+
+### Features
+
+* add substitute to member subform ([ccd7632](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ccd7632e6fdd09207306dd139faf906cf0d81161))
+
 ### [0.16.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.16.0...v0.16.1) (2020-11-13)
 
 
