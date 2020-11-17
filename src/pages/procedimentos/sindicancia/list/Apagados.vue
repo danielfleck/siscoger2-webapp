@@ -1,7 +1,8 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancias/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancias/inserir"/>
     <Table
+      data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"

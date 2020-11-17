@@ -38,6 +38,7 @@
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-loader": "^3.0.3",
+    "eslint-plugin-cypress": "^2.11.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.0.1",
@@ -45,8 +46,7 @@
     "eslint-plugin-vue": "^6.1.2",
     "git-commit-msg-linter": "^3.0.0",
     "husky": "^4.3.0",
-    "standard-version": "^9.0.0",
-    "eslint-plugin-cypress": "^2.11.1"
+    "standard-version": "^9.0.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

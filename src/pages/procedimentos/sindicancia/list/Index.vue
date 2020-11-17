@@ -20,6 +20,7 @@
             :to="tab.link"
             :label="tab.label"
             :key="tab.label"
+            @click="load(tab)"
           />
         </q-tabs>
         <transition mode="out-in">
@@ -40,15 +41,18 @@ import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
 
+type Link = {
+  link: string | undefined
+  label: string | undefined
+}
+
 export default defineComponent({
   name: 'Index',
   components: { Breadcrumbs },
   setup (_, { root }) {
     const vars = reactive({
       module: 'sindicancias',
-      breadcrumbs: [
-        { label: 'Sindicância', link: '/sindicancia' }
-      ],
+      breadcrumbs: [] as Link[],
       tabs: [
         { link: '/sindicancias/lista', label: 'Lista' },
         { link: '/sindicancias/andamento', label: 'Andamento' },
@@ -56,14 +60,22 @@ export default defineComponent({
         { link: '/sindicancias/rel_situacao', label: 'Rel.  Situação' },
         { link: '/sindicancias/resultado', label: 'Resultado' },
         { link: '/sindicancias/apagados', label: 'Apagados' }
-      ],
-      tab: 'lista'
+      ] as Link[],
+      tab: 'Lista'
     })
     const functions = {
       onClick () {
         console.log('clicked')
+      },
+      load (tab:Link) {
+        vars.breadcrumbs = []
+        const { label, link } = tab
+        vars.breadcrumbs.push({ label, link })
       }
     }
+
+    functions.load({ link: '/sindicancias/lista', label: 'Lista' })
+
     return {
       ...toRefs(vars),
       ...functions,

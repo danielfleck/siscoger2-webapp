@@ -1,7 +1,8 @@
 <template>
   <q-tab-panel name="andamento">
-    <q-btn color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancias/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancias/inserir"/>
       <Table
+      data-cy="table"
       label="Andamento"
       :data="data"
       :columns="columns"
