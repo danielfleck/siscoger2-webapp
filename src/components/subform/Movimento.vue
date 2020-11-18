@@ -28,7 +28,7 @@
           <q-item-section>Ações</q-item-section>
         </q-item>
         <q-item v-ripple v-for="movimento in registers" :key="movimento.rg">
-          <q-item-section>{{movimento.data}}</q-item-section>
+          <q-item-section>{{movimento.data | dateBr }}</q-item-section>
           <q-item-section>{{movimento.descricao}}</q-item-section>
           <q-item-section>{{movimento.cdopm}}</q-item-section>
           <q-item-section>{{movimento.rg}}</q-item-section>
@@ -58,6 +58,7 @@ import { deleteData, post, put } from 'src/libs/api'
 import InputText from 'components/form/InputText.vue'
 import InputDate from 'components/form/InputDate.vue'
 import BtnStack from 'components/form/BtnStack.vue'
+import { changeDate } from 'src/filters'
 
 export interface Register{
   id: number
@@ -80,6 +81,11 @@ const moduleName = 'movimentos'
 export default defineComponent({
   name: 'Movimento',
   components: { InputText, InputDate, BtnStack },
+  filters: {
+    dateBr (date: string) {
+      return changeDate(date, 'pt-br', { extensive: true })
+    }
+  },
   props: {
     label: {
       type: String,
