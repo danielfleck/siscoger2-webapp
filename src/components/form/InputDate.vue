@@ -53,7 +53,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { defineComponent, computed, reactive, toRefs, watch, onUnmounted } from '@vue/composition-api'
+import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { localePTBR } from 'src/config/app'
 import { changeDate, Locales } from 'src/filters'
 import { getDense } from 'src/store/utils'
@@ -134,10 +134,6 @@ export default defineComponent({
     functions.getDate()
 
     watch(() => vars._value, () => (vars.validable = true))
-
-    onUnmounted(() => {
-      vars._value = ''
-    })
 
     return {
       ...toRefs(vars),

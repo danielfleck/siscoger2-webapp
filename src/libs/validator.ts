@@ -14,7 +14,7 @@ export function validate (refs: any, fields: string[], debug = false):boolean {
 
     if (debug) {
       console.log(`Reference of ${field} is ${Boolean(refs[field])}`)
-      console.log(`prevVal is ${prevVal} and this field is ${validated}`)
+      // console.log(`prevVal is ${prevVal} and this field is ${validated}`)
     }
     return prevVal && validated
   }, true)

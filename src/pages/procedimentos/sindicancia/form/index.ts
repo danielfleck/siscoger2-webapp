@@ -5,7 +5,7 @@ export type Register = {
   id?: number
   sintese_txt: string
   prioridade: boolean | number
-  id_andamento: 6
+  id_andamento: number
   id_andamentocoger: string | number
   motivo_cancelamento: string
   doc_origem_txt: string

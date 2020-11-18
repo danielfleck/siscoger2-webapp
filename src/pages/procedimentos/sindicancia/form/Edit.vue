@@ -82,7 +82,7 @@
       </q-tab-panel>
 
       <q-tab-panel name="sobrestamentos">
-        <sobrestamento :data="{ id_sindicancia: register.id }"/>
+        <sobrestamento @submit="changeAndamento" :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
       <q-tab-panel name="arquivos">
@@ -97,6 +97,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable camelcase */
 import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
@@ -125,6 +126,7 @@ import { Register } from './index'
 import { validate } from 'src/libs/validator'
 import { getDense } from 'src/store/utils'
 import { errorNotify } from 'src/libs/notify'
+import { getAndamento, getSobrestamento } from 'src/utils'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -212,6 +214,17 @@ export default defineComponent({
           return false
         }
         return true
+      },
+      async changeAndamento (sobrestamento: { termino_data: string }) {
+        if (!vars.register.id) return
+        const { id } = vars.register
+        if (!sobrestamento.termino_data) {
+          vars.register.id_andamento = getSobrestamento('sindicancia')
+          await put(`sindicancias/${id}`, vars.register, { silent: true })
+          return
+        }
+        vars.register.id_andamento = getAndamento('sindicancia')
+        await put(`sindicancias/${id}`, vars.register, { silent: true })
       },
       async loadData () {
         const { id } = root.$route.params

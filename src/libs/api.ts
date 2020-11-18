@@ -69,7 +69,7 @@ function logResponse (response: AxiosResponse<any>) {
 }
 
 function getMainDataOfResponse (response: AxiosResponse<any>, withData = false) {
-  // console.log(response)
+  console.log(response)
   const mainData = {
     method: response.config.method,
     path: response.config.url,
