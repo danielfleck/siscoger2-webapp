@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.19.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.18.0...v0.19.0) (2020-11-18)
+
+
+### Features
+
+* implement sobrestamento functions ([f2cba0e](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/f2cba0e5187247ba038c90db8607f4fa1fea4690))
+
 ## [0.18.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.17.0...v0.18.0) (2020-11-17)
 
 ## [0.17.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.16.1...v0.17.0) (2020-11-16)
