@@ -22,6 +22,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
 import {
   andamentoCogerFATD,
@@ -45,7 +46,7 @@ export default defineComponent({
   props: {
     label: {
       type: String,
-      default: 'Andamento'
+      default: 'Andamento COGER'
     },
     type: {
       type: String,
@@ -77,7 +78,7 @@ export default defineComponent({
         return true
       }),
       _value: computed({
-        get: () => props.value,
+        get: () => functions.getAndamento(props.value),
         set: value => emit('input', value)
       }),
       options: [] as Option[]
@@ -88,6 +89,10 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
+      },
+      getAndamento (value: string|number): string {
+        const options = vars.options as unknown as string[]
+        return options[Number(value)] ?? 'ANDAMENTO'
       },
       getOptions () {
         const type = props.type.toLowerCase()
