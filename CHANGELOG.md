@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.20.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.19.0...v0.20.0) (2020-11-20)
+
+
+### Features
+
+* add functions to arquivo component ([ee79a17](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ee79a17a8abc3642c007e66bb173278f1c48aa73))
+
 ## [0.19.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.18.0...v0.19.0) (2020-11-18)
 
 
