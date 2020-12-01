@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.21.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.20.0...v0.21.0) (2020-12-01)
+
+
+### Features
+
+* add functions to upload ([116b079](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/116b079cf0e920e77dc233507509016d42fb36aa))
+
 ## [0.20.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.19.0...v0.20.0) (2020-11-20)
 
 
