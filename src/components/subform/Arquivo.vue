@@ -92,7 +92,7 @@ const cleanRegister = {
   id_proc: '',
   sjd_ref: '',
   sjd_ref_ano: '',
-  arquivo_data: null,
+  arquivo_data: undefined,
   rg: '',
   nome: '',
   cdopm: '',
@@ -133,7 +133,7 @@ export default defineComponent({
         id_proc: '',
         sjd_ref: '',
         sjd_ref_ano: '',
-        arquivo_data: null,
+        arquivo_data: undefined,
         rg: '',
         nome: '',
         cdopm: '',
@@ -141,7 +141,7 @@ export default defineComponent({
         numero: '',
         letra: '',
         obs: ''
-      },
+      } as Register,
       registers: [] as Array<Register>,
       locais,
       letras

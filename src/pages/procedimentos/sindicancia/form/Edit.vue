@@ -70,9 +70,9 @@
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_sindicancia: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_sindicancia: register.id }"/>
           <Vitima :data="{ id_sindicancia: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ id_sindicancia: register.id }"/>
-          <FileUpload label="Solução do Comandante" :data="{ id_sindicancia: register.id }"/>
-          <FileUpload label="Solução CMT Geral" :data="{ id_sindicancia: register.id }"/>
+          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'sindicancia', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
+          <FileUpload label="Solução do Comandante" :data="{ proc: 'sindicancia', campo: 'solucao_cmt_file', id_proc: register.id}"/>
+          <FileUpload label="Solução CMT Geral" :data="{ proc: 'sindicancia', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
