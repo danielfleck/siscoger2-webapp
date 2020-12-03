@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.22.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.21.0...v0.22.0) (2020-12-03)
+
+
+### Features
+
+* create autentication structure ([0fe426d](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/0fe426dd53c5958c26c427d55f9aa8e0768c79f8))
+
 ## [0.21.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.20.0...v0.21.0) (2020-12-01)
 
 
