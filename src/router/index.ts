@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { route } from 'quasar/wrappers'
 import VueRouter from 'vue-router'
 import { Store } from 'vuex'
@@ -22,6 +24,27 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
+
+  // Router.beforeEach((to, from, next) => {
+  //   const { meta } = to
+  //   if (meta && meta.auth) {
+  //     const logged = window.localStorage.getItem('token')
+  //     if (!logged) {
+  //       next('/login')
+  //       return
+  //     }
+  //   }
+
+  //   // if ((meta && meta.hasAnyRole) || (meta && meta.hasAnyPermission)) {
+  //   //   const logged = window.localStorage.getItem('token')
+  //   //   if (!logged) {
+  //   //     next('/forbidden')
+  //   //     return
+  //   //   }
+  //   // }
+
+  //   next()
+  // })
 
   return Router
 })

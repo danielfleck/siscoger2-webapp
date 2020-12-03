@@ -39,16 +39,19 @@
           <div class="col-12">
             <q-btn data-cy="button" color="light-blue-7" class="full-width" label="Login" @click="login"/>
               <div class="text-center text-dark">ou</div>
-            <q-btn id="btnToogle" :disable="!ldapIsActive" color="green-7" class="full-width" :label="ldap ? 'Login com SISCOGER' : 'Login via Expresso'" @click="changeMode"/>
-            <q-tooltip
-              v-if="!ldapIsActive"
-              target="btnToogle"
-              content-class="bg-black"
-            >
-              Conexão com Expresso encontra-se fora do ar<br/>
-              assim que for reestabelecida essa opção estará<br/>
-              disponível novamente
-            </q-tooltip>
+            <q-btn :disable="!ldapIsActive" color="green-7" class="full-width" :label="ldap ? 'Login com SISCOGER' : 'Login via Expresso'" @click="changeMode">
+              <template v-if="ldapIsActive">
+                <q-tooltip
+                  anchor="center middle"
+                  self="center middle"
+                  content-class="bg-black"
+                >
+                  Conexão com Expresso encontra-se fora do ar<br/>
+                  assim que for reestabelecida essa opção estará<br/>
+                  disponível novamente
+                </q-tooltip>
+              </template>
+            </q-btn>
           </div>
         </q-card-section>
         <q-card-section class="text-center q-pa-none">

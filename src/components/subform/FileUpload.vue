@@ -123,28 +123,28 @@ export default defineComponent({
       default: 5
     },
     extensions: {
-      type: Array, 
+      type: Array,
       default: ['pdf']
-    },
+    }
   },
   filters: {
     dateBr (date: string) {
       return changeDate(date, 'pt-br')
     },
     typeFile (type: string) {
-      if('/'.indexOf(type)) {
-        return type.split('/')[1];
+      if ('/'.indexOf(type)) {
+        return type.split('/')[1]
       }
       return '-'
     },
-    toMB(value: number){
+    toMB (value: number) {
       if (!value) return '-'
       value = value / 1048576
-      return  `${value.toFixed(2)} MB`
+      return `${value.toFixed(2)} MB`
     },
-    hasObs(value: any){
+    hasObs (value: any) {
       if (!value) return 'Não há'
-      return  value
+      return value
     }
   },
   setup (props, { root }) {
@@ -196,7 +196,8 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f._id === register._id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register._id}`)
+          const id = register._id || 0
+          await deleteData(`${moduleName}/${id}`)
           vars.registers.splice(found, 1)
         })
       },
@@ -227,8 +228,8 @@ export default defineComponent({
       },
       async upload () {
         const formData = new FormData()
-        formData.append('file', vars.files[0]);
-        const data = { ...props.data, ...vars.register }
+        formData.append('file', vars.files[0])
+        const data:any = { ...props.data, ...vars.register }
         Object.keys(data).forEach(key => {
           const val = data && data[key] ? data[key] : ''
           formData.append(key, val)
@@ -287,15 +288,15 @@ export default defineComponent({
         // eslint-disable-next-line @typescript-eslint/unbound-method
         vars.uploading = done !== true ? setTimeout(this.__updateUploadProgress, 300) : null
       },
-      verifyErrorsInFile(file: File){
+      verifyErrorsInFile (file: File) {
         const errors = []
-        const filetype = file.type.split('/')[1];
+        const filetype = file.type.split('/')[1]
         if (!props.extensions.includes(filetype)) {
           errors.push(`Extenção inválida! deve ser: ${props.extensions.join(', ')}`)
         }
-        
-        let fileSize = file.size;
-        let maxSize = 1048576 * props.limitMB
+
+        const fileSize = file.size
+        const maxSize = 1048576 * props.limitMB
         if (fileSize > maxSize) {
           errors.push(`Tamanho excedido! deve ser menor que ${props.limitMB}MB `)
         }
