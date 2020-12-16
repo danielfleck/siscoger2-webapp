@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.23.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.22.0...v0.23.0) (2020-12-16)
+
+
+### Features
+
+* create static server to production ([2d34114](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/2d341147d451574f0d7779a8d8db801b3bf85d3b))
+
 ## [0.22.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.21.0...v0.22.0) (2020-12-03)
 
 
