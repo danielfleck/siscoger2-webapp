@@ -16,7 +16,7 @@ export type Register = {
   doc_tipo: string
   doc_numero: string
   abertura_data: string | Date
-  prorogacao: string
+  prorogacao: string | boolean
   prorogacao_dias: number
   motivo_abertura: string
   motivo_outros: string

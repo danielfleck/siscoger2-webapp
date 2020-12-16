@@ -76,7 +76,7 @@
       <template v-slot:navigation>
         <q-stepper-navigation>
           <template v-if="step === 1">
-            <q-btn v-if="step === 1" @click="register.id ? update(register.id) : add()" color="positive" label="Continuar" :loading="loading" class="full-width" icon="fa fa-arrow-right"/>
+            <q-btn v-if="step === 1" @click="register.id ? update(register.id) : create()" color="positive" label="Continuar" :loading="loading" class="full-width" icon="fa fa-arrow-right"/>
           </template>
           <template v-else>
             <q-btn flat color="white" @click="previous" label="Voltar" class="full-width bg-positive" icon="fa fa-arrow-left"/>
@@ -164,7 +164,7 @@ export default defineComponent({
         sintese_txt: '',
         prioridade: false,
         id_andamento: 6,
-        id_andamentocoger: '',
+        id_andamentocoger: 0,
         motivo_cancelamento: '',
         doc_origem_txt: '',
         fato_data: '',
@@ -174,7 +174,7 @@ export default defineComponent({
         doc_tipo: '',
         doc_numero: '',
         abertura_data: '',
-        prorogacao: '',
+        prorogacao: false,
         prorogacao_dias: 0,
         motivo_abertura: '',
         motivo_outros: '',
