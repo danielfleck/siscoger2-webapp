@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -8,10 +9,13 @@ import { Loading, LocalStorage } from 'quasar'
 import { transations } from 'src/config'
 // import PrettyLog from '@emersonbraun/pretty-log'
 import { errorNotify, successNotify } from './notify'
+require('dotenv').config()
 
 const getCompleteURL = (URL: string) => {
   const cleanURL = URL.charAt(0) === '/' ? URL.slice(1, URL.length) : URL
-  return `http://127.0.0.1:8888/${cleanURL}`
+  const api = String(process.env.API_URL)
+  console.log(api)
+  return `${api}/${cleanURL}`
 }
 
 declare interface Headers {
