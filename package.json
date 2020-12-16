@@ -7,7 +7,6 @@
   "private": true,
   "scripts": {
     "start": "quasar dev",
-    "deploy": "docker build --build-arg mode=spa .",
     "lint": "eslint --ext .js,.ts,.vue ./ --fix",
     "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
