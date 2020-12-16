@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.23.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.22.0...v0.23.0) (2020-12-16)
+
+
+### Features
+
+* add docker to deploy ([5b84f76](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/5b84f76e657c9df8c50c71057992d8e4852b5bd6))
+* add docker to deploy - package.json ([b394320](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/b3943206b17385772dde7427740a37235da3c9d1))
+
 ## [0.22.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.21.0...v0.22.0) (2020-12-03)
 
 
