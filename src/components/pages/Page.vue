@@ -16,7 +16,7 @@ import { defineComponent } from '@vue/composition-api'
 
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 
-export default defineComponent({
+const Page = defineComponent({
   name: 'Page',
   components: { Breadcrumbs },
   props: {
@@ -26,4 +26,6 @@ export default defineComponent({
     }
   }
 })
+
+export default Page
 </script>

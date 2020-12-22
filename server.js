@@ -11,5 +11,5 @@ const app = express()
 app.use(history())
 app.use(serveStatic('dist/spa', { index: ['index.html', 'index.htm'] }))
 app.listen(port, () => {
-  console.log(`🚀 Frontend started in port ${port}`)
+  console.log(`🚀 ${String(process.env.APP_NAME)} (Frontend) is running on: http://localhost:${port}`)
 })

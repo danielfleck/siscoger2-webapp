@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.24.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.23.1...v0.24.0) (2020-12-22)
+
+
+### Features
+
+* add functions to Table component and create feriado pages ([d248dca](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/d248dcabb39339a61ac9191e49a6aa5d95b1752f))
+
 ### [0.23.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.22.0...v0.23.1) (2020-12-16)
 
 

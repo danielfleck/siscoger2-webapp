@@ -77,15 +77,15 @@
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
 
-      <q-tab-panel name="movimentos">
+      <q-tab-panel name="movimentos"  @click="validateNavigation">
         <movimento :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
-      <q-tab-panel name="sobrestamentos">
+      <q-tab-panel name="sobrestamentos" @click="validateNavigation">
         <sobrestamento @submit="changeAndamento" :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
-      <q-tab-panel name="arquivos">
+      <q-tab-panel name="arquivos" @click="validateNavigation">
         <arquivo :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
     </q-tab-panels>
@@ -231,6 +231,14 @@ export default defineComponent({
         if (id) {
           vars.register = await get(`sindicancias/${id}`)
         }
+      },
+      validateNavigation (e: { navigate: boolean }, go: () => void) {
+        console.log('validate')
+        if (validate(refs, fields)) {
+          console.log('validate')
+          go()
+        }
+        e.navigate = false
       }
     }
 

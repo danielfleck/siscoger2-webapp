@@ -12,6 +12,9 @@
     :square="square"
     :filter="filter"
     :title="label"
+    rows-per-page-label="Registros por página"
+    :pagination-label="(firstRowIndex, endRowIndex, totalRowsNumber) => `${firstRowIndex}-${endRowIndex} de ${totalRowsNumber}`"
+    :rows-per-page-options="[10,25,50,100]"
   >
     <template v-slot:header="props">
       <!-- <q-tr>
@@ -52,6 +55,7 @@
     </template>
 
     <template v-slot:top-right="props" v-if="fullscreen || global_search">
+      <!-- Campo busca -->
       <q-input
         v-if="global_search"
         clearable
@@ -66,7 +70,7 @@
           <q-icon name="search"/>
         </template>
       </q-input>
-
+      <!-- /Campo busca -->
       <q-btn v-if="fullscreen"
         flat
         round
@@ -75,42 +79,26 @@
         :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
         @click="props.toggleFullscreen"
         >
-        <q-tooltip
-          :disable="$q.platform.is.mobile"
-          v-close-popup
-        >
-        {{props.inFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}}
+        <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+          {{props.inFullscreen ? 'Sair da tela cheia' : 'Tela cheia'}}
         </q-tooltip>
       </q-btn>
     </template>
-
+    <!-- Botões exportar -->
     <template v-slot:top-left="props" v-if="excel || csv">
-      <q-btn
-        class="bg-grey-2 q-mr-sm" icon="fas fa-file-csv"
-        no-caps v-if="csv"
-        @click="exportTable('csv')"
-      >
-      <q-tooltip
-          :disable="$q.platform.is.mobile"
-          v-close-popup
-        >
-        Exportar em formato CSV
+      <q-btn class="q-mr-sm" icon="fas fa-file-csv" no-caps v-if="csv" @click="exportTable('csv')">
+        <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+          Exportar em formato CSV
         </q-tooltip>
       </q-btn>
 
-      <q-btn
-        class="bg-grey-2 q-mr-sm" icon="fas fa-file-excel"
-        no-caps v-if="excel"
-        @click="exportTable('xlsx')"
-      >
-      <q-tooltip
-          :disable="$q.platform.is.mobile"
-          v-close-popup
-        >
-        Exportar em formato Excel
+      <q-btn class="q-mr-sm" icon="fas fa-file-excel" no-caps v-if="excel" @click="exportTable('xlsx')">
+        <q-tooltip :disable="$q.platform.is.mobile" v-close-popup>
+          Exportar em formato Excel
         </q-tooltip>
       </q-btn>
     </template>
+    <!-- /Botões exportar -->
 
     <template v-slot:body="props">
       <q-tr :props="props">
@@ -120,7 +108,16 @@
           :props="props"
         >
           <template v-if="col.name !== 'actions'">
-            <text-highlight :queries="filter">{{ props.row[col.field] }}</text-highlight>
+            <template v-if="filterData[col.field] && col.field">
+              <text-highlight :queries="filterData[col.field]">
+                {{ col.format ? col.format(props.row[col.field]) : props.row[col.field] }}
+              </text-highlight>
+            </template>
+            <template v-else>
+              <text-highlight :queries="filter">
+                {{ col.format ? col.format(props.row[col.field]) : props.row[col.field] }}
+              </text-highlight>
+            </template>
           </template>
           <template v-else>
             <q-btn dense round flat color="grey" icon="edit" @click="$emit('edit',props.row)"></q-btn>
@@ -331,7 +328,7 @@ export default {
           icon: 'warning'
         })
       }
-    }
+    },
   }
 }
 </script>
