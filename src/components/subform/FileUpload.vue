@@ -113,7 +113,6 @@ export default defineComponent({
       type: String,
       required: true
     },
-
     data: {
       type: Object,
       required: true
@@ -124,7 +123,7 @@ export default defineComponent({
     },
     extensions: {
       type: Array,
-      default: ['pdf']
+      default: () => ['pdf']
     }
   },
   filters: {
@@ -235,7 +234,7 @@ export default defineComponent({
           formData.append(key, val)
         })
         this.showProgress()
-        const response = await post(moduleName, formData, { complete: true, file: true, debug: true })
+        const response = await post(moduleName, formData, { complete: true, file: true })
         if (response.returntype === 'success') {
           vars.register = this.cleanRegister()
           vars.files = []
@@ -244,7 +243,7 @@ export default defineComponent({
         }
       },
       async loadData () {
-        const response = await post(`${moduleName}/search`, props.data, { silent: true, debug: true })
+        const response = await post(`${moduleName}/search`, props.data, { silent: true })
         vars.registers = response
       },
 

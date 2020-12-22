@@ -1,8 +1,8 @@
 <template>
   <page :breadcrumbs="[
-  { label: 'Lista', link: '/sindicancias/lista' },
-  { label: 'Criar', link: '/sindicancias/inserir' },
-  ]">
+    { label: 'Lista', link: '/sindicancias/lista' },
+    { label: 'Criar', link: '/sindicancias/inserir' },
+    ]">
     <q-stepper
       v-model="step"
       ref="stepper"

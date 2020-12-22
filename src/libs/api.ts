@@ -14,7 +14,6 @@ require('dotenv').config()
 const getCompleteURL = (URL: string) => {
   const cleanURL = URL.charAt(0) === '/' ? URL.slice(1, URL.length) : URL
   const api = String(process.env.API_URL) || 'http://127.0.0.1:8888'
-  console.log(api)
   return `${api}/${cleanURL}`
 }
 
