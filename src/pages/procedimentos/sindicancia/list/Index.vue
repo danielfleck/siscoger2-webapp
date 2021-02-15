@@ -54,11 +54,11 @@ export default defineComponent({
       module: 'sindicancias',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/sindicancias/lista', label: 'Lista' },
-        { link: '/sindicancias/andamento', label: 'Andamento' },
-        { link: '/sindicancias/prazos', label: 'Prazos' },
+        { link: '/sindicancias/lista', label: 'Consulta' },
         { link: '/sindicancias/rel_situacao', label: 'Rel.  Situação' },
+        { link: '/sindicancias/andamento', label: 'Andamento' },
         { link: '/sindicancias/resultado', label: 'Resultado' },
+        { link: '/sindicancias/prazos', label: 'Prazos' },
         { link: '/sindicancias/apagados', label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'

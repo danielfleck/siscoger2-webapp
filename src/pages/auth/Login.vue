@@ -22,7 +22,7 @@
             </q-input>
           </div>
           <div class="col-12">
-            <q-input data-cy="pass" ref="pass" outlined clearable  v-model="registry.pass" :type="isPwd ? 'password' : 'text'" placeholder="Digite sua senha" :rules="[val => !!val || 'Senha é obrigatória']">
+            <q-input data-cy="password" ref="password" outlined clearable  v-model="registry.password" :type="isPwd ? 'passwordword' : 'text'" placeholder="Digite sua senha" :rules="[val => !!val || 'Senha é obrigatória']">
               <template v-slot:prepend>
                 <q-icon color="grey-9" name="vpn_key" />
               </template>
@@ -70,9 +70,12 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { LocalStorage } from 'quasar'
+import { post } from 'src/libs/api'
+import { errorNotify, successNotify } from 'src/libs/notify'
 
 import { validate, resetValidation } from 'src/libs/validator'
-const fields = ['rg', 'pass', 'username']
+const fields = ['rg', 'password', 'username']
 
 export default defineComponent({
   name: 'Login',
@@ -83,15 +86,25 @@ export default defineComponent({
       ldapIsActive: false,
       registry: {
         rg: null,
-        username: '',
-        pass: ''
+        username: null,
+        password: null
       }
     })
     const functions = {
-      login () {
+      async login () {
         if (validate(refs, fields)) {
+          const res = await post('auth/login', vars.registry, { silent: true, complete: true })
+          if (res?.returntype === 'error') { errorNotify('usuário ou senha inválidos'); return }
+          this.setStore(res.data)
+          successNotify(`Bem vindo ${res.data.user.name}!`)
           root.$router.push('/')
         }
+      },
+      setStore ({ token, user, permissions, roles }: unknown) {
+        LocalStorage.set('token', token)
+        LocalStorage.set('user', user)
+        LocalStorage.set('permissions', permissions)
+        LocalStorage.set('roles', roles)
       },
       changeMode () {
         resetValidation(refs, fields)

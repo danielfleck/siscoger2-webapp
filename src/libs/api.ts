@@ -56,11 +56,6 @@ const setHeaders = (file = false) => {
   return headers
 }
 
-function redirectIfNotLogged (response: { status: number }) {
-  if (response.status === 403) window.location.replace('/login')
-  return true
-}
-
 const getReturnType = (status: number) => (
   status >= 200 && status < 300 ? 'success' : 'error'
 )
@@ -86,7 +81,6 @@ function getMainDataOfResponse (response: AxiosResponse<any>, withData = false) 
 }
 
 function setResponse (response: AxiosResponse, { complete = false, debug = false }): Response {
-  redirectIfNotLogged(response)
   if (debug) logResponse(response)
   delete response.headers.Authorization // remove token of response
 

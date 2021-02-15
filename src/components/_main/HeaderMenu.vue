@@ -6,6 +6,7 @@
       </template>
       <q-list>
         <q-item-label header>Pendências</q-item-label>
+        <HeadPendences label="CD" link="'/pendencias-cd'"/>
         <q-item clickable v-close-popup v-for="pendence in pendences" :key="pendence.label" :to="pendence.link">
           <q-item-section>
             <q-item-label>{{ pendence.label }}</q-item-label>
@@ -46,7 +47,7 @@
     </q-btn-dropdown>
     <q-btn-dropdown stretch flat dropdown-icon="fas fa-user" no-icon-animation>
       <q-list>
-        <q-item clickable v-close-popup tabindex="0" to="/login">
+        <q-item clickable v-close-popup tabindex="0" @click="logout">
           <q-item-section avatar>
             <q-icon name="fa fa-power-off" />
           </q-item-section>
@@ -67,8 +68,13 @@
 import { appVersion } from '../../config/app'
 import { getFab, getDense } from 'src/store/utils'
 import { defineComponent, ref, computed } from '@vue/composition-api'
+import { LocalStorage } from 'quasar'
+import { successNotify } from 'src/libs/notify'
+import HeadPendences from './Pendences.vue'
+
 export default defineComponent({
   name: 'HeaderMenu',
+  components: {HeadPendences},
   setup (_, { root }) {
     const version = ref(appVersion)
     const pendences = ref([
@@ -78,9 +84,21 @@ export default defineComponent({
       { label: 'Sindicância', qtd: 8, color: 'amber', link: '/pendencias-sindicancia' },
       { label: 'CD', qtd: 3, color: 'amber', link: '/pendencias-cd' }
     ])
+
+    const functions = {
+      async logout () {
+        this.cleanStore()
+        successNotify(`Deslogado com sucesso`)
+        root.$router.push('/login')
+      },
+      cleanStore () {
+        ['token','user','permissions','roles'].map(item => LocalStorage.remove(item))
+      },
+    }
     return {
       version,
       pendences,
+      ...functions,
       dense: computed({
         get: () => getDense(root),
         set: () => root.$store.dispatch('configs/toogleDense')
