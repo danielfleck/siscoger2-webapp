@@ -40,7 +40,7 @@ const HeadPendences = defineComponent({
         if (qtd <= 1) return 'positive'
         if (qtd <= 5) return 'amber'
         return 'negative'
-      },
+      }
     }
     return {
       qtd: computed(() => getPendences(props.label)),

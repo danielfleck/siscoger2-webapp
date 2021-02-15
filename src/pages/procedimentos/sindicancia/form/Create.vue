@@ -93,26 +93,26 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import {
-  Page,
-  ProcedOrigem,
-  Acusado,
-  Vitima,
-  FileUpload,
-  Membro,
-  Movimento,
-  Sobrestamento,
-  Arquivo,
-  InputDate,
-  TipoBoletim,
-  Prioridade,
-  InputText,
-  InputSelect,
-  InputNumber,
-  InputSN,
-  OPM,
-  Portaria
-} from 'components/index'
+
+import Page from 'components/pages/Page.vue'
+import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
+import Acusado from 'components/subform/Acusado.vue'
+import Vitima from 'components/subform/Vitima.vue'
+import FileUpload from 'components/subform/FileUpload.vue'
+import Membro from 'components/subform/Membro.vue'
+import Movimento from 'components/subform/Movimento.vue'
+import Sobrestamento from 'components/subform/Sobrestamento.vue'
+import Arquivo from 'components/subform/Arquivo.vue'
+import InputDate from 'components/form/InputDate.vue'
+import TipoBoletim from 'components/form/TipoBoletim.vue'
+import Prioridade from 'components/form/Prioridade.vue'
+import InputText from 'components/form/InputText.vue'
+import InputSelect from 'components/form/InputSelect.vue'
+import InputNumber from 'components/form/InputNumber.vue'
+import InputSN from 'components/form/InputSN.vue'
+import OPM from 'components/form/OPM.vue'
+import Portaria from 'components/form/Portaria.vue'
+
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
 import { Register } from './index'
 import { post, put } from 'src/libs/api'

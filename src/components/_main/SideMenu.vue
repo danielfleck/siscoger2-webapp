@@ -1,4 +1,10 @@
 <template>
+  <q-drawer
+      v-model="menu"
+      show-if-above
+      bordered
+      :content-class="$q.dark.isActive ? 'bg-grey-10' : 'bg-grey-10'"
+    >
   <q-list class="rounded-borders" >
     <sub-menu class="bg-grey-10 text-white" icon="fa fa-balance-scale" group="menu" :content-inset-level="contentInsetLevel" label="Processos e Procedimentos">
       <sub-menu class="bg-grey-9 text-white" icon="fa fa-file-alt" group="submenu" :content-inset-level="contentInsetLevel" label="Processos">
@@ -155,18 +161,27 @@
 
     <menu-item class="bg-grey-10 text-white" title="Links úteis" icon="fa fa-link" link="/links_uteis"/>
   </q-list>
+  </q-drawer>
 </template>
 
 <script lang="ts">
 import MenuItem from 'components/_main/MenuItem.vue'
 import SubMenu from 'components/_main/SubMenu.vue'
-import { defineComponent, ref } from '@vue/composition-api'
+import { computed, defineComponent, ref } from '@vue/composition-api'
+import { getMenu } from 'src/store/utils'
+
 export default defineComponent({
   name: 'SideMenu',
   components: { MenuItem, SubMenu },
-  setup () {
+  setup (_, { root }) {
     const contentInsetLevel = ref(0.4)
-    return { contentInsetLevel }
+    return { 
+      contentInsetLevel,
+      menu: computed({
+        get: () => getMenu(root),
+        set: () => root.$store.dispatch('configs/toogleMenu')
+      })
+    }
   }
 })
 </script>

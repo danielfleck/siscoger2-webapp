@@ -8,6 +8,9 @@ const actions: ActionTree<ConfigStateInterface, StateInterface> = {
   },
   toogleFab (context, state: ConfigStateInterface) {
     context.commit('toogleFab', state)
+  },
+  toogleMenu (context, state: ConfigStateInterface) {
+    context.commit('toogleMenu', state)
   }
 }
 

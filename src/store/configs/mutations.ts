@@ -7,6 +7,9 @@ const mutation: MutationTree<ConfigStateInterface> = {
   },
   toogleFab (state: ConfigStateInterface) {
     state.fab = !state.fab
+  },
+  toogleMenu (state: ConfigStateInterface) {
+    state.menu = !state.menu
   }
 }
 

@@ -17,3 +17,7 @@ export const getDense = (root: { $store: { state: { configs: { dense: boolean; }
     ? root.$store.state.configs.dense
     : false
 )
+
+export const getMenu = (root: { $store: { state: { configs: { menu: boolean; }; }; }; }):boolean => (
+  root?.$store?.state?.configs?.menu
+)

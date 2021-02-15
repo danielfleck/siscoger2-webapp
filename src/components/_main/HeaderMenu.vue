@@ -74,7 +74,7 @@ import HeadPendences from './Pendences.vue'
 
 export default defineComponent({
   name: 'HeaderMenu',
-  components: {HeadPendences},
+  components: { HeadPendences },
   setup (_, { root }) {
     const version = ref(appVersion)
     const pendences = ref([
@@ -88,12 +88,12 @@ export default defineComponent({
     const functions = {
       async logout () {
         this.cleanStore()
-        successNotify(`Deslogado com sucesso`)
+        successNotify('Deslogado com sucesso')
         root.$router.push('/login')
       },
       cleanStore () {
-        ['token','user','permissions','roles'].map(item => LocalStorage.remove(item))
-      },
+        ['token', 'user', 'permissions', 'roles'].map(item => LocalStorage.remove(item))
+      }
     }
     return {
       version,
