@@ -32,7 +32,7 @@ import { getUser } from 'src/utils'
 export default defineComponent({
   name: 'DashboardCD',
   components: { Table },
-  setup (_,{ root }) {
+  setup (_, { root }) {
     const vars = reactive({
       dataAbertura: [] as readonly unknown[],
       columnsAbertura: [
