@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.24.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.24.0...v0.24.1) (2021-02-15)
+
+
+### Features
+
+* add docker to deploy ([5b84f76](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/5b84f76e657c9df8c50c71057992d8e4852b5bd6))
+* add docker to deploy - package.json ([b394320](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/b3943206b17385772dde7427740a37235da3c9d1))
+* stage ([70eaaf8](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/70eaaf861ca41c1e2236db6d82963c228555c706))
+
+
+### Bug Fixes
+
+* merge s ([9e4bdd8](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/9e4bdd8a69568113022503bec04c62df9446b41a))
+* merge tag 'v0.24.0' ([442ef5a](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/442ef5abfedc91755a8f9721b37efb44ac72063d))
+* types in boot ([ec88d73](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ec88d7391e82e661c8266362876d5419b4bfa474))
+
 ## [0.24.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.23.1...v0.24.0) (2020-12-22)
 
 
