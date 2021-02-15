@@ -86,9 +86,10 @@ export default defineComponent({
     ])
 
     const functions = {
-      async logout () {
+      logout () {
         this.cleanStore()
         successNotify('Deslogado com sucesso')
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         root.$router.push('/login')
       },
       cleanStore () {

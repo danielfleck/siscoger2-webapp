@@ -40,9 +40,9 @@ import { appName } from '../../../config/app'
 const Header = defineComponent({
   name: 'Header',
   components: { SearchBar, User, Configs, Pendences },
-  setup (_, { root } ) {
+  setup (_, { root }) {
     const name = ref(appName)
-    return { 
+    return {
       name,
       toogleMenu: () => root.$store.dispatch('configs/toogleMenu')
     }

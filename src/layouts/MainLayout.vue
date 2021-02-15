@@ -11,14 +11,14 @@
 </template>
 
 <script lang="ts">
-import SideMenu from 'components/_main/SideMenu.vue'
+import SideMenu from 'components/_main/SideMenu/Index.vue'
 import Header from 'components/_main/Header/Index.vue'
 
 import { defineComponent } from '@vue/composition-api'
 
 export default defineComponent({
   name: 'MainLayout',
-  components: { SideMenu, Header },
+  components: { SideMenu, Header }
 })
 </script>
 

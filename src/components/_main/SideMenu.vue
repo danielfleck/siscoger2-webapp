@@ -175,7 +175,7 @@ export default defineComponent({
   components: { MenuItem, SubMenu },
   setup (_, { root }) {
     const contentInsetLevel = ref(0.4)
-    return { 
+    return {
       contentInsetLevel,
       menu: computed({
         get: () => getMenu(root),

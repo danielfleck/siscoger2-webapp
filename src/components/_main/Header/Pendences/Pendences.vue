@@ -11,8 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, reactive } from '@vue/composition-api'
-import { LocalStorage } from 'quasar'
+import { defineComponent, computed } from '@vue/composition-api'
 import { getPendences } from 'src/utils'
 
 const HeadPendences = defineComponent({
@@ -27,14 +26,9 @@ const HeadPendences = defineComponent({
       default: ''
     }
   },
-  setup (props, { root }) {
-    const vars = reactive({
-      qtd: computed(() => getPendences(props.label)),
-      color: computed(() => functions.getColor())
-    })
-
+  setup (props) {
     const functions = {
-      async getColor () {
+      getColor () {
         const qtd = getPendences(props.label)
         console.log(qtd)
         if (qtd <= 1) return 'positive'
