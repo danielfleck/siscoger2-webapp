@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.25.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.24.1...v0.25.0) (2021-02-16)
+
+
+### Features
+
+* add types of all entities ([ba0b444](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ba0b44464ae7f4599d1a0cd0147ecc4fc461d9f5))
+* create types used in backend ([58d1bf1](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/58d1bf1e2dc22fe2ca69418ae4b766b6f110f89c))
+
 ### [0.24.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.24.0...v0.24.1) (2021-02-15)
 
 
