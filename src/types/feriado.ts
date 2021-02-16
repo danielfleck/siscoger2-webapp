@@ -1,4 +1,6 @@
 /* eslint-disable camelcase */
-export type XXX = {
+export type Feriado = {
   id?: number
+  data: Date
+  feriado: string
 }

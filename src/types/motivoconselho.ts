@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
-export type XXX = {
+export type Motivoconselho = {
   id?: number
+  motivoconselho: string
 }

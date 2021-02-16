@@ -1,4 +1,8 @@
 /* eslint-disable camelcase */
-export type XXX = {
+export type Role = {
   id?: number
+  role: string
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date
 }
