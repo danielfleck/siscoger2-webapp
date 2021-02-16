@@ -1,5 +1,5 @@
 import { LocalStorage } from 'quasar'
-import { User } from 'src/types/user'
+import { cleanUser, User } from 'src/types/user'
 
 interface Store {
   token: string
@@ -8,18 +8,18 @@ interface Store {
   roles: string[]
 }
 
-export const setStore = ({ token, user, permissions, roles }: Store) => {
+export const setStore = ({ token, user, permissions, roles }: Store):void => {
   LocalStorage.set('token', token)
   LocalStorage.set('user', user)
   LocalStorage.set('permissions', permissions)
   LocalStorage.set('roles', roles)
 }
 
-export const setToken = (token: string) => LocalStorage.set('token', token)
-export const getToken = () => LocalStorage.getItem('token') || ''
-export const setUser = (user: User) => LocalStorage.set('user', user)
-export const getUser = () => LocalStorage.getItem('user') || {}
-export const setPermissions = (permissions: string) => LocalStorage.set('permissions', permissions)
-export const getPermissions = () => LocalStorage.getItem('permissions') || []
-export const setRoles = (roles: string) => LocalStorage.set('roles', roles)
-export const getRoles = () => LocalStorage.getItem('roles') || []
+export const setToken = (token: string):void => LocalStorage.set('token', token)
+export const getToken = (): string => LocalStorage.getItem('token') || ''
+export const setUser = (user: User):void => LocalStorage.set('user', user)
+export const getUser = ():User => LocalStorage.getItem('user') || cleanUser
+export const setPermissions = (permissions: string):void => LocalStorage.set('permissions', permissions)
+export const getPermissions = ():string[] => LocalStorage.getItem('permissions') || []
+export const setRoles = (roles: string):void => LocalStorage.set('roles', roles)
+export const getRoles = ():string[] => LocalStorage.getItem('roles') || []
