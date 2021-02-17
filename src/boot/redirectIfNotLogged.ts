@@ -3,14 +3,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { errorNotify } from 'src/services/alert/notify'
 
-import { errorNotify } from 'src/libs/notify'
+interface To { meta: { auth: boolean | undefined, roles: string[] | undefined, permissions: string[] | undefined} }
+type From = any
+type Next = (arg0?: string | undefined) => void
 
-export default ({ urlPath }: any) => {
-  // ...
-  const isAuthorized = window.localStorage.getItem('token')
-  if (!isAuthorized && !urlPath.startsWith('/login')) {
-    errorNotify('Não autenticado')
-    return Promise.reject({ url: '/login' })
-  }
+export default ({ router, store, Vue }: any) => {
+  router.beforeEach((to: To, from: From, next: Next):void => {
+    if (to?.meta?.auth) {
+      const logged = window.localStorage.getItem('token')
+      if (!logged) {
+        next('/login')
+        errorNotify('Não autenticado')
+      }
+    }
+    next()
+  })
 }

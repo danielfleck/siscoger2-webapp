@@ -23,3 +23,12 @@ export const setPermissions = (permissions: string):void => LocalStorage.set('pe
 export const getPermissions = ():string[] => LocalStorage.getItem('permissions') || []
 export const setRoles = (roles: string):void => LocalStorage.set('roles', roles)
 export const getRoles = ():string[] => LocalStorage.getItem('roles') || []
+
+export const getPermissionsBefore = ():string[] => {
+  const permissions = window.localStorage.getItem('permissions')
+  return permissions ? permissions as unknown as string[] : []
+}
+export const getRolesBefore = ():string[] => {
+  const roles = window.localStorage.getItem('roles')
+  return roles ? roles as unknown as string[] : []
+}

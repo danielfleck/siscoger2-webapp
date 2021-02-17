@@ -1,35 +1,33 @@
-import { Permission } from 'src/types/permission'
-import { Role } from 'src/types/role'
 import { getPermissions, getRoles } from '../auth'
 
 export const acl = {
-  hasAnyRole (roles: Role[]): boolean {
+  hasAnyRole (roles: string[], sessionRoles?: string[]): boolean {
     if (!roles.length) return true
 
-    const userRoles = getRoles()
+    const userRoles = sessionRoles?.length ? sessionRoles : getRoles()
     if (!userRoles.length) return false
 
-    roles.forEach(({ role }) => {
+    roles.forEach((role) => {
       if (userRoles.includes(role)) {
         return true
       }
     })
     return false
   },
-  hasAnyPermission (permissions: Permission[]):boolean {
+  hasAnyPermission (permissions: string[], sessionPermissions?: string[]):boolean {
     if (!permissions.length) return true
 
-    const userPermissions = getPermissions()
+    const userPermissions = sessionPermissions?.length ? sessionPermissions : getPermissions()
     if (!userPermissions.length) return false
 
-    permissions.forEach(({ permission }) => {
+    permissions.forEach((permission) => {
       if (userPermissions.includes(permission)) {
         return true
       }
     })
     return false
   },
-  hasAnyRoleOrPermission ({ roles, permissions }: { roles: Role[], permissions: Permission[]}):boolean {
+  hasAnyRoleOrPermission ({ roles, permissions }: { roles: string[], permissions: string[]}):boolean {
     const hasRole = this.hasAnyRole(roles)
     const hasPermission = this.hasAnyPermission(permissions)
     return hasRole || hasPermission
