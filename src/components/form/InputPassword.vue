@@ -14,24 +14,20 @@
     :disable="disable"
     :autogrow="autogrow"
     :mask="mask"
-    :type="type"
+    :type="isPwd ? 'password' : 'text'"
     :placeholder="placeholder"
     >
-
-    <template v-slot:prepend v-if="icon">
+    
+    <template v-slot:prepend>
       <q-icon :color="iconColor" :name="icon" />
     </template>
-
-    <template v-slot:prepend v-else-if="tooltip">
-      <q-icon :color="iconColor" name="fa fa-question-circle" >
-        <q-tooltip>
-          {{tooltip}}
-        </q-tooltip>
-      </q-icon>
-    </template>
-
-    <template v-slot:prepend v-else-if="lorem">
-      <q-icon color="green-9" name="fa fa-check-circle" @click="getLorem"/>
+    <template v-slot:append>
+      <q-icon
+        color="grey-9"
+        :name="isPwd ? 'visibility_off' : 'visibility'"
+        class="cursor-pointer"
+        @click="isPwd = !isPwd"
+      />
     </template>
 
   </q-input>
@@ -42,7 +38,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
-import { fakeLorem } from 'src/filters'
 import { getDense } from 'src/store/utils'
 
 export default defineComponent({
@@ -78,17 +73,9 @@ export default defineComponent({
     mask: {
       type: String
     },
-    type: {
-      type: String,
-      default: 'text'
-    },
-    tooltip: {
-      type: String,
-      default: ''
-    },
     icon: {
       type: String,
-      default: ''
+      default: 'vpn_key'
     },
     iconColor: {
       type: String,
@@ -101,6 +88,7 @@ export default defineComponent({
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
+      isPwd: true,
       errorMsg: '',
       validable: false,
       denseVal: computed(() => getDense(root)),
@@ -127,11 +115,6 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
-      },
-      getLorem () {
-        const value = fakeLorem('words', 50)
-        vars._value = value
-        emit('input', value)
       }
     }
 

@@ -51,12 +51,14 @@ function getMainDataOfResponse (response: AxiosResponse<unknown[]>, { time, debu
 
   if (debug) console.table(mainData)
 
-  notify({
-    silent,
-    msg,
-    method: mainData.method,
-    success: ok
-  })
+  if (!silent) {
+    notify({
+      silent,
+      msg,
+      method: mainData.method,
+      success: ok
+    })
+  }
 
   mainData.data = response.data
   return mainData

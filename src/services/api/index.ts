@@ -7,9 +7,9 @@ import { Response, setResponse } from './response'
 declare interface Request {
   silent: boolean
   file?: boolean
-  msg : string
-  load: boolean
-  debug: boolean
+  msg?: string
+  load?: boolean
+  debug?: boolean
 }
 
 const defaultGetRequest: Request = {
