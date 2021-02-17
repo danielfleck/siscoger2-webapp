@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.29.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.28.0...v0.29.0) (2021-02-17)
+
+
+### Features
+
+* create boot redirectIfNotLogged and redirectIfNotHasPermission ([664de7c](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/664de7c24467c5806f341938edec2a03b893bf54))
+
 ## [0.28.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.27.0...v0.28.0) (2021-02-16)
 
 
