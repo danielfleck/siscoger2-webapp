@@ -2,7 +2,7 @@
 import axios, { AxiosResponse } from 'axios'
 import { Loading } from 'quasar'
 import { getCompleteURL, setHeaders } from './request'
-import { Response, setResponse } from './response'
+import { redirectIfBadStatus, Response, setResponse } from './response'
 
 declare interface Request {
   silent: boolean
@@ -38,6 +38,7 @@ export const api = {
       const response: AxiosResponse = await axios.get(getCompleteURL(URL), { headers })
       return setResponse(response, { time, debug, silent, msg, load })
     } catch (e) {
+      redirectIfBadStatus(e.response.status)
       return setResponse(e.response, { time, debug, silent, msg, load })
     }
   },
@@ -51,6 +52,7 @@ export const api = {
       const response: AxiosResponse = await axios.post(getCompleteURL(URL), data, { headers })
       return setResponse(response, { time, debug, silent, msg, load })
     } catch (e) {
+      redirectIfBadStatus(e.response.status)
       return setResponse(e.response, { time, debug, silent, msg, load })
     }
   },
@@ -64,6 +66,7 @@ export const api = {
       const response: AxiosResponse = await axios.put(getCompleteURL(URL), data, { headers })
       return setResponse(response, { time, debug, silent, msg, load })
     } catch (e) {
+      redirectIfBadStatus(e.response.status)
       return setResponse(e.response, { time, debug, silent, msg, load })
     }
   },
@@ -77,6 +80,7 @@ export const api = {
       const response: AxiosResponse = await axios.delete(getCompleteURL(URL), { headers })
       return setResponse(response, { time, debug, silent, msg, load })
     } catch (e) {
+      redirectIfBadStatus(e.response.status)
       return setResponse(e.response, { time, debug, silent, msg, load })
     }
   }

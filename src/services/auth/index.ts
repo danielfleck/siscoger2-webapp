@@ -16,6 +16,7 @@ export const setStore = ({ token, user, permissions, roles }: Store):void => {
 }
 
 export const setToken = (token: string):void => LocalStorage.set('token', token)
+export const removeToken = ():void => LocalStorage.set('token', null)
 export const getToken = (): string => LocalStorage.getItem('token') || ''
 export const setUser = (user: User):void => LocalStorage.set('user', user)
 export const getUser = ():User => LocalStorage.getItem('user') || cleanUser

@@ -28,7 +28,8 @@ import feriados from './admin/feriados'
 // import dadosOpm from './apresentacao/dados_opm'
 // import locais from './apresentacao/locais'
 // import notas from './apresentacao/notas'
-import auth from './auth/login'
+import login from './auth/login'
+import terms from './auth/terms'
 // import PM from './busca/PM'
 // import envolvido from './busca/envolvido'
 // import nominal from './busca/nominal'
@@ -75,7 +76,8 @@ const routes: RouteConfig[] = [
   // ...dadosOpm,
   // ...locais,
   // ...notas,
-  ...auth,
+  ...login,
+  ...terms,
   // ...PM,
   // ...envolvido,
   // ...nominal,

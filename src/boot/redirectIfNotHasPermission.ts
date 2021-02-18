@@ -5,14 +5,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // import { errorNotify } from 'src/services/alert/notify'
 
+import { LocalStorage } from 'quasar'
 import { errorNotify } from 'src/services/alert/notify'
+import { Route } from 'vue-router'
 
-interface To { meta: { auth: boolean | undefined, roles: string[] | undefined, permissions: string[] | undefined} }
-type From = any
+interface Meta { meta: { auth: boolean | undefined, roles: string[] | undefined, permissions: string[] | undefined} }
 type Next = (arg0?: string | undefined) => void
 
 export default ({ router, store, Vue }: any) => {
-  router.beforeEach((to: To, from: From, next: Next):void => {
+  router.beforeEach((to: Meta, from: Route, next: Next):void => {
     if (to?.meta?.roles?.length) {
       checkRoles(to, next)
       return
@@ -27,15 +28,15 @@ export default ({ router, store, Vue }: any) => {
   })
 }
 
-function checkRoles (to: To, next: Next) {
+function checkRoles (to: Meta, next: Next) {
   const roles = to?.meta?.roles || []
 
-  const userRoles = window.localStorage.getItem('roles') as unknown as string[]
+  const userRoles = LocalStorage.getItem('roles') as unknown as string[]
   if (!userRoles.length) notAuthorized(next)
 
-  roles.forEach((permission) => {
-    console.log(permission, userRoles.includes(permission))
-    if (userRoles.includes(permission)) {
+  roles.forEach((role) => {
+    console.log(role, userRoles.includes(role))
+    if (userRoles.includes(role)) {
       next()
     }
   })
@@ -43,10 +44,10 @@ function checkRoles (to: To, next: Next) {
   notAuthorized(next)
 }
 
-function checkPermissions (to: To, next: Next) {
+function checkPermissions (to: Meta, next: Next) {
   const permissions = to?.meta?.roles || []
 
-  const userPermissions = window.localStorage.getItem('permissions') as unknown as string[]
+  const userPermissions = LocalStorage.getItem('permissions') as unknown as string[]
   if (!userPermissions.length) notAuthorized(next)
 
   permissions.forEach((permission) => {

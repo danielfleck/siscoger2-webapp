@@ -13,7 +13,7 @@
 import { defineComponent } from '@vue/composition-api'
 
 const OrientationsLogin = defineComponent({
-  name: 'OrientationsLogin',
+  name: 'OrientationsLogin'
 })
 
 export default OrientationsLogin

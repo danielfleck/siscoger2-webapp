@@ -22,7 +22,7 @@ import Form from './Form.vue'
 
 const Login = defineComponent({
   name: 'Login',
-  components: { Orientations, Form },
+  components: { Orientations, Form }
 })
 
 export default Login

@@ -1,7 +1,7 @@
 <template>
   <q-card-section >
     <div class="col-12">
-      <input-text 
+      <input-text
         v-if="ldap"
         v-model="registry.username"
         ref="username"
@@ -11,8 +11,8 @@
         placeholder="Digite seu nome de usuário (ex: nome@pm.pr.gov.br)"
         required
       />
-      <input-text 
-        v-else 
+      <input-text
+        v-else
         v-model="registry.rg"
         ref="rg"
         data-cy="username"
@@ -24,7 +24,7 @@
       />
     </div>
     <div class="col-12">
-      <input-password 
+      <input-password
         data-cy="password"
         ref="password"
         v-model="registry.password"
@@ -43,7 +43,6 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { post } from 'src/libs/api'
 import { errorNotify, successNotify } from 'src/libs/notify'
 import { api, setStore } from 'src/services'
 
@@ -72,38 +71,37 @@ export default defineComponent({
       async login () {
         if (validate(refs, fields)) {
           if (vars.ldap) {
-            this.loginLdap()
+            await this.loginLdap()
           } else {
-            this.loginSiscoger()
+            await this.loginSiscoger()
           }
         }
       },
       async loginSiscoger () {
-        const response = await api.post('auth/login', vars.registry, { silent: true  })
+        const response = await api.post('auth/login', vars.registry, { silent: true })
 
-        if (!response.ok) { 
-          errorNotify('usuário ou senha inválidos'); 
-          return 
+        if (!response.ok) {
+          errorNotify('usuário ou senha inválidos')
+          return
         }
 
-        const data = response.data as unknown as AuthResponse
+        const data = response.data as AuthResponse
         setStore(data)
-        successNotify(`Bem vindo ${data.user.name}!`)
-        this.redirectAfterLogin(data.user.terms)
-
+        this.redirectAfterLogin(data.user.terms, data.user.name)
       },
-      loginLdap () {
+      async loginLdap () {
         // TODO
       },
       changeMode () {
         vars.ldap = !vars.ldap
       },
-      redirectAfterLogin (terms: boolean) {
+      redirectAfterLogin (terms: boolean, name: string) {
         if (!terms) {
           root.$router.push('/termos')
           return
         }
         root.$router.push('/')
+        successNotify(`Bem vindo ${name}!`)
       }
     }
 

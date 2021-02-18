@@ -17,7 +17,6 @@
     :type="isPwd ? 'password' : 'text'"
     :placeholder="placeholder"
     >
-    
     <template v-slot:prepend>
       <q-icon :color="iconColor" :name="icon" />
     </template>

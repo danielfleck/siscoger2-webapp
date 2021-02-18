@@ -19,7 +19,7 @@ export default defineComponent({
   },
   setup (_, { emit }) {
     const vars = reactive({
-      ldapIsActive: false,
+      ldapIsActive: false
     })
     const functions = {
       changeMode () {
