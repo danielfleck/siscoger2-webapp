@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.31.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.30.0...v0.31.0) (2021-02-18)
+
+
+### Features
+
+* create basic structure of pages ([ae2b30c](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ae2b30c6ff3ad39191d85f9bbe3876a49ee93d9b))
+* create terms page ([b8f8c36](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/b8f8c36a34329659d6976670c35fa7bb410d28fd))
+* prepare to upgrade version quasar ([ffba009](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ffba00957bf9335383d5cfdcdd47d998e1d27276))
+
 ## [0.30.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.29.0...v0.30.0) (2021-02-17)
 
 ## [0.29.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.28.0...v0.29.0) (2021-02-17)
