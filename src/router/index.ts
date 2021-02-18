@@ -25,26 +25,5 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     base: process.env.VUE_ROUTER_BASE
   })
 
-  // Router.beforeEach((to, from, next) => {
-  //   const { meta } = to
-  //   if (meta && meta.auth) {
-  //     const logged = window.localStorage.getItem('token')
-  //     if (!logged) {
-  //       next('/login')
-  //       return
-  //     }
-  //   }
-
-  //   // if ((meta && meta.hasAnyRole) || (meta && meta.hasAnyPermission)) {
-  //   //   const logged = window.localStorage.getItem('token')
-  //   //   if (!logged) {
-  //   //     next('/forbidden')
-  //   //     return
-  //   //   }
-  //   // }
-
-  //   next()
-  // })
-
   return Router
 })

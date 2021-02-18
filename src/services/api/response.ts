@@ -20,7 +20,7 @@ export interface Response {
 }
 
 declare interface Options {
-  silent: boolean
+  silent?: boolean
   debug?: boolean
   time: number
   load?: boolean

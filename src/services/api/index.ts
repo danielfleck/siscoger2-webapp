@@ -5,7 +5,7 @@ import { getCompleteURL, setHeaders } from './request'
 import { redirectIfBadStatus, Response, setResponse } from './response'
 
 declare interface Request {
-  silent: boolean
+  silent?: boolean
   file?: boolean
   msg?: string
   load?: boolean
@@ -57,7 +57,7 @@ export const api = {
     }
   },
 
-  async put (URL: string, data: unknown, { silent, debug, load, msg }: Request = defaultGetRequest): Promise<Response> {
+  async put (URL: string, data: unknown, { silent, debug, load, msg }: Request = defaultRequest): Promise<Response> {
     if (load) Loading.show()
     const headers = setHeaders()
     const time = Date.now()
@@ -71,7 +71,7 @@ export const api = {
     }
   },
 
-  async delete (URL: string, { silent, debug, load, msg }: Request = defaultGetRequest): Promise<Response> {
+  async delete (URL: string, { silent, debug, load, msg }: Request = defaultRequest): Promise<Response> {
     if (load) Loading.show()
     const headers = setHeaders()
     const time = Date.now()
