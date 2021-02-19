@@ -1,8 +1,8 @@
 import { store } from 'quasar/wrappers'
 import Vuex from 'vuex'
-
-import { ConfigStateInterface } from './configs/state'
 import configs from './configs'
+import { ConfigStateInterface } from './configs/state'
+
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation

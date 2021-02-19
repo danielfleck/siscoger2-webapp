@@ -1,56 +1,59 @@
 <template>
   <q-btn-dropdown stretch flat dropdown-icon="fas fa-bell" no-icon-animation>
-    <template v-slot:label>
-      <q-badge color="negative" floating>36</q-badge>
+    <template v-slot:label v-if="total">
+      <q-badge color="negative" floating>{{ total }}</q-badge>
     </template>
     <q-list>
       <q-item-label header>Pendências</q-item-label>
-      <HeadPendences label="CD" link="'/pendencias-cd'"/>
-      <q-item clickable v-close-popup v-for="pendence in pendences" :key="pendence.label" :to="pendence.link">
-        <q-item-section>
-          <q-item-label>{{ pendence.label }}</q-item-label>
-          <q-item-label caption>{{ pendence.qtd }} Pendências</q-item-label>
-        </q-item-section>
-        <q-item-section side>
-          <q-icon name="info" :color="pendence.color" />
-        </q-item-section>
-      </q-item>
+      <HeadPendences
+        v-for="pendence in pendences"
+        :key="pendence.label"
+        :label="pendence.label"
+        :link="pendence.label === 'gerais' ? '/' : `/pendencias-${pendence.label}`"
+        :qtd="pendence.qtd"
+      />
     </q-list>
   </q-btn-dropdown>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api'
-import { LocalStorage } from 'quasar'
-import { successNotify } from 'src/libs/notify'
+import { getPendence } from 'src/services'
 import HeadPendences from './Pendences.vue'
 
 const Pendences = defineComponent({
   name: 'HeaderMenu',
   components: { HeadPendences },
-  setup (_, { root }) {
+  setup () {
     const pendences = ref([
-      { label: 'Gerais', qtd: 10, color: 'negative', link: '/' },
-      { label: 'FATD', qtd: 15, color: 'negative', link: '/pendencias-fatd' },
-      { label: 'IPM', qtd: 0, color: 'positive', link: '/pendencias-ipm' },
-      { label: 'Sindicância', qtd: 8, color: 'amber', link: '/pendencias-sindicancia' },
-      { label: 'CD', qtd: 3, color: 'amber', link: '/pendencias-cd' }
+      { label: 'cd', qtd: 0 },
+      { label: 'fatd', qtd: 0 },
+      { label: 'gerais', qtd: 0 },
+      { label: 'ipm', qtd: 0 },
+      { label: 'sindicancia', qtd: 0 }
     ])
 
-    const functions = {
-      logout () {
-        this.cleanStore()
-        successNotify('Deslogado com sucesso')
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        root.$router.push('/login')
-      },
-      cleanStore () {
-        ['token', 'user', 'permissions', 'roles'].map(item => LocalStorage.remove(item))
+    const total = ref(0)
+
+    function loadData () {
+      const store = getPendence('total-pendences')
+      if (store) {
+        pendences.value = Object.entries(store).map(([key, value]) => {
+          total.value += value
+          return {
+            label: key,
+            qtd: +value
+          }
+        })
       }
+      console.log(total)
     }
+
+    loadData()
+
     return {
       pendences,
-      ...functions
+      total
     }
   }
 })

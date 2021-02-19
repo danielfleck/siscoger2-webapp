@@ -1,86 +1,44 @@
 <template>
-  <q-tab-panel name="cd">
-    <q-card-section>
-      <Table
-        label="CONSELHOS DE DISCIPLINA - DATA DE ABERTURA"
-        :data="dataAbertura"
-        :columns="columnsAbertura"
-        :fullscreen="false"
-        :csv="false"
-        :excel="false"
-      />
-    </q-card-section>
     <q-card-section>
       <Table
         label="CONSELHOS DE DISCIPLINA - PRAZOS"
-        :data="dataPrazos"
-        :columns="columnsPrazos"
+        :data="data"
+        :columns="columns"
         :fullscreen="false"
         :csv="false"
         :excel="false"
       />
     </q-card-section>
-  </q-tab-panel>
 </template>
 
 <script lang="ts">
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { api } from 'src/services'
-import { getUser } from 'src/utils'
+import { getPendence, getUserCdopm } from 'src/services'
+import { Pendencia } from 'src/types/pendencias'
 
 export default defineComponent({
-  name: 'DashboardCD',
+  name: 'DashboardCDPrazos',
   components: { Table },
-  setup (_, { root }) {
+  setup () {
     const vars = reactive({
-      dataAbertura: [] as readonly unknown[],
-      columnsAbertura: [
+      data: [] as readonly Pendencia[],
+      columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
       ],
-      dataPrazos: [] as readonly unknown[],
-      columnsPrazos: [
-        { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
-      ],
-      user: getUser()
+      cdopm: getUserCdopm()
     })
-    const functions = {
-      async loadData () {
-        await this.abertura()
-        await this.prazos()
-      },
-      async abertura () {
-        const { data, 'data (count)': length } = await api.post('pendencias/search', {
-          cdopm: vars.user.cdopm,
-          proc: 'cd',
-          pendencias: [
-            'abertura'
-          ]
-        }, { silent: true, debug: true })
-        root.$q.localStorage.set('pendencias-cd', length)
-        vars.dataAbertura = Object.freeze(data as unknown[])
-      },
-      async prazos () {
-        const { data, 'data (count)': length } = await api.post('pendencias/search', {
-          cdopm: vars.user.cdopm,
-          proc: 'cd',
-          pendencias: [
-            'prazos'
-          ]
-        }, { silent: true, debug: true })
-        root.$q.localStorage.set('pendencias-cd', length)
-        vars.dataPrazos = Object.freeze(data as unknown[])
-      }
+    function loadData () {
+      const store = getPendence('cd-prazos')
+      if (store?.data) vars.data = Object.freeze(store.data as Pendencia[])
     }
 
-    void functions.loadData()
+    void loadData()
 
     return {
-      ...toRefs(vars),
-      ...functions
+      ...toRefs(vars)
     }
   }
 })

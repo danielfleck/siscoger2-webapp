@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import { defineComponent, computed } from '@vue/composition-api'
-import { getPendences } from 'src/utils'
 
 const HeadPendences = defineComponent({
   name: 'HeaderMenu',
@@ -20,6 +19,10 @@ const HeadPendences = defineComponent({
     label: {
       type: String,
       default: ''
+    },
+    qtd: {
+      type: Number,
+      default: 0
     },
     link: {
       type: String,
@@ -29,15 +32,13 @@ const HeadPendences = defineComponent({
   setup (props) {
     const functions = {
       getColor () {
-        const qtd = getPendences(props.label)
-        console.log(qtd)
+        const qtd = props.qtd
         if (qtd <= 1) return 'positive'
         if (qtd <= 5) return 'amber'
         return 'negative'
       }
     }
     return {
-      qtd: computed(() => getPendences(props.label)),
       color: computed(() => functions.getColor())
     }
   }
