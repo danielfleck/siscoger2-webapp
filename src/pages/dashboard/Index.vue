@@ -25,7 +25,9 @@
             <q-badge v-if="tab.badge" color="red" floating>{{ tab.badge }}</q-badge>
           </q-route-tab>
         </q-tabs>
-        <transition mode="out-in"> <router-view /> </transition>
+        <transition mode="out-in">
+          <router-view />
+        </transition>
       </q-card-section>
     </q-card>
   </q-page>
