@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.33.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.32.0...v0.33.0) (2021-02-19)
+
+
+### Features
+
+* implement main admin forms ([95fe854](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/95fe8545c3907f941c04276ea3a6f70b81b74e3f))
+
 ## [0.32.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.31.0...v0.32.0) (2021-02-19)
 
 
