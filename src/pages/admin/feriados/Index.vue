@@ -41,12 +41,12 @@ const FeriadoPage = defineComponent({
         const { data } = await api.get(moduleName)
         vars.data = Object.freeze(data as Feriado[])
       },
-      onEdit (row: any) {
-        void root.$router.push(`/admin/${moduleName}/editar/${row.id}`)
+      onEdit (row: Feriado) {
+        void root.$router.push(`/admin/${moduleName}/editar/${String(row.id)}`)
       },
-      onDelete (row: any) {
+      onDelete (row: Feriado) {
         root.$q.dialog(confirmMsg).onOk(async () => {
-          const { ok } = await api.delete(`${moduleName}/${row.id}`)
+          const { ok } = await api.delete(`${moduleName}/${String(row.id)}`)
           if (ok) void this.loadData()
         })
       }

@@ -1,7 +1,7 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista ROUTE', link: '/ROUTE' },
-    { label: 'Criar', link: '/ROUTE/inserir' },
+    { label: 'Lista ROUTE', link: routeFront },
+    { label: 'Criar', link: `${routeFront}/inserir` },
     ]">
       <form class="row">
         <div class="q-pa-md col-12">
@@ -20,7 +20,7 @@
           <InputText label="TEXTAREA" v-model="register.TEXTAREA" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
       </form>
-      <q-btn 
+      <q-btn
         @click="register.id ? update(register.id) : create()"
         color="positive"
         :label="register.id ? 'Atualizar' : 'Inserir'"
@@ -33,6 +33,7 @@
 
 interface Register {
   id?: number
+  prioridade: boolean
   TEXT: string
   DATE: string
   SELECT: string
@@ -47,11 +48,12 @@ import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, errorNotify, validate } from 'src/services'
+import { api, validate } from 'src/services'
 
-const fields = [
-]
+const fields: string[] = []
+
+const routeBackend = 'NAME'
+const routeFront = '/ROUTE'
 
 export default defineComponent({
   name: 'Form',
@@ -60,37 +62,46 @@ export default defineComponent({
     Prioridade,
     InputDate,
     InputText,
-    InputSelect,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
       register: {
         id: 0,
+        prioridade: false,
         TEXT: '',
         DATE: '',
         SELECT: '',
-        TEXTAREA: '',
-      } as Register,
+        TEXTAREA: ''
+      } as Register
     })
 
     const functions = {
+      async loadData () {
+        const { id } = root.$route.params
+        if (id) {
+          const { data } = await api.get(`${routeBackend}/${id}`)
+          vars.register = data as Register
+        }
+      },
       async create () {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.post('MODULE', vars.register, { debug: true })
+          const { ok } = await api.post(routeBackend, vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push(routeFront)
           }
         }
       },
       async update (id: number) {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.put(`MODULE/${id}`, vars.register, { debug: true })
+          const { ok } = await api.put(`${routeBackend}/${id}`, vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push(routeFront)
           }
         }
-      },
+      }
     }
+
     return {
       ...toRefs(vars),
       ...functions

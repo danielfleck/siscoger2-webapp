@@ -30,7 +30,7 @@ import InputSelect from 'components/form/InputSelect.vue'
 import { api, validate } from 'src/services'
 import { Permission } from 'src/types/permission'
 
-const fields = ['permission']
+const fields: string[] = ['permission']
 
 export default defineComponent({
   name: 'FormPermission',

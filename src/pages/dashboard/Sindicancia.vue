@@ -24,36 +24,59 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-// import { get } from 'src/libs/api'
+import { api } from 'src/services'
+import { getUser } from 'src/utils'
 
 export default defineComponent({
   name: 'DashboardCD',
   components: { Table },
-  setup () {
+  setup (_, { root }) {
     const vars = reactive({
-      dataAbertura: [],
+      dataAbertura: [] as readonly unknown[],
       columnsAbertura: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
       ],
-      dataPrazos: [],
+      dataPrazos: [] as readonly unknown[],
       columnsPrazos: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
-      ]
+      ],
+      user: getUser()
     })
     const functions = {
-      // async loadData () {
-      //   const data = await get('#')
-      //   vars.dataAbertura = Object.freeze(data)
-
-      //   const data = await get('#')
-      //   vars.dataPrazos = Object.freeze(data)
-      // },
+      async loadData () {
+        await this.abertura()
+        await this.prazos()
+      },
+      async abertura () {
+        const { data, 'data (count)': length } = await api.post('pendencias/search', {
+          cdopm: vars.user.cdopm,
+          proc: 'sindicancia',
+          pendencias: [
+            'abertura'
+          ]
+        }, { silent: true, debug: true })
+        root.$q.localStorage.set('pendencias-sindicancia', length)
+        vars.dataAbertura = Object.freeze(data as unknown[])
+      },
+      async prazos () {
+        const { data, 'data (count)': length } = await api.post('pendencias/search', {
+          cdopm: vars.user.cdopm,
+          proc: 'sindicancia',
+          pendencias: [
+            'prazos'
+          ]
+        }, { silent: true, debug: true })
+        root.$q.localStorage.set('pendencias-sindicancia', length)
+        vars.dataPrazos = Object.freeze(data as unknown[])
+      }
     }
-    // void functions.loadData()
+
+    void functions.loadData()
 
     return {
       ...toRefs(vars),

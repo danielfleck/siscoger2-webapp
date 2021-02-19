@@ -30,7 +30,7 @@ import InputSelect from 'components/form/InputSelect.vue'
 import { api, validate } from 'src/services'
 import { Role } from 'src/types/role'
 
-const fields = ['role']
+const fields: string[] = ['role']
 
 export default defineComponent({
   name: 'FormRole',

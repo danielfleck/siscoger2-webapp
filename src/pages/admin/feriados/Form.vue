@@ -37,7 +37,7 @@ type Register = {
   data: string | Date,
   feriado: string,
 }
-const fields = [
+const fields: string[] = [
   'data',
   'feriado'
 ]

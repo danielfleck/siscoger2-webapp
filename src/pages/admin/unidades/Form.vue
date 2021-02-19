@@ -5,7 +5,7 @@
     ]">
       <form class="row">
         <div class="q-pa-md col-12">
-          <Prioridade v-model="register.prioridade"/>
+          <!-- <Prioridade v-model="register.prioridade"/> -->
         </div>
         <div class="q-pa-md col-4">
           <InputText label="TEXT" v-model="register.TEXT" ref="TEXT" required/>
@@ -20,7 +20,7 @@
           <InputText label="TEXTAREA" v-model="register.TEXTAREA" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
       </form>
-      <q-btn 
+      <q-btn
         @click="register.id ? update(register.id) : create()"
         color="positive"
         :label="register.id ? 'Atualizar' : 'Inserir'"
@@ -47,10 +47,9 @@ import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, errorNotify, validate } from 'src/services'
+import { api, validate } from 'src/services'
 
-const fields = [
+const fields: string[] = [
 ]
 
 export default defineComponent({
@@ -60,7 +59,7 @@ export default defineComponent({
     Prioridade,
     InputDate,
     InputText,
-    InputSelect,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -69,27 +68,27 @@ export default defineComponent({
         TEXT: '',
         DATE: '',
         SELECT: '',
-        TEXTAREA: '',
-      } as Register,
+        TEXTAREA: ''
+      } as Register
     })
 
     const functions = {
       async create () {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.post('MODULE', vars.register, { debug: true })
+          const { ok } = await api.post('MODULE', vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push('/ROUTE')
           }
         }
       },
       async update (id: number) {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.put(`MODULE/${id}`, vars.register, { debug: true })
+          const { ok } = await api.put(`MODULE/${id}`, vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push('/ROUTE')
           }
         }
-      },
+      }
     }
     return {
       ...toRefs(vars),

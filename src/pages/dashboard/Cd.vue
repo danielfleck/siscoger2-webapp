@@ -24,9 +24,10 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { post } from 'src/libs/api'
+import { api } from 'src/services'
 import { getUser } from 'src/utils'
 
 export default defineComponent({
@@ -52,28 +53,29 @@ export default defineComponent({
         await this.prazos()
       },
       async abertura () {
-        const data:unknown[] = await post('pendencias/search', {
+        const { data, 'data (count)': length } = await api.post('pendencias/search', {
           cdopm: vars.user.cdopm,
           proc: 'cd',
           pendencias: [
             'abertura'
           ]
         }, { silent: true, debug: true })
-        root.$q.localStorage.set('pendencias-cd', data.length)
-        vars.dataAbertura = Object.freeze(data)
+        root.$q.localStorage.set('pendencias-cd', length)
+        vars.dataAbertura = Object.freeze(data as unknown[])
       },
       async prazos () {
-        const data:unknown[] = await post('pendencias/search', {
+        const { data, 'data (count)': length } = await api.post('pendencias/search', {
           cdopm: vars.user.cdopm,
           proc: 'cd',
           pendencias: [
             'prazos'
           ]
         }, { silent: true, debug: true })
-        root.$q.localStorage.set('pendencias-cd', data.length)
-        vars.dataPrazos = Object.freeze(data)
+        root.$q.localStorage.set('pendencias-cd', length)
+        vars.dataPrazos = Object.freeze(data as unknown[])
       }
     }
+
     void functions.loadData()
 
     return {

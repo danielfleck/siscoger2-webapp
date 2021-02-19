@@ -41,7 +41,7 @@ import InputSelect from 'components/form/InputSelect.vue'
 
 import { api, validate } from 'src/services'
 
-const fields = ['']
+const fields: string[] = ['']
 
 export default defineComponent({
   name: 'Form',

@@ -24,7 +24,7 @@ import Page from 'components/pages/Page.vue'
 import { validate } from 'src/services'
 import OPM from 'src/components/form/OPM.vue'
 
-const fields = ['cdopm']
+const fields: string[] = ['cdopm']
 
 export default defineComponent({
   name: 'Form',

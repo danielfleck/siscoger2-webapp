@@ -65,7 +65,7 @@ import { User } from 'src/types/user'
 import OPM from 'src/components/form/OPM.vue'
 import { postograd, classPMPR, group, subgroup } from 'src/config'
 
-const fields = [
+const fields: string[] = [
   'rg',
   'name',
   'cpf',
