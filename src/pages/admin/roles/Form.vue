@@ -5,22 +5,10 @@
     ]">
       <form class="row">
         <div class="q-pa-md col-12">
-          <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputText label="TEXT" v-model="register.TEXT" ref="TEXT" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.DATE" label="DATE" />
-        </div>
-        <div class="q-pa-md col-6">
-          <InputSelect label="SELECT" v-model="register.SELECT" :options="[1,2,3]" />
-        </div>
-        <div class="q-pa-md col-12">
-          <InputText label="TEXTAREA" v-model="register.TEXTAREA" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
+          <InputText label="Papel" v-model="register.role" ref="role" required/>
         </div>
       </form>
-      <q-btn 
+      <q-btn
         @click="register.id ? update(register.id) : create()"
         color="positive"
         :label="register.id ? 'Atualizar' : 'Inserir'"
@@ -30,15 +18,7 @@
   </page>
 </template>
 <script lang="ts">
-
-interface Register {
-  id?: number
-  TEXT: string
-  DATE: string
-  SELECT: string
-  TEXTAREA: string
-}
-
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
@@ -47,50 +27,55 @@ import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, errorNotify, validate } from 'src/services'
+import { api, validate } from 'src/services'
+import { Role } from 'src/types/role'
 
-const fields = [
-]
+const fields = ['role']
 
 export default defineComponent({
-  name: 'Form',
+  name: 'FormRole',
   components: {
     Page,
     Prioridade,
     InputDate,
     InputText,
-    InputSelect,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
       register: {
-        id: 0,
-        TEXT: '',
-        DATE: '',
-        SELECT: '',
-        TEXTAREA: '',
-      } as Register,
+        role: ''
+      } as Role
     })
 
     const functions = {
+      async loadData () {
+        const { id } = root.$route.params
+        if (id) {
+          const { data } = await api.get(`roles/${id}`)
+          vars.register = data as Role
+        }
+      },
       async create () {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.post('MODULE', vars.register, { debug: true })
+          const { ok } = await api.post('roles', vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push('/admin/papeis')
           }
         }
       },
       async update (id: number) {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.put(`MODULE/${id}`, vars.register, { debug: true })
+          const { ok } = await api.put(`roles/${id}`, vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push('/admin/papeis')
           }
         }
-      },
+      }
     }
+
+    void functions.loadData()
+
     return {
       ...toRefs(vars),
       ...functions

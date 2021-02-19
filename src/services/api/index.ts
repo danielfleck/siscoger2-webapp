@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import axios, { AxiosResponse } from 'axios'
 import { Loading } from 'quasar'
+import { redirectIfBadStatus } from './redirect'
 import { getCompleteURL, setHeaders } from './request'
-import { redirectIfBadStatus, Response, setResponse } from './response'
+import { Response, setResponse } from './response'
 
 declare interface Request {
   silent?: boolean

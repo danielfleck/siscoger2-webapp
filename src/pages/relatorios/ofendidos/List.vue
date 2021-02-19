@@ -1,11 +1,11 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/ROUTE' },
+    { label: 'Lista', link: '/ofendidos' },
     ]">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ROUTE/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ofendidos/inserir"/>
     <Table
       data-cy="table"
-      label="Lista ROUTE"
+      label="Lista ofendidos"
       :data="data"
       :columns="columns"
       actions
@@ -15,57 +15,54 @@
   </page>
 </template>
 <script lang="ts">
-
-interface Register {
-  id?: number
-  TEXT: string
-  DATE: string
-  SELECT: string
-  TEXTAREA: string
-}
-
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, confirmMsg, validate } from 'src/services'
-
-const fields = [
-]
+import { api, confirmMsg } from 'src/services'
+import { Ofendido } from 'src/types/ofendido'
 
 export default defineComponent({
-  name: 'Form',
+  name: 'MODULEList',
   components: {
     Page,
     Table
   },
   setup (_, { root }) {
     const vars = reactive({
-      data: [],
+      data: [] as readonly Ofendido[],
       columns: [
-        { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'nome', label: 'nome', field: 'nome', sortable: true },
+        { name: 'rg', label: 'rg', field: 'rg', sortable: true },
+        { name: 'situacao', label: 'situacao', field: 'situacao', sortable: true },
+        { name: 'resultado', label: 'resultado', field: 'resultado', sortable: true },
+        { name: 'sexo', label: 'sexo', field: 'sexo', sortable: true },
+        { name: 'idade', label: 'idade', field: 'idade', sortable: true },
+        { name: 'fone', label: 'fone', field: 'fone', sortable: true },
+        { name: 'email', label: 'email', field: 'email', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ]
     })
 
     const functions = {
       async loadData () {
-          const data = await api.get('MODULE')
-          vars.data = Object.freeze(data)
-        },
-        onEdit (row: any) {
-          void root.$router.push(`/ROUTE/editar/${row.id}`)
-        },
-        onDelete (row: any) {
-          root.$q.dialog(confirmMsg).onOk(async () => {
-            const { ok } = await api.delete(`ROUTE/${row.id}`)
-            if (ok) await this.loadData()
-          })
-        }
+        const data = await api.get('MODULE')
+        vars.data = Object.freeze(data as unknown as readonly Ofendido[])
       },
+      onEdit (row: Ofendido) {
+        return root.$router.push(`/ofendidos/editar/${String(row.id)}`)
+      },
+      onDelete (row: Ofendido) {
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          const { ok } = await api.delete(`ofendidos/${String(row.id)}`)
+          if (ok) await this.loadData()
+        })
+      }
+    }
+
+    void functions.loadData()
 
     return {
       ...toRefs(vars),

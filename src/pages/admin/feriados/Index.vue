@@ -14,17 +14,14 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import Page from 'src/components/pages/Page.vue'
 import { changeDate } from 'src/filters'
-import { get, deleteData } from 'src/libs/api'
 import { confirmMsg } from 'src/libs/dialog'
+import { api } from 'src/services'
+import { Feriado } from 'src/types/feriado'
 
 const moduleName = 'feriados'
 const FeriadoPage = defineComponent({
@@ -32,7 +29,7 @@ const FeriadoPage = defineComponent({
   components: { Table, Page },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as any[],
+      data: [] as readonly Feriado[],
       columns: [
         { name: 'data', label: 'Data', field: 'data', sortable: true, format: (val: string) => changeDate(val, 'pt-br') },
         { name: 'feriado', label: 'Feriado', field: 'feriado', sortable: true },
@@ -41,17 +38,16 @@ const FeriadoPage = defineComponent({
     })
     const functions = {
       async loadData () {
-        const data = await get(moduleName)
-        vars.data = Object.freeze(data)
+        const { data } = await api.get(moduleName)
+        vars.data = Object.freeze(data as Feriado[])
       },
       onEdit (row: any) {
         void root.$router.push(`/admin/${moduleName}/editar/${row.id}`)
       },
       onDelete (row: any) {
-        console.log(row.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${row.id}`)
-          void this.loadData()
+          const { ok } = await api.delete(`${moduleName}/${row.id}`)
+          if (ok) void this.loadData()
         })
       }
     }

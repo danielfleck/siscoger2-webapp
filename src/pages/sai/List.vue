@@ -1,11 +1,11 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/ROUTE' },
+    { label: 'Lista', link: '/sai' },
     ]">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ROUTE/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sai/inserir"/>
     <Table
       data-cy="table"
-      label="Lista ROUTE"
+      label="Lista sai"
       :data="data"
       :columns="columns"
       actions
@@ -15,57 +15,57 @@
   </page>
 </template>
 <script lang="ts">
-
-interface Register {
-  id?: number
-  TEXT: string
-  DATE: string
-  SELECT: string
-  TEXTAREA: string
-}
-
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, confirmMsg, validate } from 'src/services'
-
-const fields = [
-]
+import { api, confirmMsg } from 'src/services'
+import { Sai } from 'src/types/sai'
 
 export default defineComponent({
-  name: 'Form',
+  name: 'SaiList',
   components: {
     Page,
     Table
   },
   setup (_, { root }) {
     const vars = reactive({
-      data: [],
+      data: [] as readonly Sai[],
       columns: [
-        { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'rg', label: 'rg', field: 'rg', sortable: true },
+        { name: 'cargo', label: 'cargo', field: 'cargo', sortable: true },
+        { name: 'nome', label: 'nome', field: 'nome', sortable: true },
+        { name: 'rg_cadastro', label: 'rg_cadastro', field: 'rg_cadastro', sortable: true },
+        { name: 'data', label: 'data', field: 'data', sortable: true },
+        { name: 'docorigem', label: 'docorigem', field: 'docorigem', sortable: true },
+        { name: 'cdopm', label: 'cdopm', field: 'cdopm', sortable: true },
+        { name: 'cdopm_fato', label: 'cdopm_fato', field: 'cdopm_fato', sortable: true },
+        { name: 'cdopm_controle', label: 'cdopm_controle', field: 'cdopm_controle', sortable: true },
+        { name: 'opm_abreviatura', label: 'opm_abreviatura', field: 'opm_abreviatura', sortable: true },
+        { name: 'sintese_txt', label: 'sintese_txt', field: 'sintese_txt', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ]
     })
 
     const functions = {
       async loadData () {
-          const data = await api.get('MODULE')
-          vars.data = Object.freeze(data)
-        },
-        onEdit (row: any) {
-          void root.$router.push(`/ROUTE/editar/${row.id}`)
-        },
-        onDelete (row: any) {
-          root.$q.dialog(confirmMsg).onOk(async () => {
-            const { ok } = await api.delete(`ROUTE/${row.id}`)
-            if (ok) await this.loadData()
-          })
-        }
+        const data = await api.get('sai')
+        vars.data = Object.freeze(data as unknown as readonly Sai[])
       },
+      onEdit (row: Sai) {
+        return root.$router.push(`/sai/editar/${String(row.id)}`)
+      },
+      onDelete (row: Sai) {
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          const { ok } = await api.delete(`sai/${String(row.id)}`)
+          if (ok) await this.loadData()
+        })
+      }
+    }
+
+    void functions.loadData()
 
     return {
       ...toRefs(vars),

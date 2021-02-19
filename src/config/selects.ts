@@ -747,6 +747,24 @@ export const postograd: Option[] = [
   { value: 'CELAGREG', label: 'CELAGREG' }
 ]
 
+export const classPMPR: Option[] = [
+  { value: 'PM', label: 'PM' },
+  { value: 'BM', label: 'BM' }
+]
+
+export const group: Option[] = [
+  { value: 'QOPM', label: 'QOPM' },
+  { value: 'QOBM', label: 'QOBM' },
+  { value: 'QPM', label: 'QPM' },
+  { value: 'QBM', label: 'QBM' }
+]
+
+export const subgroup: Option[] = [
+  { value: '-', label: '-' },
+  { value: '1-0', label: '1-0' },
+  { value: '2-0', label: '2-0' }
+]
+
 export const procedTipos: Option[] = [
   { value: 'ipm', label: 'IPM' },
   { value: 'sindicancia', label: 'SINDICÂNCIA' },

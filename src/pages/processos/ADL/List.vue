@@ -1,11 +1,11 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/ROUTE' },
+    { label: 'Lista', link: '/adl' },
     ]">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ROUTE/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
     <Table
       data-cy="table"
-      label="Lista ROUTE"
+      label="Lista ADL"
       :data="data"
       :columns="columns"
       actions
@@ -15,57 +15,57 @@
   </page>
 </template>
 <script lang="ts">
-
-interface Register {
-  id?: number
-  TEXT: string
-  DATE: string
-  SELECT: string
-  TEXTAREA: string
-}
-
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, confirmMsg, validate } from 'src/services'
-
-const fields = [
-]
+import { api, confirmMsg } from 'src/services'
+import { Adl } from 'src/types/adl'
 
 export default defineComponent({
-  name: 'Form',
+  name: 'MODULEList',
   components: {
     Page,
     Table
   },
   setup (_, { root }) {
     const vars = reactive({
-      data: [],
+      data: [] as readonly Adl[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'id_andamento', label: 'id_andamento', field: 'id_andamento', sortable: true },
+        { name: 'id_andamentocoger', label: 'id_andamentocoger', field: 'id_andamentocoger', sortable: true },
+        { name: 'id_motivoconselho', label: 'id_motivoconselho', field: 'id_motivoconselho', sortable: true },
+        { name: 'id_decorrenciaconselho', label: 'id_decorrenciaconselho', field: 'id_decorrenciaconselho', sortable: true },
+        { name: 'id_situacaoconselho', label: 'id_situacaoconselho', field: 'id_situacaoconselho', sortable: true },
+        { name: 'outromotivo', label: 'outromotivo', field: 'outromotivo', sortable: true },
+        { name: 'cdopm', label: 'cdopm', field: 'cdopm', sortable: true },
+        { name: 'fato_data', label: 'fato_data', field: 'fato_data', sortable: true },
+        { name: 'abertura_data', label: 'abertura_data', field: 'abertura_data', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ]
     })
 
     const functions = {
       async loadData () {
-          const data = await api.get('MODULE')
-          vars.data = Object.freeze(data)
-        },
-        onEdit (row: any) {
-          void root.$router.push(`/ROUTE/editar/${row.id}`)
-        },
-        onDelete (row: any) {
-          root.$q.dialog(confirmMsg).onOk(async () => {
-            const { ok } = await api.delete(`ROUTE/${row.id}`)
-            if (ok) await this.loadData()
-          })
-        }
+        const { data } = await api.get('adls')
+        vars.data = Object.freeze(data as readonly Adl[])
       },
+      onEdit (row: Adl) {
+        return root.$router.push(`/adl/editar/${String(row.id)}`)
+      },
+      onDelete (row: Adl) {
+        root.$q.dialog(confirmMsg).onOk(async () => {
+          const { ok } = await api.delete(`adls/${String(row.id)}`)
+          if (ok) await this.loadData()
+        })
+      }
+    }
+
+    void functions.loadData()
 
     return {
       ...toRefs(vars),

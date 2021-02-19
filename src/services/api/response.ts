@@ -4,7 +4,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { AxiosResponse } from 'axios'
 import { Loading } from 'quasar'
-import { removeToken } from '../auth'
 import { notify } from './utils'
 
 export interface Response {
@@ -57,7 +56,6 @@ function getMainDataOfResponse (response: AxiosResponse<unknown[]>, { time, debu
 
   if (!silent) {
     notify({
-      silent,
       msg,
       method: mainData.method,
       success: ok
@@ -66,14 +64,6 @@ function getMainDataOfResponse (response: AxiosResponse<unknown[]>, { time, debu
 
   mainData.data = response.data
   return mainData
-}
-
-export function redirectIfBadStatus (status: number) {
-  if (status === 401) {
-    console.log('here')
-    removeToken()
-    return window.location.replace('/login')
-  }
 }
 
 export function setResponse (response: AxiosResponse, { time, debug, silent, msg, load }: Options = defaultOptions): Response {

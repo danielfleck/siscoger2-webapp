@@ -1,26 +1,47 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista ROUTE', link: '/ROUTE' },
-    { label: 'Criar', link: '/ROUTE/inserir' },
+    { label: 'Lista usuarios', link: '/usuarios' },
+    { label: 'Criar', link: '/admin/usuarios/inserir' },
     ]">
       <form class="row">
-        <div class="q-pa-md col-12">
-          <Prioridade v-model="register.prioridade"/>
+        <div class="q-pa-md col-4">
+          <InputText label="RG" mask="#############" v-model="register.rg" ref="role" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="TEXT" v-model="register.TEXT" ref="TEXT" required/>
+          <InputText label="Nome" v-model="register.name" ref="name" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.DATE" label="DATE" />
+          <InputText label="CPF"  mask="###.###.###-##" v-model="register.cpf" ref="cpf" required/>
         </div>
-        <div class="q-pa-md col-6">
-          <InputSelect label="SELECT" v-model="register.SELECT" :options="[1,2,3]" />
+        <div class="q-pa-md col-4">
+          <InputSelect label="Classe" v-model="register.class" ref="class" required :options="classPMPR"/>
         </div>
-        <div class="q-pa-md col-12">
-          <InputText label="TEXTAREA" v-model="register.TEXTAREA" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
+        <div class="q-pa-md col-4">
+          <InputSelect label="Posto/Graduação" v-model="register.position" ref="position" required :options="postograd"/>
+        </div>
+        <div class="q-pa-md col-4">
+          <InputSelect label="Quadro" v-model="register.group" ref="group" required :options="[
+          { value: 'QOPM', label: 'QOPM' },
+          { value: 'QOBM', label: 'QOBM' },
+          { value: 'QPM', label: 'QPM' },
+          { value: 'QBM', label: 'QBM' }
+        ]"/>
+        </div>
+        <div class="q-pa-md col-4">
+          <InputSelect label="Subquadro" v-model="register.subgroup" ref="subgroup" required :options="[
+            { value: '-', label: '-' },
+            { value: '1-0', label: '1-0' },
+            { value: '2-0', label: '2-0' }
+          ]"/>
+        </div>
+        <div class="q-pa-md col-4">
+          <OPM v-model="register.cdopm" ref="opm" required/>
+        </div>
+        <div class="q-pa-md col-4">
+          <InputText label="Email" v-model="register.email" ref="email" required/>
         </div>
       </form>
-      <q-btn 
+      <q-btn
         @click="register.id ? update(register.id) : create()"
         color="positive"
         :label="register.id ? 'Atualizar' : 'Inserir'"
@@ -30,15 +51,7 @@
   </page>
 </template>
 <script lang="ts">
-
-interface Register {
-  id?: number
-  TEXT: string
-  DATE: string
-  SELECT: string
-  TEXTAREA: string
-}
-
+/* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
@@ -47,50 +60,80 @@ import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
-import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { api, errorNotify, validate } from 'src/services'
+import { api, validate } from 'src/services'
+import { User } from 'src/types/user'
+import OPM from 'src/components/form/OPM.vue'
+import { postograd, classPMPR, group, subgroup } from 'src/config'
 
 const fields = [
+  'rg',
+  'name',
+  'cpf',
+  'class',
+  'position',
+  'group',
+  'subgroup',
+  'cdopm',
+  'email'
 ]
 
 export default defineComponent({
-  name: 'Form',
+  name: 'FormRole',
   components: {
     Page,
     Prioridade,
     InputDate,
     InputText,
     InputSelect,
+    OPM
   },
   setup (_, { refs, root }) {
     const vars = reactive({
       register: {
-        id: 0,
-        TEXT: '',
-        DATE: '',
-        SELECT: '',
-        TEXTAREA: '',
-      } as Register,
+        name: '',
+        rg: '',
+        cpf: '',
+        class: '',
+        position: '',
+        group: '',
+        subgroup: '',
+        cdopm: '',
+        email: ''
+      } as User,
+      postograd,
+      classPMPR,
+      group,
+      subgroup
     })
 
     const functions = {
+      async loadData () {
+        const { id } = root.$route.params
+        if (id) {
+          const { data } = await api.get(`users/${id}`)
+          vars.register = data as User
+        }
+      },
       async create () {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.post('MODULE', vars.register, { debug: true })
+          const { ok } = await api.post('users', vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push('/admin/usuarios')
           }
         }
       },
       async update (id: number) {
         if (validate(refs, fields)) {
-          const { data, ok } = await api.put(`MODULE/${id}`, vars.register, { debug: true })
+          const { ok } = await api.put(`users/${id}`, vars.register, { debug: true })
           if (ok) {
-            root.$router.push('/ROUTE')
+            return root.$router.push('/admin/usuarios')
           }
         }
-      },
+      }
     }
+
+    void functions.loadData()
+
     return {
       ...toRefs(vars),
       ...functions
