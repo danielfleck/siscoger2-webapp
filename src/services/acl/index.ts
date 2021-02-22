@@ -30,6 +30,9 @@ export const acl = {
   hasAnyRoleOrPermission ({ roles, permissions }: { roles: string[], permissions: string[]}):boolean {
     const hasRole = this.hasAnyRole(roles)
     const hasPermission = this.hasAnyPermission(permissions)
-    return hasRole || hasPermission
+
+    if (roles.length && permissions.length) return hasRole || hasPermission
+    if (!roles.length && permissions.length) return hasPermission
+    return hasRole
   }
 }

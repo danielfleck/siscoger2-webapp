@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import SideMenu from 'components/_main/SideMenu/Index.vue'
+import SideMenu from 'components/_main/SideMenu.vue'
 import Header from 'components/_main/Header/Index.vue'
 
 import { defineComponent } from '@vue/composition-api'
