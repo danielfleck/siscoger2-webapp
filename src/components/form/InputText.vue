@@ -14,6 +14,7 @@
     :disable="disable"
     :autogrow="autogrow"
     :mask="mask"
+    :reverse-fill-mask="reverse"
     :type="type"
     :placeholder="placeholder"
     >
@@ -60,6 +61,10 @@ export default defineComponent({
       default: ''
     },
     required: {
+      type: Boolean,
+      default: false
+    },
+    reverse: {
       type: Boolean,
       default: false
     },

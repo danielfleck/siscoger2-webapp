@@ -50,7 +50,7 @@
           <TipoBoletim v-model="register.doc_tipo"/>
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="N° Boletim" v-model="register.doc_numero" />
+          <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
         </div>
         <div class="q-pa-md col-4">
           <InputDate v-model="register.abertura_data" label="Data da abertura"/>

@@ -78,7 +78,8 @@ export default defineComponent({
         }
       },
       async loginSiscoger () {
-        const response = await api.post('auth/login', vars.registry, { silent: true })
+        const response = await api.post('auth/login', vars.registry, { silent: true, debug: true, noRedirect: true })
+        console.log(response)
 
         if (!response.ok) {
           errorNotify('usuário ou senha inválidos')

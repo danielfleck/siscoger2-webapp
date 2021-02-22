@@ -5,6 +5,7 @@
     ref="root"
     v-model="_value"
     :label="label"
+    @input="confirm"
     hide-bottom-space
     :dense="denseVal"
   />
@@ -16,6 +17,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { localePTBR } from 'src/config/app'
+import { confirm } from 'src/services'
 import { getDense } from 'src/store/utils'
 
 export default defineComponent({
@@ -63,6 +65,13 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
+      },
+      confirm (val: boolean) {
+        if (val) {
+          root.$q.dialog(confirm({ message: 'Você tem certeza que esse procedimento é prioritário?', cancel: true }))
+          .onOk(() => { vars._value = val })
+          .onCancel(() => { vars._value = !val })
+        }
       }
     }
 

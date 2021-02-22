@@ -1,7 +1,8 @@
 import { errorNotify } from '../alert'
 import { removeToken } from '../auth'
 
-export function redirectIfBadStatus (status: number) {
+export function redirectIfBadStatus (status: number, noRedirect = false) {
+  if (noRedirect) return
   if (status === 401) {
     removeToken()
     return window.location.replace('/login')

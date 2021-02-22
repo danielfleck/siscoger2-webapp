@@ -9,6 +9,7 @@ import sjd from './admin/sjd'
 import termsAdmin from './admin/termos'
 import unidades from './admin/unidades'
 import user from './admin/user'
+import changePass from './ajuda/changePass'
 import manual from './ajuda/manual'
 import apresentacao from './apresentacao/apresentacao'
 import dadosOpm from './apresentacao/dados_opm'
@@ -143,6 +144,7 @@ const routes: RouteConfig[] = [
   ...termsAdmin,
   ...historia,
   ...listarOutraOpm,
+  ...changePass,
 
   // Always leave this as last one,
   // but you can also remove it

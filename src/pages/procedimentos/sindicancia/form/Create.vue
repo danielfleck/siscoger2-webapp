@@ -41,7 +41,7 @@
             <TipoBoletim v-model="register.doc_tipo"/>
           </div>
           <div class="q-pa-md col-4">
-            <InputText label="N° Boletim" v-model="register.doc_numero" />
+            <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
           </div>
           <div class="q-pa-md col-4">
             <InputDate v-model="register.abertura_data" label="Data da abertura"/>
@@ -114,11 +114,11 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { Register } from './index'
-import { post, put } from 'src/libs/api'
+import { Sindicancia } from 'src/types/sindicancia'
+import { api, errorNotify, getUserCdopm, validate } from 'src/services'
+import { Pendencia } from 'src/types/pendencias'
+import { LocalStorage } from 'quasar'
 
-import { validate } from 'src/libs/validator'
-import { errorNotify } from 'src/libs/notify'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -157,29 +157,38 @@ export default defineComponent({
   setup (_, { refs, root }) {
     const vars = reactive({
       step: 1,
-      tab: 'main',
       loading: false,
       register: {
-        id: 0,
-        sintese_txt: '',
-        prioridade: false,
-        id_andamento: 6,
         id_andamentocoger: 0,
-        motivo_cancelamento: '',
-        doc_origem_txt: '',
-        fato_data: '',
+        id_andamento: 6,
+        fato_data: undefined,
+        abertura_data: undefined,
+        sintese_txt: '',
         cdopm: '',
-        portaria_numero: '',
-        portaria_data: '',
         doc_tipo: '',
         doc_numero: '',
-        abertura_data: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
+        doc_origem_txt: '',
+        portaria_numero: '',
+        portaria_data: undefined,
+        sol_cmt_file: '',
+        sol_cmt_data: undefined,
+        sol_cmtgeral_file: '',
+        sol_cmtgeral_data: undefined,
+        opm_meta4: '',
+        relatorio_file: '',
+        relatorio_data: undefined,
+        prioridade: false,
+        motivo_cancelamento: '',
         motivo_abertura: '',
         motivo_outros: '',
-        completo: false
-      } as Register,
+        prorogacao: false,
+        prorogacao_dias: 0,
+        completo: false,
+        diasuteis_sobrestado: 0,
+        motivo_sobrestado: '',
+        prazo_decorrido: 0,
+      } as Sindicancia,
+      cdopm: getUserCdopm(),
       andamentoCogerSindicancia,
       andamentoSindicancia,
       motivoAberturaSindicancia,
@@ -190,19 +199,35 @@ export default defineComponent({
     const functions = {
       async create () {
         if (validate(refs, fields)) {
-          const response = await post('sindicancias', vars.register, { silent: true, complete: true, debug: true })
-          if (response.returntype === 'success') {
-            vars.register.id = response.data.id
-            refs.stepper.next()
-            return undefined
+          const { ok, data } = await api.post('sindicancias', vars.register, { silent: true, debug: true })
+          if (ok) {
+            const sindicancia = data as unknown as Sindicancia
+            vars.register.id = sindicancia.id
+            await this.addPendence()
+            return refs.stepper.next()
           }
         }
       },
+      async addPendence () {
+        const pendencia: Pendencia = {
+          cdopm: vars.cdopm,
+          id_proc: Number(vars.register.id),
+          sjd_ref: vars.register.sjd_ref,
+          sjd_ref_ano: vars.register.sjd_ref_ano,
+          proc: 'sindicancia',
+          pendencias: ['incompleto'],
+          state: vars.register
+        }
+        const { data } = await api.post('pendencias', pendencia, { silent: true, debug: true })
+        const response = data as Pendencia
+        root.$router.push({ query: { incompleto: String(response._id) }})
+        LocalStorage.set('incompleto',`/sindicancias/inserir?incompleto=${String(response._id)}`)
+      },
       async update (id: number) {
         if (validate(refs, fields)) {
-          const response = await put(`sindicancias/${id}`, vars.register, { silent: true, complete: true, debug: true })
+          const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true, debug: true })
 
-          if (response.returntype === 'success') {
+          if (ok) {
             refs.stepper.next()
           }
         }
@@ -221,7 +246,8 @@ export default defineComponent({
 
           if (validateSubforms && vars.register.id) {
             vars.register.completo = true
-            await put(`sindicancias/${vars.register.id}`, vars.register)
+            await api.put(`sindicancias/${vars.register.id}`, vars.register)
+            await removePendence()
             return root.$router.push('/sindicancias/lista')
           }
         }
@@ -230,6 +256,27 @@ export default defineComponent({
         refs.stepper.previous()
       }
     }
+
+    async function getPendence() {
+      const { incompleto } = root.$route.query
+      const { data, ok } = await api.get(`pendencias/${incompleto}`, { silent: true, debug: true })
+      if (ok) {
+        console.log(data)
+        const { state } = data as Pendencia
+        state as unknown as Sindicancia[]
+        vars.register = state[0]
+        refs.stepper.next()
+      }
+    }
+
+    async function removePendence() {
+      const { incompleto } = root.$route.query
+      const { ok } = await api.delete(`pendencias/${incompleto}`, { silent: true, debug: true })
+      if (ok) LocalStorage.remove('incompleto')
+    }
+
+    if (root.$route.query.incompleto) getPendence() 
+
     return {
       ...toRefs(vars),
       ...functions

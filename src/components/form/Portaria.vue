@@ -15,7 +15,8 @@
       :error="!isValid"
       :disable="disable"
       :autogrow="autogrow"
-      mask="####/##"
+      mask="#######/####"
+      reverse-fill-mask
       />
     <q-dialog ref="dialog" persistent >
       <q-card >

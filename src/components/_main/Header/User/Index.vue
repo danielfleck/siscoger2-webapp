@@ -7,7 +7,7 @@
         </q-item-section>
         <q-item-section>Sair</q-item-section>
       </q-item>
-      <q-item clickable v-close-popup tabindex="0" to="#">
+      <q-item clickable v-close-popup tabindex="0" to="/modificar_senha">
         <q-item-section avatar>
           <q-icon name="fa fa-key" />
         </q-item-section>

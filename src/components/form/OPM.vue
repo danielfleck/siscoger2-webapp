@@ -1,16 +1,22 @@
 <template>
   <q-select
-  hide-bottom-space
-  clearable outlined
   v-model="_value"
+  :options="options"
+  use-input
+  hide-selected
+  fill-input
+  input-debounce="0"
+  hide-bottom-space
+  clearable 
+  outlined
   emit-value
   map-options
-  :options="options"
   :dense="denseVal"
   :label="label"
   ref="root"
   @blur="validable = true"
   @validate="validate"
+  @filter="filterFn"
   :error-message="errorMsg"
   :error="!isValid"
   :disable="disable"
@@ -70,7 +76,13 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
-      }
+      },
+      filterFn (val: string, update: any, abort: any) {
+      update(() => {
+        const needle = val.toLocaleLowerCase()
+        vars.options = opms.filter(v => v.label.toLocaleLowerCase().indexOf(needle) > -1)
+      })
+    },
     }
 
     watch(() => vars._value, () => (vars.validable = true))

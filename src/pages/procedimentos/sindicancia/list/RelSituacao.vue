@@ -21,15 +21,16 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { get, deleteData } from 'src/libs/api'
 import { confirmMsg } from 'src/libs/dialog'
+import { api } from 'src/services'
+import { Sindicancia } from 'src/types/sindicancia'
 
 export default defineComponent({
   name: 'RelSituacao',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [],
+      data: [] as readonly Sindicancia[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -40,17 +41,16 @@ export default defineComponent({
     })
     const functions = {
       async loadData () {
-        const data = await get('sindicancias')
-        vars.data = Object.freeze(data)
+        const { data } = await api.get('sindicancias')
+        vars.data = Object.freeze(data as Sindicancia[])
       },
-      onEdit (row: any) {
+      onEdit (row: Sindicancia) {
         void root.$router.push(`/sindicancias/editar/${row.id}`)
       },
-      onDelete (row: any) {
-        console.log(row.id)
+      onDelete (row: Sindicancia) {
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`sindicancias/${row.id}`)
-          void this.loadData()
+          const { ok } = await api.delete(`sindicancias/${row.id}`)
+          if (ok) void this.loadData()
         })
       }
     }

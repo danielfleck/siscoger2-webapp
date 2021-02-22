@@ -137,7 +137,7 @@
         <menu-item title="Upload de Arquivos" link="/log/uploads" v-if="acl({ roles: [], permissions: []})" class="bg-grey-8"/>
       </sub-menu>
       <sub-menu icon="fa fa-bug" group="submenu" :content-inset-level="contentInsetLevel" label="Policiais" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9">
-        <sub-menu icon="fa fa-bug" group="submenu" :content-inset-level="contentInsetLevel" label="FDI" v-if="acl({ roles: [], permissions: []})" class="bg-grey-8">
+        <sub-menu icon="fa fa-bug" group="subsubmenu" :content-inset-level="contentInsetLevel" label="FDI" v-if="acl({ roles: [], permissions: []})" class="bg-grey-8">
           <menu-item title="Acesso FDI" link="/log/fdi" v-if="acl({ roles: [], permissions: []})" class="bg-grey-7"/>
           <menu-item title="Protocolo" link="/log/protocolo" v-if="acl({ roles: [], permissions: []})" class="bg-grey-7"/>
           <menu-item title="Comportamento PM" link="/log/comportamento_pm" v-if="acl({ roles: [], permissions: []})" class="bg-grey-7"/>
@@ -149,7 +149,7 @@
           <menu-item title="Tramitação COGER" link="/log/tramitacao_coger" v-if="acl({ roles: [], permissions: []})" class="bg-grey-7"/>
           <menu-item title="Medalha" link="/log/medalha" v-if="acl({ roles: [], permissions: []})" class="bg-grey-7"/>
         </sub-menu>
-        <sub-menu icon="fa fa-bug" group="submenu" :content-inset-level="contentInsetLevel" label="Geral" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9">
+        <sub-menu icon="fa fa-bug" group="subsubmenu" :content-inset-level="contentInsetLevel" label="Geral" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9">
           <menu-item title="Reintegrado" link="/log/reintegrado" v-if="acl({ roles: [], permissions: []})" class="bg-grey-8"/>
           <menu-item title="Óbitos e lesões" link="/log/obitos_lesoes" v-if="acl({ roles: [], permissions: []})" class="bg-grey-8"/>
           <menu-item title="Preso" link="/log/preso" v-if="acl({ roles: [], permissions: []})" class="bg-grey-8"/>

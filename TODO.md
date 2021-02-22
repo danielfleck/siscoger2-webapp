@@ -1,15 +1,15 @@
 Segunda  
 [x] Recursos - Menu a parte  
-[] Nº Boletim (Sindicância) #######/####  
-[] Confirm Prioridade  
-[] Lista OPMs  
-[] Change Pass  
-[] Pendências Parciais  
-[] Pendências Totais  
-[] Incompleto Middleware  
-[] Incompleto (Sindicância)  
+[x] Nº Boletim (Sindicância) #######/####  
+[x] Confirm Prioridade  
+[x] Lista OPMs  
+[x] Change Pass  
+[x] Pendências Parciais  
+[x] Pendências Totais  
+[x] Incompleto Middleware  
+[x] Incompleto (Sindicância)  
 [x] ACL menu  
-[] Ver export excel  
+[x] Ver export excel  
 [] Logs List  
 Terça  
 [] User Add Roles  
