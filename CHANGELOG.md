@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.35.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.34.0...v0.35.0) (2021-02-22)
+
+
+### Features
+
+* create centered rules ([02e9fd1](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/02e9fd10bea6bb3aaf3db41cd57b6560dbc4099d))
+
 ## [0.34.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.33.0...v0.34.0) (2021-02-19)
 
 
