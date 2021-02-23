@@ -61,7 +61,7 @@ import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
 import { api, validate } from 'src/services'
-import { User } from 'src/types/user'
+import { User } from 'src/types'
 import OPM from 'src/components/form/OPM.vue'
 import { postograd, classPMPR, group, subgroup } from 'src/config'
 

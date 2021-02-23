@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Sobrestamento } from 'src/types/sobrestamento'
+import { Columns, Sobrestamento } from 'src/types'
 
 export default defineComponent({
   name: 'MODULEList',
@@ -41,7 +41,7 @@ export default defineComponent({
         { name: 'termino_data', label: 'termino_data', field: 'termino_data', sortable: true },
         { name: 'motivo', label: 'motivo', field: 'motivo', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

@@ -69,8 +69,8 @@ export default defineComponent({
       confirm (val: boolean) {
         if (val) {
           root.$q.dialog(confirm({ message: 'Você tem certeza que esse procedimento é prioritário?', cancel: true }))
-          .onOk(() => { vars._value = val })
-          .onCancel(() => { vars._value = !val })
+            .onOk(() => { vars._value = val })
+            .onCancel(() => { vars._value = !val })
         }
       }
     }

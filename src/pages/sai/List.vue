@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Sai } from 'src/types/sai'
+import { Columns, Sai } from 'src/types'
 
 export default defineComponent({
   name: 'SaiList',
@@ -46,7 +46,7 @@ export default defineComponent({
         { name: 'opm_abreviatura', label: 'opm_abreviatura', field: 'opm_abreviatura', sortable: true },
         { name: 'sintese_txt', label: 'sintese_txt', field: 'sintese_txt', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

@@ -7,7 +7,7 @@
   fill-input
   input-debounce="0"
   hide-bottom-space
-  clearable 
+  clearable
   outlined
   emit-value
   map-options
@@ -77,12 +77,12 @@ export default defineComponent({
         refs.root.validate()
         return vars.isValid
       },
-      filterFn (val: string, update: any, abort: any) {
-      update(() => {
-        const needle = val.toLocaleLowerCase()
-        vars.options = opms.filter(v => v.label.toLocaleLowerCase().indexOf(needle) > -1)
-      })
-    },
+      filterFn (val: string, update: any) {
+        update(() => {
+          const needle = val.toLocaleLowerCase()
+          vars.options = opms.filter(v => v.label.toLocaleLowerCase().indexOf(needle) > -1)
+        })
+      },
     }
 
     watch(() => vars._value, () => (vars.validable = true))

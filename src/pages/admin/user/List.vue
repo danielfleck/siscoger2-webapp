@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { User } from 'src/types/user'
+import { Columns, User } from 'src/types'
 
 export default defineComponent({
   name: 'UserList',
@@ -46,7 +46,7 @@ export default defineComponent({
         { name: 'block', label: 'block', field: 'block', sortable: true },
         { name: 'email', label: 'email', field: 'email', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

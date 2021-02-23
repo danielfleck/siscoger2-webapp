@@ -16,7 +16,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getPendence, getUserCdopm } from 'src/services'
-import { Pendencia } from 'src/types/pendencias'
+import { Columns, Pendencia } from 'src/types'
 
 export default defineComponent({
   name: 'DashboardCDPrazos',
@@ -27,7 +27,7 @@ export default defineComponent({
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
-      ],
+      ] as Columns[],
       cdopm: getUserCdopm()
     })
     function loadData () {

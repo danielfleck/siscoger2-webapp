@@ -26,11 +26,11 @@ module.exports = configure(function (ctx) {
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
       'composition-api',
-      'axios',
-      'redirectIfNotLogged',
-      'redirectIfNotHasPermission',
-      'redirectIfNotAcceptTerms',
-      'redirectIfIncomplete'
+      'axios'
+      // 'redirectIfNotLogged',
+      // 'redirectIfNotHasPermission',
+      // 'redirectIfNotAcceptTerms',
+      // 'redirectIfIncomplete'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

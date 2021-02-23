@@ -4,7 +4,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { LocalStorage } from 'quasar'
-import { User } from 'src/types/user'
+import { User } from 'src/types'
 import { Route } from 'vue-router'
 
 interface Meta { meta: { auth: boolean | undefined, roles: string[] | undefined, permissions: string[] | undefined} }

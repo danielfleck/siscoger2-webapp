@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Permission } from 'src/types/permission'
+import { Columns, Permission } from 'src/types'
 
 export default defineComponent({
   name: 'PermissionList',
@@ -36,7 +36,7 @@ export default defineComponent({
       columns: [
         { name: 'permission', label: 'Permissão', field: 'permission', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

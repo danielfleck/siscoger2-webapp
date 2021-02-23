@@ -55,7 +55,7 @@ export default defineComponent({
     })
 
     const functions = {
-      async update (id: number) {
+      async update () {
         const isEqual = this.checkIfIsEqual()
         if (validate(refs, fields) && isEqual) {
           const data = { ...vars.user, password: vars.register.password }
@@ -70,7 +70,7 @@ export default defineComponent({
           errorNotify('Senhas não conferem')
           return false
         }
-        return true 
+        return true
       }
     }
 

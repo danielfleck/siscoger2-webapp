@@ -31,12 +31,8 @@ import { validate } from 'src/libs/validator'
 import Page from 'components/pages/Page.vue'
 import InputText from 'components/form/InputText.vue'
 import InputDate from 'components/form/InputDate.vue'
+import { Feriado } from 'src/types'
 
-type Register = {
-  id?: number,
-  data: string | Date,
-  feriado: string,
-}
 const fields: string[] = [
   'data',
   'feriado'
@@ -49,9 +45,9 @@ const FeriadoForm = defineComponent({
     const vars = reactive({
       register: {
         id: 0,
-        data: '',
+        data: undefined,
         feriado: ''
-      } as Register
+      } as Feriado
     })
 
     const functions = {

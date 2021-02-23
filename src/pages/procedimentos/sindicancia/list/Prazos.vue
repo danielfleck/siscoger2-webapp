@@ -23,7 +23,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { Sindicancia } from 'src/types/sindicancia'
+import { Sindicancia, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Prazos',
@@ -35,32 +35,40 @@ export default defineComponent({
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'cdopm', label: 'OPM', field: 'cdopm' },
-        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left' },
+        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
-    const functions = {
-      async loadData () {
-        const { data } = await api.get('sindicancias')
-        vars.data = Object.freeze(data as Sindicancia[])
-      },
-      onEdit (row: Sindicancia) {
-        void root.$router.push(`/sindicancias/editar/${row.id}`)
-      },
-      onDelete (row: Sindicancia) {
-        console.log(row.id)
-        root.$q.dialog(confirmMsg).onOk(async () => {
-          const { ok } = await api.delete(`sindicancias/${row.id}`)
-          if (ok) void this.loadData()
-        })
-      }
+    async function loadData () {
+      const { data } = await api.get('sindicancias')
+      vars.data = Object.freeze(data as Sindicancia[])
     }
-    void functions.loadData()
+
+    function onEdit (row: Sindicancia) {
+      void root.$router.push(`/sindicancias/editar/${row.id}`)
+    }
+
+    function onDelete (row: Sindicancia) {
+      root.$q.dialog(confirmMsg).onOk(async () => {
+        const { ok } = await api.delete(`sindicancias/${row.id}`)
+        if (ok) void loadData()
+      })
+    }
+
+    void loadData()
 
     return {
       ...toRefs(vars),
-      ...functions
+      onEdit,
+      onDelete
     }
   }
 })
 </script>
+
+<style scoped>
+.column-text {
+  max-width: 500px;
+  white-space: pre-wrap;
+}
+</style>

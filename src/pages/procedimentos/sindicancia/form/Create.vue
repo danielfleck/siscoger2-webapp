@@ -3,18 +3,9 @@
     { label: 'Lista', link: '/sindicancias/lista' },
     { label: 'Criar', link: '/sindicancias/inserir' },
     ]">
-    <q-stepper
-      v-model="step"
-      ref="stepper"
-      color="primary"
-      animated
-    >
-      <q-step
-        :name="1"
-        title="Dados principais"
-        icon="settings"
-        :done="step > 1"
-      >
+    <q-stepper v-model="step" ref="stepper" color="primary" animated>
+
+      <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
           <div class="q-pa-md col-12">
             <Prioridade v-model="register.prioridade"/>
@@ -58,12 +49,7 @@
         </form>
       </q-step>
 
-      <q-step
-        :name="2"
-        title="Envolvidos"
-        icon="create_new_folder"
-        :done="step > 2"
-      >
+      <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
           <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
           <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
@@ -92,7 +78,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+import { defineComponent, reactive, SetupContext, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
@@ -114,10 +100,8 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { Sindicancia } from 'src/types/sindicancia'
-import { api, errorNotify, getUserCdopm, validate } from 'src/services'
-import { Pendencia } from 'src/types/pendencias'
-import { LocalStorage } from 'quasar'
+import { Sindicancia, Pendencia, cleanSindicancia } from 'src/types'
+import { addPendence, api, errorNotify, getPendence, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
   'motivo_cancelamento',
@@ -157,37 +141,9 @@ export default defineComponent({
   setup (_, { refs, root }) {
     const vars = reactive({
       step: 1,
+      incompleto: '',
       loading: false,
-      register: {
-        id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
-        cdopm: '',
-        doc_tipo: '',
-        doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
-      } as Sindicancia,
+      register: cleanSindicancia as Sindicancia,
       cdopm: getUserCdopm(),
       andamentoCogerSindicancia,
       andamentoSindicancia,
@@ -196,90 +152,83 @@ export default defineComponent({
       tipoBoletim
     })
 
-    const functions = {
-      async create () {
-        if (validate(refs, fields)) {
-          const { ok, data } = await api.post('sindicancias', vars.register, { silent: true, debug: true })
-          if (ok) {
-            const sindicancia = data as unknown as Sindicancia
-            vars.register.id = sindicancia.id
-            await this.addPendence()
-            return refs.stepper.next()
-          }
+    async function create () {
+      if (validate(refs, fields)) {
+        const { ok, data } = await api.post('sindicancias', vars.register, { silent: true, debug: true })
+        if (ok) {
+          const sindicancia = data as unknown as Sindicancia
+          vars.register.id = sindicancia.id
+          await handlePendence()
+          return next()
         }
-      },
-      async addPendence () {
-        const pendencia: Pendencia = {
-          cdopm: vars.cdopm,
-          id_proc: Number(vars.register.id),
-          sjd_ref: vars.register.sjd_ref,
-          sjd_ref_ano: vars.register.sjd_ref_ano,
-          proc: 'sindicancia',
-          pendencias: ['incompleto'],
-          state: vars.register
-        }
-        const { data } = await api.post('pendencias', pendencia, { silent: true, debug: true })
-        const response = data as Pendencia
-        root.$router.push({ query: { incompleto: String(response._id) }})
-        LocalStorage.set('incompleto',`/sindicancias/inserir?incompleto=${String(response._id)}`)
-      },
-      async update (id: number) {
-        if (validate(refs, fields)) {
-          const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true, debug: true })
-
-          if (ok) {
-            refs.stepper.next()
-          }
-        }
-      },
-      async subforms () {
-        const sindicante = await refs.sindicante.getState()
-        if (sindicante === 'toInsert') {
-          errorNotify('Insira o sindicante')
-          return false
-        }
-        return true
-      },
-      async finalize () {
-        if (validate(refs, fields)) {
-          const validateSubforms = await this.subforms()
-
-          if (validateSubforms && vars.register.id) {
-            vars.register.completo = true
-            await api.put(`sindicancias/${vars.register.id}`, vars.register)
-            await removePendence()
-            return root.$router.push('/sindicancias/lista')
-          }
-        }
-      },
-      previous () {
-        refs.stepper.previous()
       }
     }
+
+    async function update (id: number) {
+      if (validate(refs, fields)) {
+        const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true, debug: true })
+
+        if (ok) {
+          refs.stepper.next()
+        }
+      }
+    }
+
+    async function finalize () {
+      if (validate(refs, fields)) {
+        const validateSubforms = await subforms()
+
+        if (validateSubforms && vars.register.id) {
+          vars.register.completo = true
+          await api.put(`sindicancias/${vars.register.id}`, vars.register)
+          await removePendence(vars.incompleto)
+          return root.$router.push('/sindicancias/lista')
+        }
+      }
+    }
+
+    async function handlePendence () {
+      const { _id } = await addPendence({
+        register: vars.register,
+        proc: 'sindicancia',
+        pendencias: ['incompleto'],
+        state: [vars.register],
+      })
+      incompleteProc(root, String(_id))
+    }
+
+    
+    async function subforms () {
+      const sindicante = await refs.sindicante.getState()
+      if (sindicante === 'toInsert') {
+        errorNotify('Insira o sindicante')
+        return false
+      }
+      return true
+    }
+
+    const next = () => refs.stepper.next()
+    const previous = () => refs.stepper.previous()
 
     async function getPendence() {
-      const { incompleto } = root.$route.query
-      const { data, ok } = await api.get(`pendencias/${incompleto}`, { silent: true, debug: true })
-      if (ok) {
-        console.log(data)
-        const { state } = data as Pendencia
-        state as unknown as Sindicancia[]
-        vars.register = state[0]
-        refs.stepper.next()
-      }
+      vars.incompleto = String(root.$route.query.incompleto)
+      const state = await getPendenceById(vars.incompleto)
+      if (state?.length) vars.register = state[0]
+      next()
     }
 
-    async function removePendence() {
-      const { incompleto } = root.$route.query
-      const { ok } = await api.delete(`pendencias/${incompleto}`, { silent: true, debug: true })
-      if (ok) LocalStorage.remove('incompleto')
+    if (root.$route.query.incompleto) {
+      getPendence()
     }
 
-    if (root.$route.query.incompleto) getPendence() 
+    console.log(root.$route.fullPath)
 
     return {
       ...toRefs(vars),
-      ...functions
+      create,
+      update,
+      finalize,
+      previous
     }
   }
 })

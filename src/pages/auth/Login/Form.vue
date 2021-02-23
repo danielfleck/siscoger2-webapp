@@ -50,7 +50,7 @@ import { validate } from 'src/libs/validator'
 import InputText from 'src/components/form/InputText.vue'
 import InputPassword from 'src/components/form/InputPassword.vue'
 import Ldap from './Ldap.vue'
-import { Auth, AuthResponse } from 'src/types/auth'
+import { Auth, AuthResponse } from 'src/types'
 
 const fields = ['rg', 'password', 'username']
 

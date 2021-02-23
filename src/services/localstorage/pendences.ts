@@ -1,5 +1,5 @@
 import { LocalStorage } from 'quasar'
-import { Pendencia } from 'src/types/pendencias'
+import { Pendencia } from 'src/types'
 
 interface PendenceStore {
   data: Pendencia[]

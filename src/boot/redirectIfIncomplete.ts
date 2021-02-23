@@ -11,7 +11,8 @@ type Next = (arg0?: string | undefined) => void
 export default ({ router, store, Vue }: any) => {
   router.beforeEach((to: Route, from: Route, next: Next):void => {
     const incompleto = LocalStorage.getItem('incompleto')
-    if (incompleto && incompleto !== to.fullPath) {
+    if (!incompleto) next()
+    if (incompleto !== to.fullPath) {
       next(String(incompleto))
       errorNotify('Favor terminar a inserção antes de continuar')
     }

@@ -103,7 +103,7 @@ const cleanRegister = {
   rg: '',
   motivo: '',
   motivo_outros: '',
-  inicio_data: '',
+  inicio_data: new Date(),
   doc_controle_inicio: '',
   publicacao_inicio: '',
   termino_data: null,

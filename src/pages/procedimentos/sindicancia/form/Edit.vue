@@ -11,11 +11,12 @@
       indicator-color="primary"
       align="justify"
       narrow-indicator
+      @input="validateNavigation"
     >
       <q-tab name="main" icon="edit" label="Principal"/>
-      <q-tab name="movimentos" icon="loop" label="Movimentos"/>
+      <q-tab name="movimentos" icon="loop" label="Movimentos" />
       <q-tab name="sobrestamentos" icon="hourglass_top" label="Sobrestamentos"/>
-      <q-tab name="arquivos" icon="folder" label="Arquivos"/>
+      <q-tab name="arquivos" icon="folder" label="Arquivos" />
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
@@ -77,15 +78,15 @@
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
 
-      <q-tab-panel name="movimentos"  @click="validateNavigation">
+      <q-tab-panel name="movimentos">
         <movimento :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
-      <q-tab-panel name="sobrestamentos" @click="validateNavigation">
+      <q-tab-panel name="sobrestamentos" @transition="validateNavigation">
         <sobrestamento @submit="changeAndamento" :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
 
-      <q-tab-panel name="arquivos" @click="validateNavigation">
+      <q-tab-panel name="arquivos" @transition="validateNavigation">
         <arquivo :data="{ id_sindicancia: register.id }"/>
       </q-tab-panel>
     </q-tab-panels>
@@ -120,13 +121,11 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { get, put } from 'src/libs/api'
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { Register } from './index'
-import { validate } from 'src/libs/validator'
 import { getDense } from 'src/store/utils'
-import { errorNotify } from 'src/libs/notify'
 import { getAndamento, getSobrestamento } from 'src/utils'
+import { cleanSindicancia, Sindicancia } from 'src/types'
+import { api, errorNotify, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -167,27 +166,7 @@ export default defineComponent({
       step: 1,
       tab: 'main',
       loading: false,
-      register: {
-        id: 0,
-        sintese_txt: '',
-        prioridade: false,
-        id_andamento: 6,
-        id_andamentocoger: 0,
-        motivo_cancelamento: '',
-        doc_origem_txt: '',
-        fato_data: '',
-        cdopm: '',
-        portaria_numero: '',
-        portaria_data: '',
-        doc_tipo: '',
-        doc_numero: '',
-        abertura_data: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        motivo_abertura: '',
-        motivo_outros: '',
-        completo: false
-      } as Register,
+      register: cleanSindicancia as Sindicancia,
       andamentoCogerSindicancia,
       andamentoSindicancia,
       motivoAberturaSindicancia,
@@ -195,60 +174,64 @@ export default defineComponent({
       tipoBoletim
     })
 
-    const functions = {
-      async update () {
-        if (validate(refs, fields)) {
-          const validateSubforms = await this.subforms()
+    async function update (routeSucess = '/sindicancias/lista') {
+      if (validate(refs, fields)) {
+        const validateSubforms = subforms()
 
-          if (validateSubforms && vars.register.id) {
-            vars.register.completo = true
-            await put(`sindicancias/${vars.register.id}`, vars.register)
-            return root.$router.push('/sindicancias/lista')
-          }
+        if (validateSubforms && vars.register.id) {
+          vars.register.completo = true
+          const { ok } = await api.put(`sindicancias/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(routeSucess)
         }
-      },
-      async subforms () {
-        const sindicante = await refs.sindicante.getState()
-        if (sindicante === 'toInsert') {
-          errorNotify('Insira o sindicante')
-          return false
-        }
-        return true
-      },
-      async changeAndamento (sobrestamento: { termino_data: string }) {
-        if (!vars.register.id) return
-        const { id } = vars.register
-        if (!sobrestamento.termino_data) {
-          vars.register.id_andamento = getSobrestamento('sindicancia')
-          await put(`sindicancias/${id}`, vars.register, { silent: true })
-          return
-        }
-        vars.register.id_andamento = getAndamento('sindicancia')
-        await put(`sindicancias/${id}`, vars.register, { silent: true })
-      },
-      async loadData () {
-        const { id } = root.$route.params
-        if (id) {
-          vars.register = await get(`sindicancias/${id}`)
-        }
-      },
-      validateNavigation (e: { navigate: boolean }, go: () => void) {
-        console.log('validate')
-        if (validate(refs, fields)) {
-          console.log('validate')
-          go()
-        }
-        e.navigate = false
+      }
+    }
+    
+    async function changeAndamento (sobrestamento: { termino_data: string }) {
+      if (!vars.register.id) return
+      const { id } = vars.register
+      if (!sobrestamento.termino_data) {
+        vars.register.id_andamento = getSobrestamento('sindicancia')
+        const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true })
+        if (ok) return
+      }
+      vars.register.id_andamento = getAndamento('sindicancia')
+      await api.put(`sindicancias/${id}`, vars.register, { silent: true })
+    }
+    
+    async function validateNavigation (tab: string) {
+      if (validate(refs, fields)) {
+        await update(`${root.$route.fullPath}#`)
+        vars.tab = tab
+      } else {
+        vars.tab = 'main'
       }
     }
 
+    async function loadData () {
+      const { id } = root.$route.params
+      if (id) {
+        const { data, ok } = await api.get(`sindicancias/${id}`)
+        if (ok) vars.register = data as Sindicancia
+      }
+    }
+  
+    function subforms () {
+      const sindicante = refs.sindicante.getState()
+      if (sindicante === 'toInsert') {
+        errorNotify('Insira o sindicante')
+        return false
+      }
+      return true
+    }
     // eslint-disable-next-line no-void
-    void functions.loadData()
+    void loadData()
 
     return {
       ...toRefs(vars),
       denseVal: computed(() => getDense(root)),
-      ...functions
+      update,
+      changeAndamento,
+      validateNavigation
     }
   }
 })

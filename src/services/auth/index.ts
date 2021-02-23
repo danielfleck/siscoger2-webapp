@@ -1,5 +1,5 @@
 import { LocalStorage } from 'quasar'
-import { cleanUser, User } from 'src/types/user'
+import { cleanUser, User } from 'src/types'
 
 interface Store {
   token: string

@@ -20,7 +20,7 @@ const defaultGetRequest: Request = {
   msg: '',
   load: true,
   debug: false,
-  noRedirect: true
+  noRedirect: false
 }
 
 const defaultRequest = {
@@ -29,7 +29,7 @@ const defaultRequest = {
   msg: '',
   load: true,
   debug: false,
-  noRedirect: true
+  noRedirect: false
 }
 
 export const api = {

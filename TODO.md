@@ -16,7 +16,7 @@ Terça
 [] Roles Add Permissions  
 [] Permissions insert Group  
 [] Permissions add Roles  
-[] Refatorar sindicância Form  
+[X] Refatorar sindicância Form  
 [] Refatorar sindicância list 
 Quarta
 [] Envio Email ao inserir User  

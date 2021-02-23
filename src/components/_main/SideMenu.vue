@@ -215,8 +215,8 @@ import {
   situacaoRules,
   sobrestamentoRules,
   uploadRules,
-  userRules, 
-  sindicanciaRules 
+  userRules,
+  sindicanciaRules
 } from 'src/rules'
 
 export default defineComponent({
@@ -274,8 +274,8 @@ export default defineComponent({
       situacaoRules,
       sobrestamentoRules,
       uploadRules,
-      userRules, 
-      sindicanciaRules 
+      userRules,
+      sindicanciaRules
     }
 
     return {

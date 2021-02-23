@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 export type Feriado = {
   id?: number
-  data: Date
+  data?: Date
   feriado: string
 }

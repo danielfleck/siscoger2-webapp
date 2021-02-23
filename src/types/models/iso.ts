@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-export type Ipm = {
+export type Iso = {
   id?: number;
   id_andamento: number;
   id_andamentocoger: number;

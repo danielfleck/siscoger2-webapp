@@ -44,9 +44,9 @@
 /* eslint-disable no-void */
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, reactive, ref, toRefs } from '@vue/composition-api'
-import { api, getUserCdopm, getPendence } from 'src/services'
-import { LocalStorage, date } from 'quasar'
-import { Pendencia } from 'src/types/pendencias'
+import { api, getUserCdopm } from 'src/services'
+import { LocalStorage } from 'quasar'
+import { Pendencia } from 'src/types'
 
 interface SerchPendences {
   proc: Procs,

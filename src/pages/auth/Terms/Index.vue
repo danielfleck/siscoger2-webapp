@@ -48,10 +48,10 @@ interface Terms {
   badge?: string
   label: string
 }
-const maxSize = 15
+
 const terms: Terms[] = [
-  { label: 'DECLARO estar ciente da habilitação que me foi conferida, da responsabilidade de obedecer às disposições referentes ao controle de acesso aos sistemas informatizados da Polícia Militar do Estado do Paraná e de estar sujeito às penalidades cabíveis pela não-observância dos compromissos assumidos.'},
-  { label: 'Comprometo-me a:'},
+  { label: 'DECLARO estar ciente da habilitação que me foi conferida, da responsabilidade de obedecer às disposições referentes ao controle de acesso aos sistemas informatizados da Polícia Militar do Estado do Paraná e de estar sujeito às penalidades cabíveis pela não-observância dos compromissos assumidos.' },
+  { label: 'Comprometo-me a:' },
   { badge: 'a)', label: 'zelar pelo sigilo absoluto de minha senha;' },
   { badge: 'b)', label: 'zelar pela integridade e confidencialidade das informações inseridas ou consultadas;' },
   { badge: 'c)', label: 'acessar os sistemas informatizados da SJD, somente por necessidade de serviço ou por determinação expressa de superior hierárquico, mantendo registro de tal fato;' },
@@ -64,7 +64,7 @@ const terms: Terms[] = [
   { badge: 'j)', label: 'somente utilizar o acesso para os fins designados e para os quais estiver devidamente autorizado, em razão das suas funções;' },
   { badge: 'k)', label: 'responder, em todas as instâncias, pelas conseqüências das ações ou omissões de minha parte que possam por em risco ou comprometer a exclusividade de conhecimento da minha senha ou das transações as quais esteja habilitado; e' },
   { badge: 'l)', label: 'observar o disposto no Decreto Federal nº. 4.553/2002, em especial o contido no artigo 37, § 1º.' },
-  { label: ''},
+  { label: '' },
   { label: 'Declaro ainda, estar ciente das determinações acima, compreendendo que quaisquer descumprimentos dessas regras podem implicar na aplicação das sanções disciplinares cabíveis e que o sistema manterá histórico de todos os acessos e consultas realizadas, permitindo auditoria sobre a chave utilizada.' },
   { label: 'A inexatidão das declarações desta comunicação ou a violação destas implicará nas sanções previstas no Código Penal Militar.' }
 ]
@@ -73,7 +73,7 @@ Object.freeze(terms)
 
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import { api, setUser, successNotify } from 'src/services'
-import { User } from 'src/types/user'
+import { User } from 'src/types'
 import { getUser } from 'src/utils'
 
 interface Details {

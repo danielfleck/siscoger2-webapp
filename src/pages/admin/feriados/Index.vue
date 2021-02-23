@@ -21,7 +21,7 @@ import Page from 'src/components/pages/Page.vue'
 import { changeDate } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { Feriado } from 'src/types/feriado'
+import { Columns, Feriado } from 'src/types'
 
 const moduleName = 'feriados'
 const FeriadoPage = defineComponent({
@@ -34,7 +34,7 @@ const FeriadoPage = defineComponent({
         { name: 'data', label: 'Data', field: 'data', sortable: true, format: (val: string) => changeDate(val, 'pt-br') },
         { name: 'feriado', label: 'Feriado', field: 'feriado', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
     const functions = {
       async loadData () {

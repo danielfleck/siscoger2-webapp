@@ -15,11 +15,9 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { api, getPendence, getUserCdopm } from 'src/services'
-import { Pendencia } from 'src/types/pendencias'
+import { getPendence, getUserCdopm } from 'src/services'
+import { Columns, Pendencia } from 'src/types'
 
-const proc = 'transferencias'
-const pendencias: string[] = ['nova']
 export default defineComponent({
   name: 'DashboardGeneral',
   components: { Table },
@@ -29,7 +27,7 @@ export default defineComponent({
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true }
-      ],
+      ] as Columns[],
       cdopm: getUserCdopm()
     })
     function loadData () {

@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Adl } from 'src/types/adl'
+import { Adl, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'MODULEList',
@@ -46,7 +46,7 @@ export default defineComponent({
         { name: 'fato_data', label: 'fato_data', field: 'fato_data', sortable: true },
         { name: 'abertura_data', label: 'abertura_data', field: 'abertura_data', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

@@ -35,3 +35,34 @@ export type Sindicancia = {
   updatedAt?: Date
   deletedAt?: Date
 }
+
+export const cleanSindicancia = {
+  id_andamentocoger: 0,
+  id_andamento: 6,
+  fato_data: undefined,
+  abertura_data: undefined,
+  sintese_txt: '',
+  cdopm: '',
+  doc_tipo: '',
+  doc_numero: '',
+  doc_origem_txt: '',
+  portaria_numero: '',
+  portaria_data: undefined,
+  sol_cmt_file: '',
+  sol_cmt_data: undefined,
+  sol_cmtgeral_file: '',
+  sol_cmtgeral_data: undefined,
+  opm_meta4: '',
+  relatorio_file: '',
+  relatorio_data: undefined,
+  prioridade: false,
+  motivo_cancelamento: '',
+  motivo_abertura: '',
+  motivo_outros: '',
+  prorogacao: false,
+  prorogacao_dias: 0,
+  completo: false,
+  diasuteis_sobrestado: 0,
+  motivo_sobrestado: '',
+  prazo_decorrido: 0
+} as Sindicancia

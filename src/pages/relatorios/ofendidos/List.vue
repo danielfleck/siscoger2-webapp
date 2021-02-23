@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Ofendido } from 'src/types/ofendido'
+import { Columns, Ofendido } from 'src/types'
 
 export default defineComponent({
   name: 'MODULEList',
@@ -43,7 +43,7 @@ export default defineComponent({
         { name: 'fone', label: 'fone', field: 'fone', sortable: true },
         { name: 'email', label: 'email', field: 'email', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

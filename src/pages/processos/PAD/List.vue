@@ -22,7 +22,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Envolvido } from 'src/types/envolvido'
+import { Columns, Envolvido } from 'src/types'
 
 export default defineComponent({
   name: 'MODULEList',
@@ -41,7 +41,7 @@ export default defineComponent({
         { name: 'cargo', label: 'cargo', field: 'cargo', sortable: true },
         { name: 'resultado', label: 'resultado', field: 'resultado', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ]
+      ] as Columns[]
     })
 
     const functions = {

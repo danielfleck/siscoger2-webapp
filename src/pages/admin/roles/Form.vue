@@ -28,7 +28,7 @@ import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
 import { api, validate } from 'src/services'
-import { Role } from 'src/types/role'
+import { Role } from 'src/types'
 
 const fields: string[] = ['role']
 
