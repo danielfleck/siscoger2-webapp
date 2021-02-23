@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.38.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.37.0...v0.38.0) (2021-02-23)
+
+
+### Features
+
+* add insertion of roles in permissions and roles in users ([b13876c](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/b13876ccabfd3b48c51edf143206fa128bc54b24))
+
 ## [0.37.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.36.0...v0.37.0) (2021-02-23)
 
 
