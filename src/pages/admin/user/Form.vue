@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista usuarios', link: '/usuarios' },
+    { label: 'Lista usuarios', link: '/admin/usuarios' },
     { label: 'Criar', link: '/admin/usuarios/inserir' },
     ]">
       <form class="row">
@@ -40,6 +40,19 @@
         <div class="q-pa-md col-4">
           <InputText label="Email" v-model="register.email" ref="email" required/>
         </div>
+        <div class="q-pa-md col-12">
+          <InputSelect 
+            label="Papéis" 
+            v-model="register.roles"
+            optionLabel="role"
+            useChips
+            stackLabel
+            multiple
+            ref="subgroup"
+            required
+            :options="roles"
+          />
+        </div>
       </form>
       <q-btn
         @click="register.id ? update(register.id) : create()"
@@ -61,7 +74,7 @@ import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 
 import { api, validate } from 'src/services'
-import { User } from 'src/types'
+import { Role, User } from 'src/types'
 import OPM from 'src/components/form/OPM.vue'
 import { postograd, classPMPR, group, subgroup } from 'src/config'
 
@@ -98,8 +111,10 @@ export default defineComponent({
         group: '',
         subgroup: '',
         cdopm: '',
-        email: ''
+        email: '',
+        roles: [] as Role[]
       } as User,
+      roles: [] as Role[],
       postograd,
       classPMPR,
       group,
@@ -109,6 +124,9 @@ export default defineComponent({
     const functions = {
       async loadData () {
         const { id } = root.$route.params
+        const { data } = await api.get('roles')
+        vars.roles = data as Role[]
+        console.log(data)
         if (id) {
           const { data } = await api.get(`users/${id}`)
           vars.register = data as User

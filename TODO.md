@@ -12,10 +12,10 @@ Segunda
 [x] Ver export excel  
 [] Logs List  
 Terça  
-[] User Add Roles  
+[x] User Add Roles  
 [] Roles Add Permissions  
-[] Permissions insert Group  
-[] Permissions add Roles  
+[x] Permissions insert Group  
+[x] Permissions add Roles  
 [X] Refatorar sindicância Form  
 [] Refatorar sindicância list 
 Quarta

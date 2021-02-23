@@ -1,3 +1,5 @@
+import { Role } from './role'
+
 /* eslint-disable camelcase */
 export type User = {
   id?: number,
@@ -14,7 +16,8 @@ export type User = {
   terms: boolean,
   email: string,
   createdAt: string,
-  updatedAt: string | null
+  updatedAt: string | null,
+  roles: Role[]
 }
 
 export const cleanUser = {

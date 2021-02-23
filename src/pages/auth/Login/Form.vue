@@ -50,7 +50,7 @@ import { validate } from 'src/libs/validator'
 import InputText from 'src/components/form/InputText.vue'
 import InputPassword from 'src/components/form/InputPassword.vue'
 import Ldap from './Ldap.vue'
-import { Auth, AuthResponse } from 'src/types'
+import { Auth, AuthResponse, User } from 'src/types'
 
 const fields = ['rg', 'password', 'username']
 
@@ -61,6 +61,8 @@ export default defineComponent({
     const vars = reactive({
       isPwd: true,
       ldap: false,
+      atempts: 1,
+      totalAtemps: 3,
       registry: {
         rg: '',
         username: '',
@@ -78,20 +80,36 @@ export default defineComponent({
         }
       },
       async loginSiscoger () {
-        const response = await api.post('auth/login', vars.registry, { silent: true, debug: true, noRedirect: true })
+        const response = await api.post('auth/login', vars.registry, { silent: true, noRedirect: true })
         console.log(response)
 
         if (!response.ok) {
-          errorNotify('usuário ou senha inválidos')
+          await this.handleAtempts()
           return
         }
 
         const data = response.data as AuthResponse
+        if (data.user.block) {
+          errorNotify('usuário bloqueado, entre em contato com SJD')
+          return
+        }
+
         setStore(data)
         this.redirectAfterLogin(data.user.terms, data.user.name)
       },
       async loginLdap () {
         // TODO
+      },
+      async handleAtempts () {
+        if (vars.atempts < vars.totalAtemps) {
+          errorNotify('usuário ou senha inválidos')
+          errorNotify(`tentativa ${vars.atempts} de ${vars.totalAtemps}`)
+          vars.atempts++
+        } else {
+          const { ok, data } = await api.post('users/block', { rg: vars.registry.rg }, { noRedirect: true, silent: true })
+          const user = data as User
+          if(ok) errorNotify(`Bloqueado usuário ${user.name}, entre em contato com SJD`)
+        }
       },
       changeMode () {
         vars.ldap = !vars.ldap

@@ -1,50 +1,38 @@
 <template>
-  <q-select
-  :dense="denseVal"
-  hide-bottom-space
-  clearable
-  outlined
-  v-model="_value"
-  emit-value
-  map-options
-  :options="options"
-  :option-value="optionValue"
-  :option-label="optionLabel"
-  :use-chips="useChips"
-  :stack-label="stackLabel"
-  :multiple="multiple"
-  ref="root"
-  :label="label"
-  @blur="validable = true"
-  @validate="validate"
-  :error-message="errorMsg"
-  :error="!isValid"
-  :disable="disable"
-  />
+  <div>
+    <q-toggle
+      v-bind="$attrs"
+      v-on="$listeners"
+      ref="root"
+      v-model="_value"
+      :label="label"
+      hide-bottom-space
+      :dense="denseVal"
+    />
+    <q-icon v-if="tooltip" :color="iconColor" name="fa fa-question-circle" >
+    <q-tooltip>
+      {{tooltip}}
+    </q-tooltip>
+  </q-icon>
+  </div>
 </template>
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { defineComponent, computed, toRefs, reactive, watch } from '@vue/composition-api'
+import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
+import { localePTBR } from 'src/config/app'
+import { confirm } from 'src/services'
 import { getDense } from 'src/store/utils'
 
 export default defineComponent({
-  name: 'PostoGrad',
+  name: 'InputToogle',
   props: {
     label: {
-      type: String,
-      required: true
-    },
-    options: {
-      type: Array,
-      default: []
+      type: String
     },
     value: {
-      default: ''
-    },
-    disable: {
       type: Boolean,
       default: false
     },
@@ -52,21 +40,22 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    optionValue: {
-      type: String
+    disable: {
+      type: Boolean,
+      default: false
     },
-    optionLabel: {
-      type: String
+    tooltip: {
+      type: String,
+      default: ''
     },
-    useChips: {
-      type: Boolean
+    icon: {
+      type: String,
+      default: ''
     },
-    stackLabel: {
-      type: Boolean
+    iconColor: {
+      type: String,
+      default: 'grey-9'
     },
-    multiple: {
-      type: Boolean
-    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -84,7 +73,8 @@ export default defineComponent({
       _value: computed({
         get: () => props.value,
         set: value => emit('input', value)
-      })
+      }),
+      localePTBR
     })
 
     const functions = {
@@ -92,7 +82,7 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
-      }
+      },
     }
 
     watch(() => vars._value, () => (vars.validable = true))
