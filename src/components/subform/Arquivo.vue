@@ -112,7 +112,7 @@ export default defineComponent({
   props: {
     label: {
       type: String,
-      default: 'Sobrestamentos'
+      default: 'Arquivamentos'
     },
     data: {
       type: Object,

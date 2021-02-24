@@ -7,7 +7,9 @@
       :data="data"
       :columns="columns"
       actions
+      actionButtonRestore
       @delete="onDelete"
+      @restore="onRestore"
       @edit="onEdit"
     />
   </q-tab-panel>
@@ -21,8 +23,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, confirm } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
 
 export default defineComponent({
@@ -40,7 +41,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('sindicancias')
+      const { data } = await api.get('sindicancias/deleted')
       vars.data = Object.freeze(data as Sindicancia[])
     }
 
@@ -48,9 +49,16 @@ export default defineComponent({
       void root.$router.push(`/sindicancias/editar/${row.id}`)
     }
 
+    function onRestore (row: Sindicancia) {
+      root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
+        const { ok } = await api.put(`sindicancias/${row.id}/restore`, {})
+        if (ok) void loadData()
+      })
+    }
+
     function onDelete (row: Sindicancia) {
-      root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`sindicancias/${row.id}`)
+      root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
+        const { ok } = await api.delete(`sindicancias/${row.id}/force`)
         if (ok) void loadData()
       })
     }
@@ -60,6 +68,7 @@ export default defineComponent({
     return {
       ...toRefs(vars),
       onEdit,
+      onRestore,
       onDelete
     }
   }
@@ -72,4 +81,3 @@ export default defineComponent({
   white-space: pre-wrap;
 }
 </style>
-

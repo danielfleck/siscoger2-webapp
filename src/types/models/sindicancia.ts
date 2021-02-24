@@ -36,7 +36,7 @@ export type Sindicancia = {
   deletedAt?: Date
 }
 
-export const cleanSindicancia = {
+export const cleanSindicancia = () => ({
   id_andamentocoger: 0,
   id_andamento: 6,
   fato_data: undefined,
@@ -64,5 +64,6 @@ export const cleanSindicancia = {
   completo: false,
   diasuteis_sobrestado: 0,
   motivo_sobrestado: '',
-  prazo_decorrido: 0
-} as Sindicancia
+  prazo_decorrido: 0,
+  deletedAt: undefined
+})

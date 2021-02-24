@@ -20,6 +20,9 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
+        <div  class="q-pa-md col-12">
+          <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="sindicancias"/>
+        </div>
         <div class="q-pa-md col-12">
           <Prioridade v-model="register.prioridade"/>
         </div>
@@ -102,6 +105,7 @@
 import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
+import BannerDeleted from 'components/pages/BannerDeleted.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
 import Acusado from 'components/subform/Acusado.vue'
 import Vitima from 'components/subform/Vitima.vue'
@@ -159,14 +163,15 @@ export default defineComponent({
     OPM,
     Portaria,
     Andamento,
-    AndamentoCoger
+    AndamentoCoger,
+    BannerDeleted
   },
   setup (_, { refs, root }) {
     const vars = reactive({
       step: 1,
       tab: 'main',
       loading: false,
-      register: cleanSindicancia as Sindicancia,
+      register: cleanSindicancia,
       andamentoCogerSindicancia,
       andamentoSindicancia,
       motivoAberturaSindicancia,
@@ -174,18 +179,18 @@ export default defineComponent({
       tipoBoletim
     })
 
-    async function update (routeSucess = '/sindicancias/lista') {
+    async function update () {
       if (validate(refs, fields)) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           const { ok } = await api.put(`sindicancias/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push(routeSucess)
+          if (ok) return root.$router.push('/sindicancias/lista')
         }
       }
     }
-    
+
     async function changeAndamento (sobrestamento: { termino_data: string }) {
       if (!vars.register.id) return
       const { id } = vars.register
@@ -197,11 +202,11 @@ export default defineComponent({
       vars.register.id_andamento = getAndamento('sindicancia')
       await api.put(`sindicancias/${id}`, vars.register, { silent: true })
     }
-    
+
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        await update(`${root.$route.fullPath}#`)
-        vars.tab = tab
+        const { ok } = await api.put(`sindicancias/${vars.register.id}`, vars.register, { silent: true })
+        if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
       }
@@ -214,7 +219,7 @@ export default defineComponent({
         if (ok) vars.register = data as Sindicancia
       }
     }
-  
+
     function subforms () {
       const sindicante = refs.sindicante.getState()
       if (sindicante === 'toInsert') {

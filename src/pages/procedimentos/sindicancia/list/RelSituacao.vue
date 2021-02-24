@@ -24,6 +24,7 @@ import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
+import { getOpmByCode, changeDate } from 'src/filters'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -34,8 +35,12 @@ export default defineComponent({
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
-        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
+        { name: 'fato', label: 'Fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'portaria', label: 'Portaria', field: 'portaria_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'sol_cmt', label: 'Sol. OPM', field: 'sol_cmt_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'sol_cmtgeral', label: 'Sol. CG', field: 'sol_cmtgeral_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })

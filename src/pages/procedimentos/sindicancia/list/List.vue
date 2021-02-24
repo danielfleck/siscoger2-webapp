@@ -24,6 +24,7 @@ import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
+import { getOpmByCode } from 'src/utils'
 
 export default defineComponent({
   name: 'List',
@@ -34,13 +35,13 @@ export default defineComponent({
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
+        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('sindicancias')
+      const { data } = await api.get('sindicancias/andamento')
       vars.data = Object.freeze(data as Sindicancia[])
     }
 

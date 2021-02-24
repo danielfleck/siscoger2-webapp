@@ -119,7 +119,7 @@ export default defineComponent({
     },
     limitMB: {
       type: Number,
-      default: 5
+      default: 15
     },
     extensions: {
       type: Array,

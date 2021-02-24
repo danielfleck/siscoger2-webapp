@@ -62,8 +62,8 @@ export default defineComponent({
         return true
       }),
       _value: computed({
-        get: () => props.value,
-        set: value => emit('input', value)
+        get: () => Number(props.value),
+        set: value => emit('input', Number(value))
       })
     })
 

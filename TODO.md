@@ -10,15 +10,13 @@ Segunda
 [x] Incompleto (Sindicância)  
 [x] ACL menu  
 [x] Ver export excel  
-[] Logs List  
-Terça  
 [x] User Add Roles  
-[] Roles Add Permissions  
 [x] Permissions insert Group  
 [x] Permissions add Roles  
 [X] Refatorar sindicância Form  
-[] Refatorar sindicância list 
-Quarta
+[x] Refatorar sindicância list 
+[] Logs List  
+[] Roles Add Permissions  
 [] Envio Email ao inserir User  
 [] Forgot pass Form  
 [] Forgot pass Email  

@@ -21,6 +21,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
+import { changeDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
@@ -34,13 +35,16 @@ export default defineComponent({
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
-        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
+        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'sindicado', label: 'Sindicado', field: 'name', sortable: true },
+        { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
+        { name: 'resultado', label: 'Resultado', field: 'resultado', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('sindicancias')
+      const { data } = await api.get('sindicancias/resultado')
       vars.data = Object.freeze(data as Sindicancia[])
     }
 

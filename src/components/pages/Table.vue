@@ -120,8 +120,10 @@
             </template>
           </template>
           <template v-else>
-            <q-btn dense round flat color="grey" icon="edit" @click="$emit('edit',props.row)"></q-btn>
-            <q-btn dense round flat color="grey" icon="delete" @click="$emit('delete',props.row)"></q-btn>
+            <q-btn v-if="actionButtonShow" dense round flat color="grey" icon="visibility" @click="$emit('show',props.row)"></q-btn>
+            <q-btn v-if="actionButtonRestore" dense round flat color="grey" icon="restore" @click="$emit('restore',props.row)"></q-btn>
+            <q-btn v-if="actionButtonEdit" dense round flat color="grey" icon="edit" @click="$emit('edit',props.row)"></q-btn>
+            <q-btn v-if="actionButtonDelete" dense round flat color="grey" icon="delete" @click="$emit('delete',props.row)"></q-btn>
           </template>
         </q-td>
       </q-tr>
@@ -178,6 +180,22 @@ export default {
       default: true
     },
     dense: {
+      type: Boolean,
+      default: true
+    },
+    actionButtonShow: {
+      type: Boolean,
+      default: false
+    },
+    actionButtonRestore: {
+      type: Boolean,
+      default: false
+    },
+    actionButtonEdit: {
+      type: Boolean,
+      default: true
+    },
+    actionButtonDelete: {
       type: Boolean,
       default: true
     },

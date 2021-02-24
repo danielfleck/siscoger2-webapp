@@ -19,7 +19,7 @@ import { getPendence, getUserCdopm } from 'src/services'
 import { Columns, Pendencia } from 'src/types'
 
 export default defineComponent({
-  name: 'DashboardCD',
+  name: 'DashboardSindicanciaPrazos',
   components: { Table },
   setup () {
     const vars = reactive({
@@ -30,9 +30,9 @@ export default defineComponent({
       ] as Columns[],
       cdopm: getUserCdopm()
     })
-    async function loadData () {
+    function loadData () {
       const store = getPendence('sindicancia-prazos')
-      if (store?.data) vars.data = Object.freeze(store.data as Pendencia[])
+      if (store?.data) vars.data = Object.freeze(store.data as unknown as Pendencia[])
     }
 
     void loadData()
