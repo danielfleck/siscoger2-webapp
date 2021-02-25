@@ -21,7 +21,7 @@ import { Columns, Pendencia } from 'src/types'
 export default defineComponent({
   name: 'DashboardIPM',
   components: { Table },
-  setup (_, { root }) {
+  setup () {
     const vars = reactive({
       data: [] as readonly Pendencia[],
       columns: [
@@ -30,7 +30,7 @@ export default defineComponent({
       ] as Columns[],
       cdopm: getUserCdopm()
     })
-    async function loadData () {
+    function loadData () {
       const store = getPendence('ipm-prazos')
       if (store?.data) vars.data = Object.freeze(store.data as Pendencia[])
     }
