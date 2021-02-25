@@ -32,7 +32,7 @@ export default defineComponent({
     })
     function loadData () {
       const store = getPendence('fatd-punicao')
-      if (store?.data) vars.data = Object.freeze(store.data as Pendencia[])
+      if (store?.data) vars.data = Object.freeze(store.data as unknown as Pendencia[])
     }
 
     void loadData()

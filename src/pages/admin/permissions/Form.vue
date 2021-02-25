@@ -101,7 +101,7 @@ export default defineComponent({
       },
       async create () {
         if (validate(refs, fields)) {
-          const group = vars.group ? 'group' : ''
+          const group = vars.register.group ? 'group' : ''
           const { ok } = await api.post(`permissions/${group}`, vars.register, { debug: true })
           if (ok) {
             return root.$router.push('/admin/permissoes')

@@ -3,4 +3,3 @@ export * from './faker'
 export * from './opm'
 export * from './prazo'
 export * from './text'
-

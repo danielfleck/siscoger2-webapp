@@ -25,7 +25,7 @@
                   <q-item-label>
                     <q-badge v-if="item.badge" >
                     {{  item.badge }}
-                    </q-badge> 
+                    </q-badge>
                   {{ item.label }}
                   </q-item-label>
                 </q-item-section>

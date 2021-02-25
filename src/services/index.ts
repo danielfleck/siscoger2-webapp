@@ -6,4 +6,3 @@ export * from './checkIfExists'
 export * from './localstorage'
 export * from './pendences'
 export * from './validator'
-

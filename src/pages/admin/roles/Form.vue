@@ -7,6 +7,7 @@
         <div class="q-pa-md col-12">
           <InputText label="Papel" v-model="register.role" ref="role" required/>
         </div>
+        <!--
         <q-card v-for="(groups, index) in permissions" class="q-pa-md col-lg-3 col-md-4 col-xs-12" :key="index">
           <q-card-section>
             <div class="text-h6">{{ groups[0].group || 'outros' }}</div>
@@ -24,6 +25,7 @@
             />
           </q-card-section>
         </q-card>
+        -->
       </form>
       <q-btn
         @click="register.id ? update(register.id) : create()"
@@ -35,7 +37,13 @@
   </page>
 </template>
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
@@ -69,21 +77,21 @@ export default defineComponent({
       permissionsChecked: [] as Permission[]
     })
 
-    function checkPermissions (value) {
-      vars.register.permissions.push(value)
-    }
+    // function checkPermissions (value: string) {
+    //   vars.register.permissions.push(value || '')
+    // }
 
     const functions = {
       async loadData () {
         const { id } = root.$route.params
-        const { data } = await api.get('permissions')
+        // const { data } = await api.get('permissions')
 
-        vars.permissions = data.reduce((obj: any, permission: Permission) => {
-          const { group, ...rest } = permission
-          if (!obj[group]) obj[group] = []
-          obj[group].push(permission)
-          return obj
-        }, {})
+        // vars.permissions = data.reduce((obj: unknown, permission: Permission) => {
+        //   const { group, ...rest } = permission
+        //   if (!obj[group]) obj[group] = []
+        //   obj[group].push(permission)
+        //   return obj
+        // }, {})
 
         if (id) {
           const { data } = await api.get(`roles/${id}`)
@@ -112,7 +120,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
-      checkPermissions,
+      // checkPermissions,
       ...functions
     }
   }

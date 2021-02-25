@@ -59,7 +59,7 @@ export default defineComponent({
         const isEqual = this.checkIfIsEqual()
         if (validate(refs, fields) && isEqual) {
           const data = { ...vars.user, password: vars.register.password }
-          const { ok } = await api.put(`${routeBackend}/${vars.user.id}`, data, { debug: true })
+          const { ok } = await api.put(`${String(routeBackend)}/${String(vars.user.id)}`, data, { debug: true })
           if (ok) {
             return root.$router.push(routeFront)
           }

@@ -108,7 +108,7 @@ export default defineComponent({
         } else {
           const { ok, data } = await api.post('users/block', { rg: vars.registry.rg }, { noRedirect: true, silent: true })
           const user = data as User
-          if(ok) errorNotify(`Bloqueado usuário ${user.name}, entre em contato com SJD`)
+          if (ok) errorNotify(`Bloqueado usuário ${user.name}, entre em contato com SJD`)
         }
       },
       changeMode () {

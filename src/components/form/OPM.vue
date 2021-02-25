@@ -82,7 +82,7 @@ export default defineComponent({
           const needle = val.toLocaleLowerCase()
           vars.options = opms.filter(v => v.label.toLocaleLowerCase().indexOf(needle) > -1)
         })
-      },
+      }
     }
 
     watch(() => vars._value, () => (vars.validable = true))

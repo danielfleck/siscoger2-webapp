@@ -89,10 +89,10 @@ export interface Register{
   rg: string
   motivo: string
   motivo_outros: string
-  inicio_data: string
+  inicio_data: Date | string | null
   doc_controle_inicio: string
   publicacao_inicio: string
-  termino_data: string | null
+  termino_data: Date | string | null
   doc_controle_termino: string
   publicacao_termino: string
 }

@@ -35,5 +35,6 @@ export const cleanUser = {
   terms: false,
   email: '',
   createdAt: '',
-  updatedAt: ''
+  updatedAt: '',
+  roles: []
 }

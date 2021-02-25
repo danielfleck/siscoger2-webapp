@@ -44,4 +44,3 @@ export * from './situacao'
 export * from './sobrestamento'
 export * from './upload'
 export * from './user'
-

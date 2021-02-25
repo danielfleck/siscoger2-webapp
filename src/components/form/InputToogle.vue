@@ -23,7 +23,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { localePTBR } from 'src/config/app'
-import { confirm } from 'src/services'
 import { getDense } from 'src/store/utils'
 
 export default defineComponent({
@@ -55,7 +54,7 @@ export default defineComponent({
     iconColor: {
       type: String,
       default: 'grey-9'
-    },
+    }
   },
   setup (props, { root, emit, refs }) {
     const vars = reactive({
@@ -65,7 +64,7 @@ export default defineComponent({
       isValid: computed(() => {
         if (!vars.validable) return true
         if (props.required && !vars._value) {
-          vars.errorMsg = `${props.label} é obrigatório`
+          vars.errorMsg = `${String(props.label)} é obrigatório`
           return false
         }
         return true
@@ -82,7 +81,7 @@ export default defineComponent({
         vars.validable = true
         refs.root.validate()
         return vars.isValid
-      },
+      }
     }
 
     watch(() => vars._value, () => (vars.validable = true))

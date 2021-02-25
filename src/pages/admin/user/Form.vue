@@ -41,8 +41,8 @@
           <InputText label="Email" v-model="register.email" ref="email" required/>
         </div>
         <div class="q-pa-md col-12">
-          <InputSelect 
-            label="Papéis" 
+          <InputSelect
+            label="Papéis"
             v-model="register.roles"
             optionLabel="role"
             useChips

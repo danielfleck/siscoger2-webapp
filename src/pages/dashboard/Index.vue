@@ -55,19 +55,19 @@ interface SerchPendences {
 
 type Procs = 'gerais' | 'fatd' | 'ipm' | 'sindicancia' | 'cd' | 'comportamento' | 'transferencias'
 
-const pendences: SerchPendences[] = [
-  { proc: 'cd', pendencias: 'abertura' },
-  { proc: 'cd', pendencias: 'prazos' },
-  { proc: 'ipm', pendencias: 'abertura' },
-  { proc: 'ipm', pendencias: 'prazos' },
-  { proc: 'sindicancia', pendencias: 'abertura' },
-  { proc: 'sindicancia', pendencias: 'prazos' },
-  { proc: 'fatd', pendencias: 'abertura' },
-  { proc: 'fatd', pendencias: 'prazos' },
-  { proc: 'fatd', pendencias: 'punicao' },
-  { proc: 'comportamento', pendencias: 'alteracao' },
-  { proc: 'transferencias', pendencias: 'nova' }
-]
+// const pendences: SerchPendences[] = [
+//   { proc: 'cd', pendencias: 'abertura' },
+//   { proc: 'cd', pendencias: 'prazos' },
+//   { proc: 'ipm', pendencias: 'abertura' },
+//   { proc: 'ipm', pendencias: 'prazos' },
+//   { proc: 'sindicancia', pendencias: 'abertura' },
+//   { proc: 'sindicancia', pendencias: 'prazos' },
+//   { proc: 'fatd', pendencias: 'abertura' },
+//   { proc: 'fatd', pendencias: 'prazos' },
+//   { proc: 'fatd', pendencias: 'punicao' },
+//   { proc: 'comportamento', pendencias: 'alteracao' },
+//   { proc: 'transferencias', pendencias: 'nova' }
+// ]
 
 export default defineComponent({
   name: 'Index',
@@ -83,9 +83,8 @@ export default defineComponent({
     const module = 'sindicancias'
     const state = reactive({
       tab: '',
-      cdopm: getUserCdopm(),
+      cdopm: getUserCdopm()
     })
-
 
     async function callApi ({ proc, pendencias }: SerchPendences) {
       const { data, 'data (count)': length } = await api.post('pendencias/search', {
@@ -94,7 +93,7 @@ export default defineComponent({
         pendencias: [pendencias]
       }, { silent: true })
 
-      return [data as Pendencia[], length ]
+      return [data as Pendencia[], length]
     }
 
     async function pendencesGeneral () {
@@ -149,14 +148,13 @@ export default defineComponent({
       totalPendences.value.fatd = Number(fatdAberturaTotal) + Number(fatdPrazosTotal) + Number(fatdPunicaoTotal)
     }
 
-
     async function loadData () {
       await Promise.all([
         pendencesGeneral(),
         pendencesCd(),
         pendencesIpm(),
         pendencesSindicancia(),
-        pendencesFatd(),
+        pendencesFatd()
       ]).then(() => updateTotalPendences())
     }
 
