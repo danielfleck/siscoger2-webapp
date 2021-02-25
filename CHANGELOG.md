@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.40.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.39.0...v0.40.0) (2021-02-25)
+
+
+### Features
+
+* add under-construction in list pages not implementeds ([c7347a4](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/c7347a48249abcdf6953eba207501331e96fe390))
+
 ## [0.39.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.38.0...v0.39.0) (2021-02-24)
 
 
