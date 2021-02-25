@@ -1,18 +1,19 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/ofendidos' },
+  <under-construction/>
+  <!-- <page :breadcrumbs="[
+    { label: 'Lista', link: '/recursos' },
     ]">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ofendidos/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/recursos/inserir"/>
     <Table
       data-cy="table"
-      label="Lista ofendidos"
+      label="Lista recursos"
       :data="data"
       :columns="columns"
       actions
       @delete="onDelete"
       @edit="onEdit"
     />
-  </page>
+  </page> -->
 </template>
 <script lang="ts">
 /* eslint-disable no-void */
@@ -20,49 +21,44 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
+import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Columns, Ofendido } from 'src/types'
 
 export default defineComponent({
   name: 'MODULEList',
   components: {
     Page,
-    Table
+    Table,
+    UnderConstruction
   },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly Ofendido[],
+      data: [] as readonly string[],
       columns: [
-        { name: 'nome', label: 'nome', field: 'nome', sortable: true },
-        { name: 'rg', label: 'rg', field: 'rg', sortable: true },
-        { name: 'situacao', label: 'situacao', field: 'situacao', sortable: true },
-        { name: 'resultado', label: 'resultado', field: 'resultado', sortable: true },
-        { name: 'sexo', label: 'sexo', field: 'sexo', sortable: true },
-        { name: 'idade', label: 'idade', field: 'idade', sortable: true },
-        { name: 'fone', label: 'fone', field: 'fone', sortable: true },
-        { name: 'email', label: 'email', field: 'email', sortable: true },
+        // { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
+        // { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ]
     })
 
     const functions = {
       async loadData () {
         const data = await api.get('MODULE')
-        vars.data = Object.freeze(data as unknown as readonly Ofendido[])
+        vars.data = Object.freeze(data as unknown as readonly string[])
       },
-      onEdit (row: Ofendido) {
-        return root.$router.push(`/ofendidos/editar/${String(row.id)}`)
+      onEdit (row: { id: number }) {
+        return root.$router.push(`/recursos/editar/${String(row.id)}`)
       },
-      onDelete (row: Ofendido) {
+      onDelete (row: { id: number }) {
         root.$q.dialog(confirmMsg).onOk(async () => {
-          const { ok } = await api.delete(`ofendidos/${String(row.id)}`)
+          const { ok } = await api.delete(`recursos/${String(row.id)}`)
           if (ok) await this.loadData()
         })
       }
     }
 
-    void functions.loadData()
+    // void functions.loadData()
 
     return {
       ...toRefs(vars),

@@ -34,7 +34,7 @@ export default defineComponent({
     const vars = reactive({
       data: [] as readonly Role[],
       columns: [
-        { name: 'role', label: 'Papéis', field: 'role', sortable: true },
+        { name: 'role', label: 'Papel', field: 'role', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })

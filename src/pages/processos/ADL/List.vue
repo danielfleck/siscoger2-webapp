@@ -1,5 +1,6 @@
 <template>
-  <page :breadcrumbs="[
+  <under-construction/>
+  <!-- <page :breadcrumbs="[
     { label: 'Lista', link: '/adl' },
     ]">
     <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
@@ -12,7 +13,7 @@
       @delete="onDelete"
       @edit="onEdit"
     />
-  </page>
+  </page> -->
 </template>
 <script lang="ts">
 /* eslint-disable no-void */
@@ -20,6 +21,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
+import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
 
 import { api, confirmMsg } from 'src/services'
 import { Adl, Columns } from 'src/types'
@@ -28,7 +30,8 @@ export default defineComponent({
   name: 'MODULEList',
   components: {
     Page,
-    Table
+    Table,
+    UnderConstruction
   },
   setup (_, { root }) {
     const vars = reactive({

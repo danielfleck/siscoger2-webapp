@@ -124,6 +124,15 @@
             <q-btn v-if="actionButtonRestore" dense round flat color="grey" icon="restore" @click="$emit('restore',props.row)"></q-btn>
             <q-btn v-if="actionButtonEdit" dense round flat color="grey" icon="edit" @click="$emit('edit',props.row)"></q-btn>
             <q-btn v-if="actionButtonDelete" dense round flat color="grey" icon="delete" @click="$emit('delete',props.row)"></q-btn>
+            <q-btn 
+              v-if="actionButtonToogle"
+              dense
+              round
+              flat
+              color="grey"
+              :icon="props.row[actionButtonToogleConfig.trueValue] ? actionButtonToogleConfig.trueIcon : actionButtonToogleConfig.falseIcon"
+              @click="$emit('toogle',props.row)">
+            </q-btn>
           </template>
         </q-td>
       </q-tr>
@@ -198,6 +207,18 @@ export default {
     actionButtonDelete: {
       type: Boolean,
       default: true
+    },
+    actionButtonToogle: {
+      type: Boolean,
+      default: false
+    },
+    actionButtonToogleConfig: {
+      type: Object,
+      default: () => ({
+       trueValue: 'block',
+       trueIcon: 'fa fa-lock',
+       falseIcon: 'fa fa-lock-open'
+      })
     },
     flat: {
       type: Boolean,

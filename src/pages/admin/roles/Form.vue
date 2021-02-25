@@ -7,12 +7,12 @@
         <div class="q-pa-md col-12">
           <InputText label="Papel" v-model="register.role" ref="role" required/>
         </div>
-        <q-card v-for="(groups, index) in permissions" class="q-pa-md col-12" :key="index">
+        <q-card v-for="(groups, index) in permissions" class="q-pa-md col-lg-3 col-md-4 col-xs-12" :key="index">
           <q-card-section>
             <div class="text-h6">{{ groups[0].group || 'outros' }}</div>
           </q-card-section>
           <q-card-section >
-            <InputSelect 
+            <InputSelect
               :label="groups[0].group"
               v-model="permissionsChecked[group]"
               optionLabel="permission"
@@ -35,6 +35,7 @@
   </page>
 </template>
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
@@ -65,13 +66,13 @@ export default defineComponent({
         permissions: [] as Permission[]
       } as Role,
       permissions: [] as Permission[],
-      permissionsChecked: [] as Permission[],
+      permissionsChecked: [] as Permission[]
     })
 
     function checkPermissions (value) {
       vars.register.permissions.push(value)
     }
-  
+
     const functions = {
       async loadData () {
         const { id } = root.$route.params
@@ -79,10 +80,10 @@ export default defineComponent({
 
         vars.permissions = data.reduce((obj: any, permission: Permission) => {
           const { group, ...rest } = permission
-          if (!obj[group]) obj[group] = [];
-          obj[group].push(permission);
-          return obj;
-        }, {});
+          if (!obj[group]) obj[group] = []
+          obj[group].push(permission)
+          return obj
+        }, {})
 
         if (id) {
           const { data } = await api.get(`roles/${id}`)
@@ -91,7 +92,7 @@ export default defineComponent({
       },
       async create () {
         if (validate(refs, fields)) {
-          const { ok } = await api.post('roles', {...vars.register, permissions: vars.permissionsChecked}, { debug: true })
+          const { ok } = await api.post('roles', { ...vars.register, permissions: vars.permissionsChecked }, { debug: true })
           if (ok) {
             return root.$router.push('/admin/papeis')
           }

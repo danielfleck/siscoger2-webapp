@@ -128,7 +128,7 @@ import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
 import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
-import { cleanSindicancia, Sindicancia } from 'src/types'
+import { Sindicancia } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
@@ -171,7 +171,38 @@ export default defineComponent({
       step: 1,
       tab: 'main',
       loading: false,
-      register: cleanSindicancia,
+      register: {
+        id: 0,
+        id_andamentocoger: 0,
+        id_andamento: 6,
+        fato_data: undefined,
+        abertura_data: undefined,
+        sintese_txt: '',
+        cdopm: '',
+        doc_tipo: '',
+        doc_numero: '',
+        doc_origem_txt: '',
+        portaria_numero: '',
+        portaria_data: undefined,
+        sol_cmt_file: '',
+        sol_cmt_data: undefined,
+        sol_cmtgeral_file: '',
+        sol_cmtgeral_data: undefined,
+        opm_meta4: '',
+        relatorio_file: '',
+        relatorio_data: undefined,
+        prioridade: false,
+        motivo_cancelamento: '',
+        motivo_abertura: '',
+        motivo_outros: '',
+        prorogacao: false,
+        prorogacao_dias: 0,
+        completo: false,
+        diasuteis_sobrestado: 0,
+        motivo_sobrestado: '',
+        prazo_decorrido: 0,
+        deletedAt: undefined
+      } as Sindicancia,
       andamentoCogerSindicancia,
       andamentoSindicancia,
       motivoAberturaSindicancia,
@@ -205,7 +236,7 @@ export default defineComponent({
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`sindicancias/${vars.register.id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`sindicancias/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'

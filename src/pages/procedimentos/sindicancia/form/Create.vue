@@ -78,7 +78,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { defineComponent, reactive, SetupContext, toRefs } from '@vue/composition-api'
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
@@ -100,8 +101,8 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
-import { Sindicancia, Pendencia, cleanSindicancia } from 'src/types'
-import { addPendence, api, errorNotify, getPendence, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
+import { Sindicancia } from 'src/types'
+import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
   'motivo_cancelamento',
@@ -143,7 +144,38 @@ export default defineComponent({
       step: 1,
       incompleto: '',
       loading: false,
-      register: cleanSindicancia as Sindicancia,
+      register: {
+        id: 0,
+        id_andamentocoger: 0,
+        id_andamento: 6,
+        fato_data: undefined,
+        abertura_data: undefined,
+        sintese_txt: '',
+        cdopm: '',
+        doc_tipo: '',
+        doc_numero: '',
+        doc_origem_txt: '',
+        portaria_numero: '',
+        portaria_data: undefined,
+        sol_cmt_file: '',
+        sol_cmt_data: undefined,
+        sol_cmtgeral_file: '',
+        sol_cmtgeral_data: undefined,
+        opm_meta4: '',
+        relatorio_file: '',
+        relatorio_data: undefined,
+        prioridade: false,
+        motivo_cancelamento: '',
+        motivo_abertura: '',
+        motivo_outros: '',
+        prorogacao: false,
+        prorogacao_dias: 0,
+        completo: false,
+        diasuteis_sobrestado: 0,
+        motivo_sobrestado: '',
+        prazo_decorrido: 0,
+        deletedAt: undefined
+      },
       cdopm: getUserCdopm(),
       andamentoCogerSindicancia,
       andamentoSindicancia,
@@ -156,8 +188,8 @@ export default defineComponent({
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('sindicancias', vars.register, { silent: true, debug: true })
         if (ok) {
-          const sindicancia = data as unknown as Sindicancia
-          vars.register.id = sindicancia.id
+          const sindicancia = data as Sindicancia
+          vars.register.id = Number(sindicancia.id)
           await handlePendence()
           return next()
         }
@@ -189,15 +221,14 @@ export default defineComponent({
 
     async function handlePendence () {
       const { _id } = await addPendence({
-        register: vars.register,
+        register: vars.register as never,
         proc: 'sindicancia',
         pendencias: ['incompleto'],
-        state: [vars.register],
+        state: [vars.register]
       })
       incompleteProc(root, String(_id))
     }
 
-    
     async function subforms () {
       const sindicante = await refs.sindicante.getState()
       if (sindicante === 'toInsert') {
@@ -210,7 +241,7 @@ export default defineComponent({
     const next = () => refs.stepper.next()
     const previous = () => refs.stepper.previous()
 
-    async function getPendence() {
+    async function getPendence () {
       vars.incompleto = String(root.$route.query.incompleto)
       const state = await getPendenceById(vars.incompleto)
       if (state?.length) vars.register = state[0]
@@ -218,6 +249,7 @@ export default defineComponent({
     }
 
     if (root.$route.query.incompleto) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       getPendence()
     }
 

@@ -6,7 +6,7 @@
       <form class="row">
         <div v-if="insertion" class="q-pa-md col-12">
           <InputToogle
-            v-model="group"
+            v-model="groupToogle"
             label="Inserir grupo"
             tooltip="
               listar-XXX
@@ -16,18 +16,18 @@
               apagar-XXX"
             />
         </div>
-        <div v-if="!group" class="q-pa-md col-12">
+        <div v-if="!groupToogle" class="q-pa-md col-12">
           <InputText label="Permissão" v-model="register.permission" ref="permission" required/>
         </div>
         <div class="q-pa-md col-12">
-          <InputText label="Grupo" v-model="register.group" ref="permission" required/>
+          <InputText label="Grupo" v-model="register.group" ref="group" required/>
         </div>
         <div class="q-pa-md col-12">
-          <InputText label="Descrição" v-model="register.description" ref="permission" required/>
+          <InputText label="Descrição" v-model="register.description" />
         </div>
         <div class="q-pa-md col-12">
-          <InputSelect 
-            label="Papéis" 
+          <InputSelect
+            label="Papéis"
             v-model="register.roles"
             optionLabel="role"
             useChips
@@ -76,7 +76,7 @@ export default defineComponent({
   },
   setup (_, { refs, root }) {
     const vars = reactive({
-      group: false,
+      groupToogle: false,
       insertion: true,
       register: {
         id: 0,
@@ -85,7 +85,7 @@ export default defineComponent({
         group: '',
         roles: [] as Role[]
       } as Permission,
-      roles: [] as Role[],
+      roles: [] as Role[]
     })
 
     const functions = {

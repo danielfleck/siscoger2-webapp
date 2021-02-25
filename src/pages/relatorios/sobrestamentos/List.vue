@@ -1,18 +1,19 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/sobrestamentos' },
+  <under-construction/>
+  <!-- <page :breadcrumbs="[
+    { label: 'Lista', link: '/recursos' },
     ]">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sobrestamentos/inserir"/>
+    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/recursos/inserir"/>
     <Table
       data-cy="table"
-      label="Lista sobrestamentos"
+      label="Lista recursos"
       :data="data"
       :columns="columns"
       actions
       @delete="onDelete"
       @edit="onEdit"
     />
-  </page>
+  </page> -->
 </template>
 <script lang="ts">
 /* eslint-disable no-void */
@@ -20,47 +21,44 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
+import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
 
 import { api, confirmMsg } from 'src/services'
-import { Columns, Sobrestamento } from 'src/types'
 
 export default defineComponent({
   name: 'MODULEList',
   components: {
     Page,
-    Table
+    Table,
+    UnderConstruction
   },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly Sobrestamento[],
+      data: [] as readonly string[],
       columns: [
-        { name: 'rg', label: 'rg', field: 'rg', sortable: true },
-        { name: 'publicacao_inicio', label: 'publicacao_inicio', field: 'publicacao_inicio', sortable: true },
-        { name: 'inicio_data', label: 'inicio_data', field: 'inicio_data', sortable: true },
-        { name: 'publicacao_termino', label: 'publicacao_termino', field: 'publicacao_termino', sortable: true },
-        { name: 'termino_data', label: 'termino_data', field: 'termino_data', sortable: true },
-        { name: 'motivo', label: 'motivo', field: 'motivo', sortable: true },
+        // { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
+        // { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ]
     })
 
     const functions = {
       async loadData () {
         const data = await api.get('MODULE')
-        vars.data = Object.freeze(data as unknown as readonly Sobrestamento[])
+        vars.data = Object.freeze(data as unknown as readonly string[])
       },
-      onEdit (row: Sobrestamento) {
-        return root.$router.push(`/sobrestamentos/editar/${String(row.id)}`)
+      onEdit (row: { id: number }) {
+        return root.$router.push(`/recursos/editar/${String(row.id)}`)
       },
-      onDelete (row: Sobrestamento) {
+      onDelete (row: { id: number }) {
         root.$q.dialog(confirmMsg).onOk(async () => {
-          const { ok } = await api.delete(`sobrestamentos/${String(row.id)}`)
+          const { ok } = await api.delete(`recursos/${String(row.id)}`)
           if (ok) await this.loadData()
         })
       }
     }
 
-    void functions.loadData()
+    // void functions.loadData()
 
     return {
       ...toRefs(vars),
