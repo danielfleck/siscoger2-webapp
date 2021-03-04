@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.42.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.41.0...v0.42.0) (2021-03-04)
+
+
+### Features
+
+* add basic apfd module ([d5b065f](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/d5b065f4a973c29cd7236dfefd8d323a241e47fe))
+
 ## [0.41.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.40.0...v0.41.0) (2021-03-04)
 
 
