@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.41.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.40.0...v0.41.0) (2021-03-04)
+
+
+### Features
+
+* add sindicancia structure in other processos and procedimentos ([8e9e144](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/8e9e144dd11e24d2b2ba618c7a2194b5d7f4f225))
+
+
+### Bug Fixes
+
+* dashboard ipm prazos ([1c05cb8](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/1c05cb857341d598bb2aac21890e38982ad66a32))
+* types ([e39bb5b](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/e39bb5b0535854f16f82be54c099555986afcae4))
+
 ## [0.40.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.39.0...v0.40.0) (2021-02-25)
 
 
