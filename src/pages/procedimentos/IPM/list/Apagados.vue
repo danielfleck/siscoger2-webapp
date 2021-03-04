@@ -24,14 +24,14 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { api, confirm } from 'src/services'
-import { ipm, Columns } from 'src/types'
+import { Ipm, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly ipm[],
+      data: [] as readonly Ipm[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -42,21 +42,21 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('ipm/deleted')
-      vars.data = Object.freeze(data as ipm[])
+      vars.data = Object.freeze(data as Ipm[])
     }
 
-    function onEdit (row: ipm) {
+    function onEdit (row: Ipm) {
       void root.$router.push(`/ipm/editar/${row.id}`)
     }
 
-    function onRestore (row: ipm) {
+    function onRestore (row: Ipm) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`ipm/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: ipm) {
+    function onDelete (row: Ipm) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`ipm/${row.id}/force`)
         if (ok) void loadData()

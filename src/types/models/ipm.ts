@@ -43,4 +43,8 @@ export type Ipm = {
   bou_ano: number;
   bou_numero: number;
   prioridade: number;
+  n_eproc: string;
+  ano_eproc: string;
+  completo: boolean;
+  deletedAt?: Date
 };

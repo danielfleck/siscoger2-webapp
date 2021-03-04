@@ -441,7 +441,7 @@ export const motivoConselho: Option[] = [
   { value: 8, label: 'Integrar partido político ou associação contrária à lei' }
 ]
 
-export const situacaoConselho: Option[] = [
+export const situacaoServicoOuFora: Option[] = [
   { value: 1, label: 'Em serviço ou atendimento de Ocorrência' },
   { value: 2, label: 'Fora do Serviço ou outras circunstâncias' }
 ]

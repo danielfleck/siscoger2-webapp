@@ -23,47 +23,65 @@
         <div  class="q-pa-md col-12">
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="ipm"/>
         </div>
+        <div class="q-pa-md col-4">
+          <AndamentoCoger v-model="register.id_andamentocoger" type="ipm"/>
+        </div>
         <div class="q-pa-md col-12">
           <Prioridade v-model="register.prioridade"/>
         </div>
         <div class="q-pa-md col-4">
-          <Andamento v-model="register.id_andamento" type="ipm"/>
-        </div>
-        <div class="q-pa-md col-4">
-          <AndamentoCoger v-model="register.id_andamentocoger" type="ipm"/>
-        </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.fato_data" label="Data da fato" />
+          <InputText label="Andamento" value="Andamento" disable/>
         </div>
         <div class="q-pa-md col-4">
           <OPM v-model="register.cdopm" ref="opm" required/>
         </div>
         <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
+          <InputDate v-model="register.fato_data" label="Data da fato" />
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+          <InputDate v-model="register.abertura_data" label="Data da portaria de delegação de poderes" />
         </div>
         <div class="q-pa-md col-4">
-          <TipoBoletim v-model="register.doc_tipo"/>
+          <InputDate v-model="register.autuacao_data" label="Data da portaria de instauração" />
+        </div>
+        <div class="q-pa-md col-4" v-if="register.cdopm">
+          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="ipm" :cdopm="register.cdopm"/>
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Motivo da abertura (crime)" v-model="register.crime" :options="crime" />
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Tipo (crime)" v-model="register.tentado" :options="tentado" />
+        </div>
+        <div v-if="register.crime === 'Outros'" class="q-pa-md col-4">
+          <InputText label="Documento de origem" v-model="register.crime_especificar" ref="crime_especificar" required/>
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Situação" v-model="register.id_situacao" :options="situacaoServicoOuFora" />
+        </div>
+        <div class="q-pa-md col-6">
+          CIDADE DO FATO - TODO
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
+          <InputText label="N° Boletim" mask="#######" v-model="register.bou_numero" />
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+          <InputAno label="Bou Ano" v-model="register.bou_ano" ref="bou_ano" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
+          <InputText label="N° Eproc" mask="#######" v-model="register.n_eproc" />
         </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
+        <div class="q-pa-md col-4">
+          <InputAno label="Eproc Ano" v-model="register.ano_eproc" ref="bou_ano" required/>
+        </div>
+        <div class="q-pa-md col-4">
+          <InputText label="Conclusão do encarregado" v-model="register.relato_enc" />
+        </div>
+        <div class="q-pa-md col-4">
+          <InputText label="Solução do Cmt OPM" v-model="register.relato_cmtopm" />
+        </div>
+        <div class="q-pa-md col-4">
+          <InputText label="Decisão do Cmt Geral" v-model="register.relato_cmtgeral" />
         </div>
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
@@ -74,9 +92,10 @@
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_ipm: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_ipm: register.id }"/>
           <Vitima :data="{ id_ipm: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'ipm', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
-          <FileUpload label="Solução do Comandante" :data="{ proc: 'ipm', campo: 'solucao_cmt_file', id_proc: register.id}"/>
-          <FileUpload label="Solução CMT Geral" :data="{ proc: 'ipm', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
+          <FileUpload label="Conclusão do encarregado" :data="{ proc: 'ipm', campo: 'relato_enc_file', id_proc: register.id}"/>
+          <FileUpload label="Solução do Comandante" :data="{ proc: 'ipm', campo: 'relato_cmtopm_file', id_proc: register.id}"/>
+          <FileUpload label="Solução CMT Geral" :data="{ proc: 'ipm', campo: 'relato_cmtgeral_file', id_proc: register.id}"/>
+          <FileUpload label="Relatório complementar" :data="{ proc: 'ipm', campo: 'relcomplementar_file', id_proc: register.id}"/>
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
@@ -125,22 +144,49 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogeripm, andamentoipm, motivoAberturaipm, prorogacao, tipoBoletim } from 'src/config/selects'
 import { getDense } from 'src/store/utils'
-import { getAndamento, getSobrestamento } from 'src/utils'
-import { ipm } from 'src/types'
+import { Ipm } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
+  'id_andamento',
+  'id_andamentocoger',
+  'id_municipio',
+  'id_situacao',
+  'cdopm',
+  'opm_sigla',
+  'opm_ref',
+  'opm_ref_ano',
+  'sjd_ref',
+  'sjd_ref_ano',
+  'abertura_data',
+  'fato_data',
+  'autuacao_data',
+  'crime',
+  'tentado',
+  'crime_especificar',
   'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
+  'relato_enc',
+  'relato_enc_data',
+  'relato_cmtopm',
+  'relato_cmtopm_data',
+  'relato_cmtgeral',
+  'relato_cmtgeral_data',
+  'vajme_ref',
+  'justicacomum_ref',
+  'vitima',
+  'confronto_armado_bl',
+  'vitima_qtdd',
+  'julgamento',
+  'portaria_numero',
+  'exclusao_txt',
+  'relato_enc_file',
+  'relato_cmtopm_file',
+  'relato_cmtgeral_file',
+  'defensor_oab',
+  'defensor_nome',
+  'relcomplementar_file',
+  'relcomplementar_data',
+  'opm_meta4',
 ]
 export default defineComponent({
   name: 'Form',
@@ -173,41 +219,50 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        id_municipio: 0,
+        id_situacao: 0,
         cdopm: '',
-        doc_tipo: '',
-        doc_numero: '',
-        doc_origem_txt: '',
+        opm_sigla: '',
+        opm_ref: 0,
+        opm_ref_ano: 0,
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        abertura_data: new Date(),
+        fato_data: new Date(),
+        autuacao_data: new Date(),
+        crime: '',
+        tentado: '',
+        crime_especificar: '',
+        sintese_txt: '', // text
+        relato_enc: '',
+        relato_enc_data: new Date(),
+        relato_cmtopm: '',
+        relato_cmtopm_data: new Date(),
+        relato_cmtgeral: '',
+        relato_cmtgeral_data: new Date(),
+        vajme_ref: '',
+        justicacomum_ref: '',
+        vitima: '',
+        confronto_armado_bl: '',
+        vitima_qtdd: 0,
+        julgamento: '',
         portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
+        exclusao_txt: '', // text
+        relato_enc_file: '',
+        relato_cmtopm_file: '',
+        relato_cmtgeral_file: '',
+        defensor_oab: '',
+        defensor_nome: '',
+        relcomplementar_file: '',
+        relcomplementar_data: new Date(),
         opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        bou_ano: 0,
+        bou_numero: 0,
+        prioridade: 0,
         deletedAt: undefined
-      } as ipm,
-      andamentoCogeripm,
-      andamentoipm,
-      motivoAberturaipm,
-      prorogacao,
-      tipoBoletim
+      } as Ipm,
     })
 
     async function update () {
@@ -222,17 +277,6 @@ export default defineComponent({
       }
     }
 
-    async function changeAndamento (sobrestamento: { termino_data: string }) {
-      if (!vars.register.id) return
-      const { id } = vars.register
-      if (!sobrestamento.termino_data) {
-        vars.register.id_andamento = getSobrestamento('ipm')
-        const { ok } = await api.put(`ipm/${id}`, vars.register, { silent: true })
-        if (ok) return
-      }
-      vars.register.id_andamento = getAndamento('ipm')
-      await api.put(`ipm/${id}`, vars.register, { silent: true })
-    }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
@@ -247,7 +291,7 @@ export default defineComponent({
       const { id } = root.$route.params
       if (id) {
         const { data, ok } = await api.get(`ipm/${id}`)
-        if (ok) vars.register = data as ipm
+        if (ok) vars.register = data as Ipm
       }
     }
 
@@ -266,7 +310,6 @@ export default defineComponent({
       ...toRefs(vars),
       denseVal: computed(() => getDense(root)),
       update,
-      changeAndamento,
       validateNavigation
     }
   }

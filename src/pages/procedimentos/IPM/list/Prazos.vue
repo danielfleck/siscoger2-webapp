@@ -1,8 +1,7 @@
 <template>
   <q-tab-panel name="prazos">
     <q-banner class="bg-green text-white">
-      Calculo do prazo dos ipm - contado em dias uteis, EXCLUI-SE o primeiro dia. (Portaria 338)
-      Sao descontados os dias em que o procedimento ficou sobrestado.
+      Calculo do prazo dos ipm - contado em dias corridos, conta-se o primeiro dia.
       <template v-slot:action>
         Data de referência: HOJE ({{ today }})
       </template>
@@ -32,7 +31,7 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { ipm, Columns } from 'src/types'
+import { Ipm, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Prazos',
@@ -40,31 +39,29 @@ export default defineComponent({
   setup (_, { root }) {
     const vars = reactive({
       today: getCurrentDate('pt-br'),
-      data: [] as readonly ipm[],
+      data: [] as readonly Ipm[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
-        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'abertura', label: 'Instauração', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val) => val || 'Não há', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
-        { name: 'diasuteis_sobrestado', label: 'Sobrestamento', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
-        { name: 'motivo_sobrestado', label: 'Motivo Sobrest.', field: 'motivo_sobrestado', format: (val, row) => getPrazoDecorrido(val, row), sortable: true },
         { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('ipm/andamento')
-      vars.data = Object.freeze(data as ipm[])
+      vars.data = Object.freeze(data as Ipm[])
     }
 
-    function onEdit (row: ipm) {
+    function onEdit (row: Ipm) {
       void root.$router.push(`/ipm/editar/${row.id}`)
     }
 
-    function onDelete (row: ipm) {
+    function onDelete (row: Ipm) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`ipm/${row.id}`)
         if (ok) void loadData()
