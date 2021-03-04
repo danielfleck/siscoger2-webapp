@@ -23,40 +23,44 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
+import { changeDate, getOpmByCode } from 'src/filters'
 import { api, confirm } from 'src/services'
-import { exclusao, Columns } from 'src/types'
+import { ExclusaoJudicial, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly exclusao[],
+      data: [] as readonly ExclusaoJudicial[],
       columns: [
-        { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
-        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'rg', label: 'Rg', field: 'rg', sortable: true },
+        { name: 'nome', label: 'Nome', field: 'nome', sortable: true },
+        { name: 'cdopm_quandoexcluido', label: 'OPM Exclusão', field: 'cdopm_quandoexcluido', format: (val) => getOpmByCode(val) },
+        { name: 'data', label: 'Data sentença', field: 'data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'exclusao_data', label: 'Data exclusão', field: 'exclusao_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'portaria_numero', label: 'Portaria CG', field: 'portaria_numero', sortable: true },
+        { name: 'bg_numero', label: 'Boletim Geral', field: 'bg_numero', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('exclusao/deleted')
-      vars.data = Object.freeze(data as exclusao[])
+      vars.data = Object.freeze(data as ExclusaoJudicial[])
     }
 
-    function onEdit (row: exclusao) {
+    function onEdit (row: ExclusaoJudicial) {
       void root.$router.push(`/exclusao/editar/${row.id}`)
     }
 
-    function onRestore (row: exclusao) {
+    function onRestore (row: ExclusaoJudicial) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`exclusao/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: exclusao) {
+    function onDelete (row: ExclusaoJudicial) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`exclusao/${row.id}/force`)
         if (ok) void loadData()

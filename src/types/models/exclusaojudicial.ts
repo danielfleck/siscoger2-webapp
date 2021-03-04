@@ -20,4 +20,5 @@ export type ExclusaoJudicial = {
   bg_numero: number;
   bg_ano: number;
   prioridade: number;
+  deletedAt?: Date;
 };
