@@ -24,14 +24,14 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { api, confirm } from 'src/services'
-import { fatd, Columns } from 'src/types'
+import { Fatd, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly fatd[],
+      data: [] as readonly Fatd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -42,21 +42,21 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('fatd/deleted')
-      vars.data = Object.freeze(data as fatd[])
+      vars.data = Object.freeze(data as Fatd[])
     }
 
-    function onEdit (row: fatd) {
+    function onEdit (row: Fatd) {
       void root.$router.push(`/fatd/editar/${row.id}`)
     }
 
-    function onRestore (row: fatd) {
+    function onRestore (row: Fatd) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`fatd/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: fatd) {
+    function onDelete (row: Fatd) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`fatd/${row.id}/force`)
         if (ok) void loadData()

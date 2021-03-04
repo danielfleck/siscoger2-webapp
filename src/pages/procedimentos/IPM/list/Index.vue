@@ -1,5 +1,6 @@
 <template>
-  <q-page class="doc-container q-pa-md">
+  <under-construction/>
+  <!-- <q-page class="doc-container q-pa-md">
     <q-card flat>
       <q-card-section>
         <Breadcrumbs :breadcrumbs="breadcrumbs"/>
@@ -33,13 +34,14 @@
         <q-fab-action label="Filtro avançado" color="primary" text-color="white" @click="onClick" icon="fa fa-filter" />
       </q-fab>
     </q-page-sticky>
-  </q-page>
+  </q-page> -->
 </template>
 
 <script lang="ts">
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
 
 type Link = {
   link: string | undefined
@@ -48,7 +50,7 @@ type Link = {
 
 export default defineComponent({
   name: 'Index',
-  components: { Breadcrumbs },
+  components: { Breadcrumbs, UnderConstruction },
   setup (_, { root }) {
     const vars = reactive({
       module: 'ipm',

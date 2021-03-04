@@ -33,6 +33,9 @@
             <OPM v-model="register.cdopm" ref="opm" required/>
           </div>
           <div class="q-pa-md col-4">
+            <Andamento v-model="register.id_andamento" type="apfd"/>
+          </div>
+          <div class="q-pa-md col-4">
             <AndamentoCoger v-model="register.id_andamentocoger" type="apfd"/>
           </div>
           <div class="q-pa-md col-4">

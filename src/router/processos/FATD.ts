@@ -12,10 +12,10 @@ export default [
         children: [
           { path: 'lista', component: () => import('pages/processos/FATD/list/List.vue'), meta: { auth: true, ...fatdRules.toShow } },
           { path: 'andamento', component: () => import('pages/processos/FATD/list/Andamento.vue'), meta: { auth: true, ...fatdRules.toShow } },
-          { path: 'apagados', component: () => import('pages/processos/FATD/list/Apagados.vue'), meta: { auth: true, ...fatdRules.toShow } },
+          { path: 'apagados', component: () => import('pages/processos/FATD/list/Apagados.vue'), meta: { auth: true, ...fatdRules.toDelete } },
           { path: 'prazos', component: () => import('pages/processos/FATD/list/Prazos.vue'), meta: { auth: true, ...fatdRules.toShow } },
           { path: 'rel_situacao', component: () => import('pages/processos/FATD/list/RelSituacao.vue'), meta: { auth: true, ...fatdRules.toShow } },
-          { path: 'resultado', component: () => import('pages/processos/FATD/list/Resultado.vue'), meta: { auth: true, ...fatdRules.toShow } }
+          { path: 'resultado', component: () => import('src/pages/processos/FATD/list/Julgamento.vue'), meta: { auth: true, ...fatdRules.toShow } }
         ]
       }
     ]

@@ -22,11 +22,20 @@
           <div class="q-pa-md col-4">
             <OPM v-model="register.cdopm" ref="opm" required/>
           </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
-            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="fatd" :cdopm="register.cdopm"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Motivo do FATD" v-model="register.motivo_fatd" :options="motivoFATD" />
+          </div>
+          <div class="q-pa-md col-6" v-if="register.motivo_fatd === 'Outro'">
+            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Situação" v-model="register.situacao_fatd" :options="situacaoFatd" />
+          </div>
+          <div class="q-pa-md col-6">
+            <InputText tooltip="ATENÇÃO, CINCO NÚMEROS" label="Nº do despacho que designa o Encarregado" mask="#####" v-model="register.despacho_numero" ref="despacho_numero" required/>
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+            <InputDate v-model="register.portaria_data" label="Data do despacho" ref="portaria_data" required/>
           </div>
           <div class="q-pa-md col-4">
             <TipoBoletim v-model="register.doc_tipo"/>
@@ -37,12 +46,6 @@
           <div class="q-pa-md col-4">
             <InputDate v-model="register.abertura_data" label="Data da abertura"/>
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturafatd" />
-          </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
-          </div>
           <div class="q-pa-md col-12">
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
           </div>
@@ -52,8 +55,9 @@
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
           <ProcedOrigem type="fatd" :data="{ id_fatd: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_fatd: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_fatd: register.id }"/>
+          <Membro label="Encarregado" ref="Encarregado" required :data="{ situacao: 'Encarregado', id_fatd: register.id }"/>
+          <Membro label="Acusador" ref="Acusador" required :data="{ situacao: 'Acusador', id_fatd: register.id }"/>
+          <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_fatd: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_fatd: register.id }"/>
           <Vitima :data="{ id_fatd: register.id }"/>
         </template>
@@ -100,21 +104,39 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogerfatd, andamentofatd, motivoAberturafatd, prorogacao, tipoBoletim } from 'src/config/selects'
-import { fatd } from 'src/types'
+import { motivoFATD, situacaoFATD } from 'src/config'
+import { Fatd } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
+  'id_andamento',
+  'id_andamentocoger',
+  'sjd_ref',
+  'sjd_ref_ano',
+  'fato_data',
+  'abertura_data',
   'sintese_txt',
+  'cdopm',
+  'doc_tipo',
+  'doc_numero',
+  'doc_origem_txt',
+  'despacho_numero',
   'portaria_data',
-  'prorogacao_dias',
+  'fato_file',
+  'relatorio_file',
+  'sol_cmt_file',
+  'sol_cg_file',
+  'rec_ato_file',
+  'rec_cmt_file',
+  'rec_crpm_file',
+  'rec_cg_file',
+  'opm_meta4',
+  'notapunicao_file',
+  'publicacaonp',
+  'prioridade',
+  'situacao_fatd',
+  'motivo_fatd',
   'motivo_outros',
-  'sindicante',
-  'escrivao'
 ]
 
 export default defineComponent({
@@ -146,49 +168,46 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        fato_data: new Date(),
+        abertura_data: new Date(),
+        sintese_txt: '', // text
         cdopm: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
+        doc_origem_txt: '', // text
+        despacho_numero: '',
+        portaria_data: new Date(),
+        fato_file: '',
         relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
+        sol_cmt_file: '',
+        sol_cg_file: '',
+        rec_ato_file: '',
+        rec_cmt_file: '',
+        rec_crpm_file: '',
+        rec_cg_file: '',
+        opm_meta4: '',
+        notapunicao_file: '',
+        publicacaonp: '',
+        prioridade: 0,
+        situacao_fatd: '',
+        motivo_fatd: '',
         motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
         deletedAt: undefined
-      },
+      } as Fatd,
       cdopm: getUserCdopm(),
-      andamentoCogerfatd,
-      andamentofatd,
-      motivoAberturafatd,
-      prorogacao,
-      tipoBoletim
+      motivoFATD,
+      situacaoFATD
     })
 
     async function create () {
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('fatd', vars.register, { silent: true, debug: true })
         if (ok) {
-          const fatd = data as fatd
+          const fatd = data as Fatd
           vars.register.id = Number(fatd.id)
           await handlePendence()
           return next()

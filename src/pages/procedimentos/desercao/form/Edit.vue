@@ -30,7 +30,7 @@
             <Prioridade v-model="register.prioridade"/>
           </div>
           <div class="q-pa-md col-4">
-            <InputText label="Andamento" value="Andamento" disable/>
+            <Andamento v-model="register.id_andamento" type="desercao"/>
           </div>
           <div class="q-pa-md col-4">
             <AndamentoCoger v-model="register.id_andamentocoger" type="desercao"/>

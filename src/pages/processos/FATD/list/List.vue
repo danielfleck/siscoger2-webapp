@@ -23,7 +23,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { fatd, Columns } from 'src/types'
+import { Fatd, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 
 export default defineComponent({
@@ -31,7 +31,7 @@ export default defineComponent({
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly fatd[],
+      data: [] as readonly Fatd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -42,14 +42,14 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('fatd/andamento')
-      vars.data = Object.freeze(data as fatd[])
+      vars.data = Object.freeze(data as Fatd[])
     }
 
-    function onEdit (row: fatd) {
+    function onEdit (row: Fatd) {
       void root.$router.push(`/fatd/editar/${row.id}`)
     }
 
-    function onDelete (row: fatd) {
+    function onDelete (row: Fatd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`fatd/${row.id}`)
         if (ok) void loadData()

@@ -16,6 +16,7 @@
       <q-tab name="main" icon="edit" label="Principal"/>
       <q-tab name="movimentos" icon="loop" label="Movimentos" />
       <q-tab name="sobrestamentos" icon="hourglass_top" label="Sobrestamentos"/>
+      <q-tab name="acompanhamento" icon="hourglass_top" label="Acompanhamento"/>
       <q-tab name="arquivos" icon="folder" label="Arquivos" />
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
@@ -32,9 +33,6 @@
         <div class="q-pa-md col-4">
           <AndamentoCoger v-model="register.id_andamentocoger" type="fatd"/>
         </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
-        </div>
         <div class="q-pa-md col-4">
           <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
         </div>
@@ -44,11 +42,20 @@
         <div class="q-pa-md col-4">
           <OPM v-model="register.cdopm" ref="opm" required/>
         </div>
-        <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Motivo do FATD" v-model="register.motivo_fatd" :options="motivoFATD" />
+        </div>
+        <div class="q-pa-md col-6" v-if="register.motivo_fatd === 'Outro'">
+          <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Situação" v-model="register.situacao_fatd" :options="situacaoFatd" />
+        </div>
+        <div class="q-pa-md col-6">
+          <InputText tooltip="ATENÇÃO, CINCO NÚMEROS" label="Nº do despacho que designa o Encarregado" mask="#####" v-model="register.despacho_numero" ref="despacho_numero" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+          <InputDate v-model="register.portaria_data" label="Data do despacho" ref="portaria_data" required/>
         </div>
         <div class="q-pa-md col-4">
           <TipoBoletim v-model="register.doc_tipo"/>
@@ -59,24 +66,29 @@
         <div class="q-pa-md col-4">
           <InputDate v-model="register.abertura_data" label="Data da abertura"/>
         </div>
-        <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
-        </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
-        </div>
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
         <template v-if="register.id">
           <ProcedOrigem type="fatd" :data="{ id_fatd: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_fatd: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_fatd: register.id }"/>
+          <Membro label="Encarregado" ref="Encarregado" required :data="{ situacao: 'Encarregado', id_fatd: register.id }"/>
+          <Membro label="Acusador" ref="Acusador" required :data="{ situacao: 'Acusador', id_fatd: register.id }"/>
+          <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_fatd: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_fatd: register.id }"/>
           <Vitima :data="{ id_fatd: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'fatd', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
-          <FileUpload label="Solução do Comandante" :data="{ proc: 'fatd', campo: 'solucao_cmt_file', id_proc: register.id}"/>
-          <FileUpload label="Solução CMT Geral" :data="{ proc: 'fatd', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
+
+          <FileUpload label="Relato do fato imputado" :data="{ proc: 'fatd', campo: 'fato_file', id_proc: register.id}"/>
+          <FileUpload label="Relatório" :data="{ proc: 'fatd', campo: 'relatorio_file', id_proc: register.id}"/>
+          <FileUpload label="Solução do Comandante" :data="{ proc: 'fatd', campo: 'sol_cmt_file', id_proc: register.id}"/>
+          <FileUpload label="Solução do Cmt Geral" :data="{ proc: 'fatd', campo: 'sol_cg_file', id_proc: register.id}"/>
+          <FileUpload label="Nota de punição" :data="{ proc: 'fatd', campo: 'notapunicao_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-12">
+            <InputText tooltip="Ex: BI nº 12/2011" label="Publicação da nota de punição" reverse v-model="register.publicacaonp" />
+          </div>
+          <FileUpload label="Reconsideração de ato (solução)" :data="{ proc: 'fatd', campo: 'rec_ato_file', id_proc: register.id}"/>
+          <FileUpload label="Recurso Cmt OPM" :data="{ proc: 'fatd', campo: 'rec_cmt_file', id_proc: register.id}"/>
+          <FileUpload label="Recurso Cmt CRPM" :data="{ proc: 'fatd', campo: 'rec_crpm_file', id_proc: register.id}"/>
+          <FileUpload label="Recurso Cmt Geral" :data="{ proc: 'fatd', campo: 'rec_cg_file', id_proc: register.id}"/>
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
@@ -87,6 +99,10 @@
 
       <q-tab-panel name="sobrestamentos" @transition="validateNavigation">
         <sobrestamento @submit="changeAndamento" :data="{ id_fatd: register.id }"/>
+      </q-tab-panel>
+
+      <q-tab-panel name="acompanhamento" @transition="validateNavigation">
+        TODO
       </q-tab-panel>
 
       <q-tab-panel name="arquivos" @transition="validateNavigation">
@@ -125,22 +141,40 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogerfatd, andamentofatd, motivoAberturafatd, prorogacao, tipoBoletim } from 'src/config/selects'
+import { motivoFATD, situacaoFATD } from 'src/config'
 import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
-import { fatd } from 'src/types'
-import { api, errorNotify, validate } from 'src/services'
+import { Fatd } from 'src/types'
+import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
+  'id_andamento',
+  'id_andamentocoger',
+  'sjd_ref',
+  'sjd_ref_ano',
+  'fato_data',
+  'abertura_data',
   'sintese_txt',
+  'cdopm',
+  'doc_tipo',
+  'doc_numero',
+  'doc_origem_txt',
+  'despacho_numero',
   'portaria_data',
-  'prorogacao_dias',
+  'fato_file',
+  'relatorio_file',
+  'sol_cmt_file',
+  'sol_cg_file',
+  'rec_ato_file',
+  'rec_cmt_file',
+  'rec_crpm_file',
+  'rec_cg_file',
+  'opm_meta4',
+  'notapunicao_file',
+  'publicacaonp',
+  'prioridade',
+  'situacao_fatd',
+  'motivo_fatd',
   'motivo_outros',
-  'sindicante',
-  'escrivao'
 ]
 export default defineComponent({
   name: 'Form',
@@ -173,41 +207,39 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        fato_data: new Date(),
+        abertura_data: new Date(),
+        sintese_txt: '', // text
         cdopm: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
+        doc_origem_txt: '', // text
+        despacho_numero: '',
+        portaria_data: new Date(),
+        fato_file: '',
         relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
+        sol_cmt_file: '',
+        sol_cg_file: '',
+        rec_ato_file: '',
+        rec_cmt_file: '',
+        rec_crpm_file: '',
+        rec_cg_file: '',
+        opm_meta4: '',
+        notapunicao_file: '',
+        publicacaonp: '',
+        prioridade: 0,
+        situacao_fatd: '',
+        motivo_fatd: '',
         motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
         deletedAt: undefined
-      } as fatd,
-      andamentoCogerfatd,
-      andamentofatd,
-      motivoAberturafatd,
-      prorogacao,
-      tipoBoletim
+      } as Fatd,
+      cdopm: getUserCdopm(),
+      motivoFATD,
+      situacaoFATD
     })
 
     async function update () {
@@ -247,7 +279,7 @@ export default defineComponent({
       const { id } = root.$route.params
       if (id) {
         const { data, ok } = await api.get(`fatd/${id}`)
-        if (ok) vars.register = data as fatd
+        if (ok) vars.register = data as Fatd
       }
     }
 

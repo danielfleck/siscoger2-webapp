@@ -23,14 +23,14 @@
         <div  class="q-pa-md col-12">
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="ipm"/>
         </div>
-        <div class="q-pa-md col-4">
-          <AndamentoCoger v-model="register.id_andamentocoger" type="ipm"/>
-        </div>
         <div class="q-pa-md col-12">
           <Prioridade v-model="register.prioridade"/>
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="Andamento" value="Andamento" disable/>
+          <Andamento v-model="register.id_andamento" type="ipm"/>
+        </div>
+        <div class="q-pa-md col-4">
+          <AndamentoCoger v-model="register.id_andamentocoger" type="ipm"/>
         </div>
         <div class="q-pa-md col-4">
           <OPM v-model="register.cdopm" ref="opm" required/>

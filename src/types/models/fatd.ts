@@ -29,4 +29,6 @@ export type Fatd = {
   situacao_fatd: string;
   motivo_fatd: string;
   motivo_outros: string;
+  completo: boolean;
+  deletedAt?: Date
 };
