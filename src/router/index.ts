@@ -28,8 +28,8 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
   })
 
   Router.beforeEach((to: Route, from: Route, next: Next):void => {
+    checkIfIsLogged(next)
     if (to?.meta?.auth) {
-      checkIfIsLogged(next)
     }
 
     if (to?.meta?.roles?.length) {
