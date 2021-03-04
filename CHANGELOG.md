@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.43.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.42.0...v0.43.0) (2021-03-04)
+
+
+### Features
+
+* add basic desercao module ([e307b8d](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/e307b8d377df66cb644a6974c8ad8022cbc45541))
+
 ## [0.42.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.41.0...v0.42.0) (2021-03-04)
 
 
