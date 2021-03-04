@@ -11,11 +11,8 @@ export default [
         component: () => import('pages/procedimentos/APFD/list/Index.vue'),
         children: [
           { path: 'lista', component: () => import('pages/procedimentos/APFD/list/List.vue'), meta: { auth: true, ...apfdRules.toShow } },
-          { path: 'andamento', component: () => import('pages/procedimentos/APFD/list/Andamento.vue'), meta: { auth: true, ...apfdRules.toShow } },
-          { path: 'apagados', component: () => import('pages/procedimentos/APFD/list/Apagados.vue'), meta: { auth: true, ...apfdRules.toShow } },
-          { path: 'prazos', component: () => import('pages/procedimentos/APFD/list/Prazos.vue'), meta: { auth: true, ...apfdRules.toShow } },
-          { path: 'rel_situacao', component: () => import('pages/procedimentos/APFD/list/RelSituacao.vue'), meta: { auth: true, ...apfdRules.toShow } },
-          { path: 'resultado', component: () => import('pages/procedimentos/APFD/list/Resultado.vue'), meta: { auth: true, ...apfdRules.toShow } }
+          { path: 'apagados', component: () => import('pages/procedimentos/APFD/list/Apagados.vue'), meta: { auth: true, ...apfdRules.toDelete } },
+          { path: 'rel_situacao', component: () => import('pages/procedimentos/APFD/list/RelSituacao.vue'), meta: { auth: true, ...apfdRules.toShow } }
         ]
       }
     ]

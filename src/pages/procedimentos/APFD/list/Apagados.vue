@@ -24,17 +24,18 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { api, confirm } from 'src/services'
-import { apfd, Columns } from 'src/types'
+import { Apfd, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly apfd[],
+      data: [] as readonly Apfd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
+        { name: 'tipo', label: 'tipo', field: 'tipo', sortable: true },
         { name: 'cdopm', label: 'OPM', field: 'cdopm' },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
@@ -42,21 +43,21 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('apfd/deleted')
-      vars.data = Object.freeze(data as apfd[])
+      vars.data = Object.freeze(data as Apfd[])
     }
 
-    function onEdit (row: apfd) {
+    function onEdit (row: Apfd) {
       void root.$router.push(`/apfd/editar/${row.id}`)
     }
 
-    function onRestore (row: apfd) {
+    function onRestore (row: Apfd) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`apfd/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: apfd) {
+    function onDelete (row: Apfd) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`apfd/${row.id}/force`)
         if (ok) void loadData()

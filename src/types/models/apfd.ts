@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 export type Apfd = {
+  id?: number
   id_andamento: number
   id_andamentocoger: number
   sjd_ref: number
@@ -16,5 +17,7 @@ export type Apfd = {
   exclusao_txt: string
   opm_meta4: string
   referenciavajme: string
-  prioridade: number
+  prioridade: boolean
+  deletedAt?: Date
+  completo?: boolean
 }

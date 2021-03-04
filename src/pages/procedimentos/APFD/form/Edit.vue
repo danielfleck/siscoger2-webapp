@@ -24,59 +24,45 @@
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="apfd"/>
         </div>
         <div class="q-pa-md col-12">
-          <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-4">
-          <Andamento v-model="register.id_andamento" type="apfd"/>
-        </div>
-        <div class="q-pa-md col-4">
-          <AndamentoCoger v-model="register.id_andamentocoger" type="apfd"/>
-        </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
-          <OPM v-model="register.cdopm" ref="opm" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <TipoBoletim v-model="register.doc_tipo"/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.abertura_data" label="Data da abertura"/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
-        </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
-        </div>
-        <div class="q-pa-md col-12">
-          <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-        </div>
+            <Prioridade v-model="register.prioridade"/>
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Tipo" v-model="register.tipo" :options="tipoApfd" />
+          </div>
+          <div class="q-pa-md col-4">
+            <OPM v-model="register.cdopm" ref="opm" required/>
+          </div>
+          <div class="q-pa-md col-4">
+            <AndamentoCoger v-model="register.id_andamentocoger" type="apfd"/>
+          </div>
+          <div class="q-pa-md col-4">
+            <InputDate v-model="register.fato_data" label="Data da fato" />
+          </div>
+           <div class="q-pa-md col-6">
+            <InputSelect tooltip="Do mais grave ao menos grave" label="Tipos penais" v-model="register.tipo_penal_novo" :options="crime" />
+          </div>
+          <div v-if="register.tipo_penal_novo === 'Outros'" class="q-pa-md col-4">
+            <InputText label="Documento de origem" v-model="register.especificar" ref="especificar" required/>
+          </div>
+          <div class="q-pa-md col-4">
+            <TipoBoletim v-model="register.doc_tipo"/>
+          </div>
+          <div class="q-pa-md col-4">
+            <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
+          </div>
+          <div class="q-pa-md col-4">
+            <InputText tooltip="Nº do processo e vara" label="Referencia da VAJME" v-model="register.referenciavajme" />
+          </div>
+          <div class="q-pa-md col-12">
+            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
+          </div>
         <template v-if="register.id">
-          <ProcedOrigem type="apfd" :data="{ id_apfd: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_apfd: register.id }"/>
+          <Membro label="Presidente" ref="presidente" required :data="{ situacao: 'presidente', id_apfd: register.id }"/>
+          <Membro label="Condutor" ref="condutor" required :data="{ situacao: 'condutor', id_apfd: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_apfd: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_apfd: register.id }"/>
+          <Acusado label="Acusado" :data="{ situacao: 'acusado', id_apfd: register.id }"/>
           <Vitima :data="{ id_apfd: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'apfd', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
-          <FileUpload label="Solução do Comandante" :data="{ proc: 'apfd', campo: 'solucao_cmt_file', id_proc: register.id}"/>
-          <FileUpload label="Solução CMT Geral" :data="{ proc: 'apfd', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
+          <!-- <FileUpload label="Relatório do Encarregado" :data="{ proc: 'apfd', campo: 'relatorio_encarregado_file', id_proc: register.id}"/> -->
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
@@ -85,8 +71,8 @@
         <movimento :data="{ id_apfd: register.id }"/>
       </q-tab-panel>
 
-      <q-tab-panel name="sobrestamentos" @transition="validateNavigation">
-        <sobrestamento @submit="changeAndamento" :data="{ id_apfd: register.id }"/>
+      <q-tab-panel name="reus" @transition="validateNavigation">
+        TODO
       </q-tab-panel>
 
       <q-tab-panel name="arquivos" @transition="validateNavigation">
@@ -125,22 +111,24 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogerapfd, andamentoapfd, motivoAberturaapfd, prorogacao, tipoBoletim } from 'src/config/selects'
+import { andamentoCogerAPFD, crime, tipoApfd } from 'src/config'
 import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Apfd } from 'src/types'
-import { api, errorNotify, validate } from 'src/services'
+import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
+  'tipo',
+  'cdopm',
+  'fato_data',
   'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
+  'tipo_penal',
+  'tipo_penal_novo',
+  'especificar',
+  'doc_tipo',
+  'doc_numero',
+  'exclusao_txt',
+  'opm_meta4',
+  'referenciavajme'
 ]
 export default defineComponent({
   name: 'Form',
@@ -173,41 +161,29 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        tipo: '',
         cdopm: '',
+        fato_data: new Date(),
+        sintese_txt: '',
+        tipo_penal: '',
+        tipo_penal_novo: '',
+        especificar: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
+        exclusao_txt: '',
         opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
+        referenciavajme: '',
         prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
         deletedAt: undefined
       } as Apfd,
-      andamentoCogerapfd,
-      andamentoapfd,
-      motivoAberturaapfd,
-      prorogacao,
-      tipoBoletim
+      cdopm: getUserCdopm(),
+      andamentoCogerAPFD,
+      crime,
+      tipoApfd
     })
 
     async function update () {

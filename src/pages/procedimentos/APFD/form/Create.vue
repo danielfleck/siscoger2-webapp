@@ -10,23 +10,20 @@
           <div class="q-pa-md col-12">
             <Prioridade v-model="register.prioridade"/>
           </div>
-          <div class="q-pa-md col-4">
-            <InputText label="Andamento" value="Andamento" disable/>
-          </div>
-          <div class="q-pa-md col-4">
-            <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-          </div>
-          <div class="q-pa-md col-4">
-            <InputDate v-model="register.fato_data" label="Data da fato" />
+          <div class="q-pa-md col-6">
+            <InputSelect label="Tipo" v-model="register.tipo" :options="tipoApfd" />
           </div>
           <div class="q-pa-md col-4">
             <OPM v-model="register.cdopm" ref="opm" required/>
           </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
-            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="apfd" :cdopm="register.cdopm"/>
-          </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+            <InputDate v-model="register.fato_data" label="Data da fato" />
+          </div>
+           <div class="q-pa-md col-6">
+            <InputSelect tooltip="Do mais grave ao menos grave" label="Tipos penais" v-model="register.tipo_penal_novo" :options="crime" />
+          </div>
+          <div v-if="register.tipo_penal_novo === 'Outros'" class="q-pa-md col-4">
+            <InputText label="Documento de origem" v-model="register.especificar" ref="especificar" required/>
           </div>
           <div class="q-pa-md col-4">
             <TipoBoletim v-model="register.doc_tipo"/>
@@ -35,13 +32,7 @@
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.abertura_data" label="Data da abertura"/>
-          </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturaapfd" />
-          </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+            <InputText tooltip="Nº do processo e vara" label="Referencia da VAJME" v-model="register.referenciavajme" />
           </div>
           <div class="q-pa-md col-12">
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
@@ -51,10 +42,10 @@
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
-          <ProcedOrigem type="apfd" :data="{ id_apfd: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_apfd: register.id }"/>
+          <Membro label="Presidente" ref="presidente" required :data="{ situacao: 'presidente', id_apfd: register.id }"/>
+          <Membro label="Condutor" ref="condutor" required :data="{ situacao: 'condutor', id_apfd: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_apfd: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_apfd: register.id }"/>
+          <Acusado label="Acusado" :data="{ situacao: 'acusado', id_apfd: register.id }"/>
           <Vitima :data="{ id_apfd: register.id }"/>
         </template>
       </q-step>
@@ -100,21 +91,23 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogerapfd, andamentoapfd, motivoAberturaapfd, prorogacao, tipoBoletim } from 'src/config/selects'
-import { apfd } from 'src/types'
+import { andamentoCogerAPFD, crime, tipoApfd } from 'src/config'
+import { Apfd } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
+  'tipo',
+  'cdopm',
+  'fato_data',
   'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
+  'tipo_penal',
+  'tipo_penal_novo',
+  'especificar',
+  'doc_tipo',
+  'doc_numero',
+  'exclusao_txt',
+  'opm_meta4',
+  'referenciavajme'
 ]
 
 export default defineComponent({
@@ -146,49 +139,36 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        tipo: '',
         cdopm: '',
+        fato_data: new Date(),
+        sintese_txt: '',
+        tipo_penal: '',
+        tipo_penal_novo: '',
+        especificar: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
+        exclusao_txt: '',
         opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
+        referenciavajme: '',
         prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
         deletedAt: undefined
-      },
+      } as Apfd,
       cdopm: getUserCdopm(),
-      andamentoCogerapfd,
-      andamentoapfd,
-      motivoAberturaapfd,
-      prorogacao,
-      tipoBoletim
+      andamentoCogerAPFD,
+      crime,
+      tipoApfd
     })
 
     async function create () {
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('apfd', vars.register, { silent: true, debug: true })
         if (ok) {
-          const apfd = data as apfd
+          const apfd = data as Apfd
           vars.register.id = Number(apfd.id)
           await handlePendence()
           return next()
