@@ -21,4 +21,6 @@ export type Desercao = {
   opm_meta4: string;
   referenciavajme: string;
   prioridade: number;
+  completo: boolean,
+  deletedAt?: Date
 };

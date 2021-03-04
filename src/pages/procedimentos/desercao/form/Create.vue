@@ -14,19 +14,10 @@
             <InputText label="Andamento" value="Andamento" disable/>
           </div>
           <div class="q-pa-md col-4">
-            <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-          </div>
-          <div class="q-pa-md col-4">
             <InputDate v-model="register.fato_data" label="Data da fato" />
           </div>
           <div class="q-pa-md col-4">
             <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
-            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="desercao" :cdopm="register.cdopm"/>
-          </div>
-          <div class="q-pa-md col-4">
-            <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
           </div>
           <div class="q-pa-md col-4">
             <TipoBoletim v-model="register.doc_tipo"/>
@@ -34,28 +25,39 @@
           <div class="q-pa-md col-4">
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
           </div>
-          <div class="q-pa-md col-4">
-            <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Termo exclusão/agregação" v-model="register.termo_exclusao" :options="termoExclusaoAgregacao" ref="termo_exclusao" required/>
+          </div>
+          <div class="q-pa-md col-6" v-if="register.termo_exclusao">
+            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_exclusao_pub" ref="termo_exclusao_pub" required/>
           </div>
           <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturadesercao" />
+            <InputSelect label="Motivo abertura" v-model="register.termo_captura" :options="termoApresentacaoCaptura" ref="termo_captura" required/>
           </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+          <div class="q-pa-md col-6" v-if="register.termo_captura">
+            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_captura_pub" ref="termo_captura_pub" required/>
           </div>
-          <div class="q-pa-md col-12">
-            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Motivo abertura" v-model="register.pericia" :options="desercaoPericia" ref="pericia" required/>
+          </div>
+          <div class="q-pa-md col-6" v-if="register.pericia">
+            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.pericia_pub" ref="pericia_pub" required/>
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Motivo abertura" v-model="register.termo_inclusao" :options="termoInclusaoReversao" ref="termo_inclusao" required/>
+          </div>
+          <div class="q-pa-md col-6" v-if="register.termo_inclusao">
+            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_inclusao_pub" ref="termo_inclusao_pub" required/>
+          </div>
+          <div class="q-pa-md col-6">
+            <InputText tooltip="Nº do processo, vara" label="Referencia VAJME" v-model="register.referenciavajme" ref="referenciavajme" required/>
           </div>
         </form>
       </q-step>
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
-          <ProcedOrigem type="desercao" :data="{ id_desercao: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_desercao: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_desercao: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_desercao: register.id }"/>
-          <Vitima :data="{ id_desercao: register.id }"/>
+          <Acusado label="Desertor" :data="{ situacao: 'desertor', id_desercao: register.id }"/>
         </template>
       </q-step>
 
@@ -100,21 +102,26 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogerdesercao, andamentodesercao, motivoAberturadesercao, prorogacao, tipoBoletim } from 'src/config/selects'
-import { desercao } from 'src/types'
+import { andamentoCogerDesercao, termoExclusaoAgregacao, termoApresentacaoCaptura, desercaoPericia, termoInclusaoReversao } from 'src/config'
+import { Desercao } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
+  'decorrenciaconselho',
+  'cdopm',
+  'fato_data',
+  'doc_tipo',
+  'doc_numero',
+  'termo_exclusao',
+  'termo_exclusao_pub',
+  'termo_captura',
+  'termo_captura_pub',
+  'pericia',
+  'pericia_pub',
+  'termo_inclusao',
+  'termo_inclusao_pub',
+  'opm_meta4',
+  'referenciavajme',
 ]
 
 export default defineComponent({
@@ -146,49 +153,41 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        decorrenciaconselho: '',
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
         cdopm: '',
+        fato_data: new Date(),
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
+        termo_exclusao: '',
+        termo_exclusao_pub: '',
+        termo_captura: '',
+        termo_captura_pub: '',
+        pericia: '',
+        pericia_pub: '',
+        termo_inclusao: '',
+        termo_inclusao_pub: '',
         opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        referenciavajme: '',
+        prioridade: 0,
         deletedAt: undefined
-      },
+      } as Desercao,
       cdopm: getUserCdopm(),
-      andamentoCogerdesercao,
-      andamentodesercao,
-      motivoAberturadesercao,
-      prorogacao,
-      tipoBoletim
+      andamentoCogerDesercao,
+      termoExclusaoAgregacao,
+      termoApresentacaoCaptura,
+      desercaoPericia,
+      termoInclusaoReversao,
     })
 
     async function create () {
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('desercao', vars.register, { silent: true, debug: true })
         if (ok) {
-          const desercao = data as desercao
+          const desercao = data as Desercao
           vars.register.id = Number(desercao.id)
           await handlePendence()
           return next()
@@ -226,7 +225,7 @@ export default defineComponent({
         pendencias: ['incompleto'],
         state: [vars.register]
       })
-      incompleteProc(root, String(_id))
+      incompleteProc(root, '',_id))
     }
 
     async function subforms () {
@@ -242,7 +241,7 @@ export default defineComponent({
     const previous = () => refs.stepper.previous()
 
     async function getPendence () {
-      vars.incompleto = String(root.$route.query.incompleto)
+      vars.incompleto = '',root.$route.query.incompleto)
       const state = await getPendenceById(vars.incompleto)
       if (state?.length) vars.register = state[0]
       next()
@@ -252,8 +251,6 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       getPendence()
     }
-
-    console.log(root.$route.fullPath)
 
     return {
       ...toRefs(vars),
