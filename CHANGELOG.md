@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.45.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.44.0...v0.45.0) (2021-03-04)
+
+
+### Features
+
+* add ipm basic module ([fab3fa1](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/fab3fa1a972c21d5c74fe92c23c27ae19d12e303))
+
 ## [0.44.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.43.0...v0.44.0) (2021-03-04)
 
 
