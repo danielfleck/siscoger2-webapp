@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.46.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.45.0...v0.46.0) (2021-03-04)
+
+
+### Features
+
+* add fatd basic module ([f5ccfe2](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/f5ccfe2186a90a695bd1cb7713ca658398db4c73))
+
 ## [0.45.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.44.0...v0.45.0) (2021-03-04)
 
 
