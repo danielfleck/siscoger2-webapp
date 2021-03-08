@@ -21,22 +21,22 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { changeDate, getOpmByCode } from 'src/filters'
+import { changeDate } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { adl, Columns } from 'src/types'
+import { Adl, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Andamento',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly adl[],
+      data: [] as readonly Adl[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
         { name: 'fato', label: 'Fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'prescricao_data', label: 'Prescrição', field: 'prescricao_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val):string => val ? String(val) : 'Não há', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
@@ -46,14 +46,14 @@ export default defineComponent({
 
     async function loadData () {
       const { data } = await api.get('adl')
-      vars.data = Object.freeze(data as adl[])
+      vars.data = Object.freeze(data as Adl[])
     }
 
-    function onEdit (row: adl) {
+    function onEdit (row: Adl) {
       void root.$router.push(`/adl/editar/${row.id}`)
     }
 
-    function onDelete (row: adl) {
+    function onDelete (row: Adl) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`adl/${row.id}`)
         if (ok) void loadData()

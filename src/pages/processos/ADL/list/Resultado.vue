@@ -24,35 +24,36 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { adl, Columns } from 'src/types'
+import { Adl, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Resultado',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly adl[],
+      data: [] as readonly Adl[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
-        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'sindicado', label: 'Sindicado', field: 'name', sortable: true },
+        { name: 'fato_data', label: 'Data do fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'acusado', label: 'Acusado', field: 'name', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
-        { name: 'resultado', label: 'Resultado', field: 'resultado', sortable: true },
+        { name: 'parecer_comissao', label: 'Comissao', field: 'parecer_comissao', sortable: true },
+        { name: 'parecer_cmtgeral', label: 'Cmt. Geral', field: 'parecer_cmtgeral', sortable: true },
+        { name: 'julgamento', label: 'julgamento*', field: 'julgamento', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('adl/resultado')
-      vars.data = Object.freeze(data as adl[])
+      vars.data = Object.freeze(data as Adl[])
     }
 
-    function onEdit (row: adl) {
+    function onEdit (row: Adl) {
       void root.$router.push(`/adl/editar/${row.id}`)
     }
 
-    function onDelete (row: adl) {
+    function onDelete (row: Adl) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`adl/${row.id}`)
         if (ok) void loadData()
