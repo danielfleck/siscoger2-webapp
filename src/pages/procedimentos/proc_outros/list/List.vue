@@ -23,7 +23,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { proc_outros, Columns } from 'src/types'
+import { ProcOutros, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 
 export default defineComponent({
@@ -31,25 +31,28 @@ export default defineComponent({
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly proc_outros[],
+      data: [] as readonly ProcOutros[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'cdopm', label: 'OPM (abertura)', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'cdopm_apuracao', label: 'OPM (apuração)', field: 'cdopm_apuracao', format: (val) => getOpmByCode(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'motivo_abertura', label: 'Motivo Principal', field: 'motivo_abertura', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'doc_origem', label: 'Dpcumento Origem', field: 'doc_origem', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('proc_outros/andamento')
-      vars.data = Object.freeze(data as proc_outros[])
+      vars.data = Object.freeze(data as ProcOutros[])
     }
 
-    function onEdit (row: proc_outros) {
+    function onEdit (row: ProcOutros) {
       void root.$router.push(`/proc_outros/editar/${row.id}`)
     }
 
-    function onDelete (row: proc_outros) {
+    function onDelete (row: ProcOutros) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`proc_outros/${row.id}`)
         if (ok) void loadData()

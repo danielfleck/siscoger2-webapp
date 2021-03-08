@@ -1,8 +1,7 @@
 <template>
   <q-tab-panel name="prazos">
     <q-banner class="bg-green text-white">
-      Calculo do prazo dos proc_outros - contado em dias uteis, EXCLUI-SE o primeiro dia. (Portaria 338)
-      Sao descontados os dias em que o procedimento ficou sobrestado.
+      Tempo de andamento dos proc_outros.
       <template v-slot:action>
         Data de referência: HOJE ({{ today }})
       </template>
@@ -32,7 +31,7 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { proc_outros, Columns } from 'src/types'
+import { ProcOutros, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Prazos',
@@ -40,31 +39,36 @@ export default defineComponent({
   setup (_, { root }) {
     const vars = reactive({
       today: getCurrentDate('pt-br'),
-      data: [] as readonly proc_outros[],
+      data: [] as readonly ProcOutros[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
-        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val) => val || 'Não há', sortable: true },
+        { name: 'cdopm', label: 'OPM (abertura)', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'cdopm_apuracao', label: 'OPM (apuração)', field: 'cdopm_apuracao', format: (val) => getOpmByCode(val) },
+        { name: 'data', label: 'Data Fato', field: 'data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'abertura_data', label: 'Data Recebimento', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'limite_data', label: 'Data limite', field: 'limite_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
-        { name: 'diasuteis_sobrestado', label: 'Sobrestamento', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
-        { name: 'motivo_sobrestado', label: 'Motivo Sobrest.', field: 'motivo_sobrestado', format: (val, row) => getPrazoDecorrido(val, row), sortable: true },
-        { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
+        { name: 'diasuteis_sobrestado', label: 'Dias úteis totais*', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
+        { name: 'diasuteis_sobrestado', label: 'Dias totais*', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
+        { name: 'diasuteis_sobrestado', label: 'Dias úteis decorridos*', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
+        { name: 'diasuteis_sobrestado', label: 'Dias decorridos*', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
+        { name: 'diasuteis_sobrestado', label: 'Dias úteis faltando*', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
+        { name: 'diasuteis_sobrestado', label: 'Dias faltando*', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('proc_outros/andamento')
-      vars.data = Object.freeze(data as proc_outros[])
+      vars.data = Object.freeze(data as ProcOutros[])
     }
 
-    function onEdit (row: proc_outros) {
+    function onEdit (row: ProcOutros) {
       void root.$router.push(`/proc_outros/editar/${row.id}`)
     }
 
-    function onDelete (row: proc_outros) {
+    function onDelete (row: ProcOutros) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`proc_outros/${row.id}`)
         if (ok) void loadData()

@@ -1,9 +1,9 @@
 <template>
-  <q-tab-panel name="rel_situacao">
+  <q-tab-panel name="envolvidos">
     <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/proc_outros/inserir"/>
     <Table
       data-cy="table"
-      label="Rel. Situação"
+      label="Envolvidos"
       :data="data"
       :columns="columns"
       actions
@@ -23,37 +23,37 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { proc_outros, Columns } from 'src/types'
+import { ProcOutros, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
 
 export default defineComponent({
-  name: 'RelSituacao',
+  name: 'Envolvidos',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly proc_outros[],
+      data: [] as readonly ProcOutros[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
-        { name: 'fato', label: 'Fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'portaria', label: 'Portaria', field: 'portaria_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'sol_cmt', label: 'Sol. OPM', field: 'sol_cmt_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'sol_cmtgeral', label: 'Sol. CG', field: 'sol_cmtgeral_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'cdopm', label: 'OPM (abertura)', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'data', label: 'Data Fato', field: 'data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'abertura_data', label: 'Data Recebimento', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'digitador', label: 'Digitador', field: 'digitador', sortable: true },
+        { name: 'envolvidos', label: 'Envolvidos*', field: 'envolvidos', sortable: true },
+        { name: 'ofendidos', label: 'Ofendidos*', field: 'ofendidos', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('proc_outros')
-      vars.data = Object.freeze(data as proc_outros[])
+      vars.data = Object.freeze(data as ProcOutros[])
     }
 
-    function onEdit (row: proc_outros) {
+    function onEdit (row: ProcOutros) {
       void root.$router.push(`/proc_outros/editar/${row.id}`)
     }
 
-    function onDelete (row: proc_outros) {
+    function onDelete (row: ProcOutros) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`proc_outros/${row.id}`)
         if (ok) void loadData()

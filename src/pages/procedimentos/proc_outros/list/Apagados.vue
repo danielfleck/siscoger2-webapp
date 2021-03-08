@@ -23,40 +23,44 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
+import { getOpmByCode } from 'src/filters'
 import { api, confirm } from 'src/services'
-import { proc_outros, Columns } from 'src/types'
+import { ProcOutros, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly proc_outros[],
+      data: [] as readonly ProcOutros[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
+        { name: 'cdopm', label: 'OPM (abertura)', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'cdopm_apuracao', label: 'OPM (apuração)', field: 'cdopm_apuracao', format: (val) => getOpmByCode(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'motivo_abertura', label: 'Motivo Principal', field: 'motivo_abertura', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'doc_origem', label: 'Dpcumento Origem', field: 'doc_origem', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('proc_outros/deleted')
-      vars.data = Object.freeze(data as proc_outros[])
+      vars.data = Object.freeze(data as ProcOutros[])
     }
 
-    function onEdit (row: proc_outros) {
+    function onEdit (row: ProcOutros) {
       void root.$router.push(`/proc_outros/editar/${row.id}`)
     }
 
-    function onRestore (row: proc_outros) {
+    function onRestore (row: ProcOutros) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`proc_outros/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: proc_outros) {
+    function onDelete (row: ProcOutros) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`proc_outros/${row.id}/force`)
         if (ok) void loadData()

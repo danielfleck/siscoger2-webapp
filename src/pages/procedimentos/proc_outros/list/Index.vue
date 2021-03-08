@@ -55,7 +55,7 @@ export default defineComponent({
       breadcrumbs: [] as Link[],
       tabs: [
         { link: '/proc_outros/lista', label: 'Consulta' },
-        { link: '/proc_outros/rel_situacao', label: 'Rel.  Situação' },
+        { link: '/proc_outros/envolvidos', label: 'Envolvidos' },
         { link: '/proc_outros/andamento', label: 'Andamento' },
         { link: '/proc_outros/resultado', label: 'Resultado' },
         { link: '/proc_outros/prazos', label: 'Prazos' },
