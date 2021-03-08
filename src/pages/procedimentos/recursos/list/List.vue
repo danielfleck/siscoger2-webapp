@@ -23,7 +23,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { recursos, Columns } from 'src/types'
+import { Recurso, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 
 export default defineComponent({
@@ -31,25 +31,26 @@ export default defineComponent({
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly recursos[],
+      data: [] as readonly Recurso[],
       columns: [
+        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'Procedimento', label: 'Procedimento', field: 'procedimento', sortable: true },
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
-        { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
+        { name: 'datahora', label: 'Data-hora recebimento', field: 'datahora' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('recursos/andamento')
-      vars.data = Object.freeze(data as recursos[])
+      vars.data = Object.freeze(data as Recurso[])
     }
 
-    function onEdit (row: recursos) {
+    function onEdit (row: Recurso) {
       void root.$router.push(`/recursos/editar/${row.id}`)
     }
 
-    function onDelete (row: recursos) {
+    function onDelete (row: Recurso) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`recursos/${row.id}`)
         if (ok) void loadData()
