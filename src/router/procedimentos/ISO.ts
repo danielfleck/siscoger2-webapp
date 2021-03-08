@@ -12,10 +12,8 @@ export default [
         children: [
           { path: 'lista', component: () => import('pages/procedimentos/ISO/list/List.vue'), meta: { auth: true, ...isoRules.toShow } },
           { path: 'andamento', component: () => import('pages/procedimentos/ISO/list/Andamento.vue'), meta: { auth: true, ...isoRules.toShow } },
-          { path: 'apagados', component: () => import('pages/procedimentos/ISO/list/Apagados.vue'), meta: { auth: true, ...isoRules.toShow } },
-          { path: 'prazos', component: () => import('pages/procedimentos/ISO/list/Prazos.vue'), meta: { auth: true, ...isoRules.toShow } },
-          { path: 'rel_situacao', component: () => import('pages/procedimentos/ISO/list/RelSituacao.vue'), meta: { auth: true, ...isoRules.toShow } },
-          { path: 'resultado', component: () => import('pages/procedimentos/ISO/list/Resultado.vue'), meta: { auth: true, ...isoRules.toShow } }
+          { path: 'apagados', component: () => import('pages/procedimentos/ISO/list/Apagados.vue'), meta: { auth: true, ...isoRules.toDelete } },
+          { path: 'prazos', component: () => import('pages/procedimentos/ISO/list/Prazos.vue'), meta: { auth: true, ...isoRules.toShow } }
         ]
       }
     ]

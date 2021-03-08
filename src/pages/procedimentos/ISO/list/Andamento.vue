@@ -24,14 +24,14 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { iso, Columns } from 'src/types'
+import { Iso, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Andamento',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly iso[],
+      data: [] as readonly Iso[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -46,14 +46,14 @@ export default defineComponent({
 
     async function loadData () {
       const { data } = await api.get('iso')
-      vars.data = Object.freeze(data as iso[])
+      vars.data = Object.freeze(data as Iso[])
     }
 
-    function onEdit (row: iso) {
+    function onEdit (row: Iso) {
       void root.$router.push(`/iso/editar/${row.id}`)
     }
 
-    function onDelete (row: iso) {
+    function onDelete (row: Iso) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`iso/${row.id}`)
         if (ok) void loadData()

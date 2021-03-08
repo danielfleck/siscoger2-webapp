@@ -24,14 +24,14 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { api, confirm } from 'src/services'
-import { iso, Columns } from 'src/types'
+import { Iso, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly iso[],
+      data: [] as readonly Iso[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -42,21 +42,21 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('iso/deleted')
-      vars.data = Object.freeze(data as iso[])
+      vars.data = Object.freeze(data as Iso[])
     }
 
-    function onEdit (row: iso) {
+    function onEdit (row: Iso) {
       void root.$router.push(`/iso/editar/${row.id}`)
     }
 
-    function onRestore (row: iso) {
+    function onRestore (row: Iso) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`iso/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: iso) {
+    function onDelete (row: Iso) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`iso/${row.id}/force`)
         if (ok) void loadData()

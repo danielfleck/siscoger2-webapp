@@ -1,8 +1,7 @@
 <template>
   <q-tab-panel name="prazos">
     <q-banner class="bg-green text-white">
-      Calculo do prazo dos iso - contado em dias uteis, EXCLUI-SE o primeiro dia. (Portaria 338)
-      Sao descontados os dias em que o procedimento ficou sobrestado.
+      Calculo do prazo dos iso - contado em dias corridos, conta-se o primeiro dia.
       <template v-slot:action>
         Data de referência: HOJE ({{ today }})
       </template>
@@ -29,10 +28,10 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
+import { changeDate, getCurrentDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { iso, Columns } from 'src/types'
+import { Iso, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Prazos',
@@ -40,7 +39,7 @@ export default defineComponent({
   setup (_, { root }) {
     const vars = reactive({
       today: getCurrentDate('pt-br'),
-      data: [] as readonly iso[],
+      data: [] as readonly Iso[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
@@ -49,22 +48,20 @@ export default defineComponent({
         { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val) => val || 'Não há', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
-        { name: 'diasuteis_sobrestado', label: 'Sobrestamento', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
-        { name: 'motivo_sobrestado', label: 'Motivo Sobrest.', field: 'motivo_sobrestado', format: (val, row) => getPrazoDecorrido(val, row), sortable: true },
         { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('iso/andamento')
-      vars.data = Object.freeze(data as iso[])
+      vars.data = Object.freeze(data as Iso[])
     }
 
-    function onEdit (row: iso) {
+    function onEdit (row: Iso) {
       void root.$router.push(`/iso/editar/${row.id}`)
     }
 
-    function onDelete (row: iso) {
+    function onDelete (row: Iso) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`iso/${row.id}`)
         if (ok) void loadData()
