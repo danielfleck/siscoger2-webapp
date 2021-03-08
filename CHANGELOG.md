@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.47.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.46.0...v0.47.0) (2021-03-08)
+
+
+### Features
+
+* implement adl lists ([8176ba6](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/8176ba6e1d0cd96469a35227c2f61e00e1fe8530))
+* implement iso lists ([c9314f8](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/c9314f8294c73489fae58b783193de3aa04e060e))
+* implement proc_outros lists ([ad9f427](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ad9f4276ff8a66bb0db290b5371e13afd1d840a0))
+* implement recurso lists ([2013f08](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/2013f083deaf1805a241d2a2a459a256e0b155ba))
+
 ## [0.46.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.45.0...v0.46.0) (2021-03-04)
 
 
