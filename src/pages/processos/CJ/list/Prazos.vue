@@ -63,7 +63,7 @@ export default defineComponent({
       void root.$router.push(`/cj/editar/${row.id}`)
     }
 
-    function onDelete (row: cj) {
+    function onDelete (row: Cj) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`cj/${row.id}`)
         if (ok) void loadData()

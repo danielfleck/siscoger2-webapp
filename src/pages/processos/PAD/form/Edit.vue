@@ -32,9 +32,6 @@
         <div class="q-pa-md col-4">
           <AndamentoCoger v-model="register.id_andamentocoger" type="pad"/>
         </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
-        </div>
         <div class="q-pa-md col-4">
           <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
         </div>
@@ -44,11 +41,11 @@
         <div class="q-pa-md col-4">
           <OPM v-model="register.cdopm" ref="opm" required/>
         </div>
-        <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
+        <div class="q-pa-md col-4" v-if="register.cdopm">
+          <Portaria label="Nº da portaria de designação" v-model="register.portaria_numero" ref="portaria_numero" required proc="pad" :cdopm="register.cdopm"/>
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+          <InputDate v-model="register.portaria_data" label="Data da portaria de designação" ref="portaria_data" required/>
         </div>
         <div class="q-pa-md col-4">
           <TipoBoletim v-model="register.doc_tipo"/>
@@ -59,24 +56,17 @@
         <div class="q-pa-md col-4">
           <InputDate v-model="register.abertura_data" label="Data da abertura"/>
         </div>
-        <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
-        </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
-        </div>
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
         <template v-if="register.id">
-          <ProcedOrigem type="pad" :data="{ id_pad: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_pad: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_pad: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_pad: register.id }"/>
-          <Vitima :data="{ id_pad: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'pad', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
-          <FileUpload label="Solução do Comandante" :data="{ proc: 'pad', campo: 'solucao_cmt_file', id_proc: register.id}"/>
-          <FileUpload label="Solução CMT Geral" :data="{ proc: 'pad', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_pad: register.id }"/>
+          <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_pad: register.id }"/>
+          <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_pad: register.id }"/>
+          <Vitima label="Civis envolvidos (Pessoa física, Apenas se houver)" :data="{ id_pad: register.id }"/>
+          <!-- <Pj label="Pessoas juridicas envolvidas" :data="{ id_pad: register.id }"/> -->
+          <FileUpload label="Relatorio" :data="{ proc: 'pad', campo: 'relatorio_file', id_proc: register.id}"/>
+          <FileUpload label="Solucao" :data="{ proc: 'pad', campo: 'solucao_file', id_proc: register.id}"/>
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
@@ -125,10 +115,8 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogerpad, andamentopad, motivoAberturapad, prorogacao, tipoBoletim } from 'src/config/selects'
-import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
-import { pad } from 'src/types'
+import { Pad } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
@@ -173,41 +161,24 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        doc_origem_txt: '', // text
+        fato_data: new Date(),
         cdopm: '',
+        sintese_txt: '', // text
+        portaria_numero: '',
+        portaria_data: new Date(),
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
+        abertura_data: new Date(),
         relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        solucao_file: '',
+        prioridade: 0,
         deletedAt: undefined
-      } as pad,
-      andamentoCogerpad,
-      andamentopad,
-      motivoAberturapad,
-      prorogacao,
-      tipoBoletim
+      } as Pad,
     })
 
     async function update () {
@@ -247,7 +218,7 @@ export default defineComponent({
       const { id } = root.$route.params
       if (id) {
         const { data, ok } = await api.get(`pad/${id}`)
-        if (ok) vars.register = data as pad
+        if (ok) vars.register = data as Pad
       }
     }
 
@@ -264,7 +235,6 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
-      denseVal: computed(() => getDense(root)),
       update,
       changeAndamento,
       validateNavigation

@@ -23,10 +23,10 @@
             <OPM v-model="register.cdopm" ref="opm" required/>
           </div>
           <div class="q-pa-md col-4" v-if="register.cdopm">
-            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="pad" :cdopm="register.cdopm"/>
+            <Portaria label="Nº da portaria de designação" v-model="register.portaria_numero" ref="portaria_numero" required proc="pad" :cdopm="register.cdopm"/>
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+            <InputDate v-model="register.portaria_data" label="Data da portaria de designação" ref="portaria_data" required/>
           </div>
           <div class="q-pa-md col-4">
             <TipoBoletim v-model="register.doc_tipo"/>
@@ -37,12 +37,6 @@
           <div class="q-pa-md col-4">
             <InputDate v-model="register.abertura_data" label="Data da abertura"/>
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturapad" />
-          </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
-          </div>
           <div class="q-pa-md col-12">
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
           </div>
@@ -51,11 +45,11 @@
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
-          <ProcedOrigem type="pad" :data="{ id_pad: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_pad: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_pad: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_pad: register.id }"/>
-          <Vitima :data="{ id_pad: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_pad: register.id }"/>
+          <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_pad: register.id }"/>
+          <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_pad: register.id }"/>
+          <Vitima label="Civis envolvidos (Pessoa física, Apenas se houver)" :data="{ id_pad: register.id }"/>
+          <!-- <Pj label="Pessoas juridicas envolvidas" :data="{ id_pad: register.id }"/> -->
         </template>
       </q-step>
 
@@ -100,8 +94,7 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogerpad, andamentopad, motivoAberturapad, prorogacao, tipoBoletim } from 'src/config/selects'
-import { pad } from 'src/types'
+import { Pad } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
@@ -146,49 +139,32 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        doc_origem_txt: '', // text
+        fato_data: new Date(),
         cdopm: '',
+        sintese_txt: '', // text
+        portaria_numero: '',
+        portaria_data: new Date(),
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
+        abertura_data: new Date(),
         relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        solucao_file: '',
+        prioridade: 0,
         deletedAt: undefined
-      },
+      } as Pad,
       cdopm: getUserCdopm(),
-      andamentoCogerpad,
-      andamentopad,
-      motivoAberturapad,
-      prorogacao,
-      tipoBoletim
     })
 
     async function create () {
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('pad', vars.register, { silent: true, debug: true })
         if (ok) {
-          const pad = data as pad
+          const pad = data as Pad
           vars.register.id = Number(pad.id)
           await handlePendence()
           return next()

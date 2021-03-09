@@ -17,4 +17,6 @@ export type Pad = {
   relatorio_file: string;
   solucao_file: string;
   prioridade: number;
+  completo?: boolean;
+  deletedAt?: Date;
 };
