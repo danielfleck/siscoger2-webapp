@@ -141,7 +141,7 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'import { getDense } from 'src/store/utils'
+import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Cd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
@@ -263,7 +263,7 @@ export default defineComponent({
       const { id } = root.$route.params
       if (id) {
         const { data, ok } = await api.get(`cd/${id}`)
-        if (ok) vars.register = data as cd
+        if (ok) vars.register = data as Cd
       }
     }
 
@@ -280,7 +280,6 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
-      denseVal: computed(() => getDense(root)),
       update,
       changeAndamento,
       validateNavigation

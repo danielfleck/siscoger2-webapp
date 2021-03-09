@@ -1,7 +1,7 @@
 <template>
   <page :breadcrumbs="[
-  { label: 'Lista', link: '/cj/lista' },
-  { label: 'Editar', link: '/cj/editar' },
+  { label: 'Lista', link: '/cd/lista' },
+  { label: 'Editar', link: '/cd/editar' },
   ]">
     <q-tabs
       v-model="tab"
@@ -21,31 +21,31 @@
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
         <div  class="q-pa-md col-12">
-          <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="cj"/>
+          <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="cd"/>
         </div>
         <div class="q-pa-md col-12">
           <Prioridade v-model="register.prioridade"/>
         </div>
         <div class="q-pa-md col-4">
-          <Andamento v-model="register.id_andamento" type="cj"/>
+          <Andamento v-model="register.id_andamento" type="cd"/>
         </div>
         <div class="q-pa-md col-4">
-          <AndamentoCoger v-model="register.id_andamentocoger" type="cj"/>
+          <AndamentoCoger v-model="register.id_andamentocoger" type="cd"/>
         </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
+        <div class="q-pa-md col-6">
+          <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturacd" />
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
+        </div>
+        <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+          <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
-          <OPM v-model="register.cdopm" ref="opm" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
+          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="cd" :cdopm="register.cdopm"/>
         </div>
         <div class="q-pa-md col-4">
           <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
@@ -57,40 +57,56 @@
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+          <InputDate v-model="register.fato_data" label="Data da fato" />
         </div>
         <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
+          <InputDate v-model="register.abertura_data" label="Data da abertura" />
         </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
+        <div class="q-pa-md col-4">
+          <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
         </div>
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
         <template v-if="register.id">
-          <ProcedOrigem type="cj" :data="{ id_cj: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_cj: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_cj: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_cj: register.id }"/>
-          <Vitima :data="{ id_cj: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'cj', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
-          <FileUpload label="Solução do Comandante" :data="{ proc: 'cj', campo: 'solucao_cmt_file', id_proc: register.id}"/>
-          <FileUpload label="Solução CMT Geral" :data="{ proc: 'cj', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
+          <ProcedOrigem type="cd" :data="{ id_cd: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cd: register.id }"/>
+          <Membro label="Escrivão" ref="Escrivão" :data="{ situacao: 'Escrivão', id_cd: register.id }"/>
+          <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_cd: register.id }"/>
+          <Acusado label="Acusado" :data="{ id_cd: register.id }"/>
+          <Vitima :data="{ id_cd: register.id }"/>
+          <FileUpload label="Libelo" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Resumo do parecer da comissão" v-model="register.parecer_comissao" :options="parecerComissao" />
+          </div>
+          <FileUpload label="Parecer Comissão" :data="{ proc: 'cd', campo: 'parecer_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Resumo do parecer do Cmt. Geral" v-model="register.parecer_cmtgeral" :options="parecerCmtgeral" />
+          </div>
+          <FileUpload label="Decisão do Cmt Geral" :data="{ proc: 'cd', campo: 'decisao_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-4">
+            <InputText label="Documento da prorrogação de prazo" v-model="register.doc_prorrogacao" />
+          </div>
+
+          <FileUpload label="Reconsideração de ato (solução)" :data="{ proc: 'cd', campo: 'rec_ato_file', id_proc: register.id}"/>
+          <FileUpload label="Recurso ao Governador (solução)" :data="{ proc: 'cd', campo: 'stj_file', id_proc: register.id}"/>
+
+          <FileUpload label="TJ-PR" :data="{ proc: 'cd', campo: 'tjpr_file', id_proc: register.id}"/>
+          <FileUpload label="STJ/STF" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
 
       <q-tab-panel name="movimentos">
-        <movimento :data="{ id_cj: register.id }"/>
+        <movimento :data="{ id_cd: register.id }"/>
       </q-tab-panel>
 
       <q-tab-panel name="sobrestamentos" @transition="validateNavigation">
-        <sobrestamento @submit="changeAndamento" :data="{ id_cj: register.id }"/>
+        <sobrestamento @submit="changeAndamento" :data="{ id_cd: register.id }"/>
       </q-tab-panel>
 
       <q-tab-panel name="arquivos" @transition="validateNavigation">
-        <arquivo :data="{ id_cj: register.id }"/>
+        <arquivo :data="{ id_cd: register.id }"/>
       </q-tab-panel>
     </q-tab-panels>
 
@@ -125,11 +141,10 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogercj, andamentocj, motivoAberturacj, prorogacao, tipoBoletim } from 'src/config/selects'
-import { getDense } from 'src/store/utils'
+import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
-import { cj } from 'src/types'
-import { api, errorNotify, validate } from 'src/services'
+import { Cd } from 'src/types'
+import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -174,40 +189,44 @@ export default defineComponent({
       register: {
         id: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        id_andamento: 0,
+        id_motivoconselho: 0,
+        id_decorrenciaconselho: 0,
+        id_situacaoconselho: 0,
+        motivo_outros: '',
         cdopm: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        abertura_data: new Date(),
+        fato_data: new Date(),
+        libelo_file: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
         portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
+        portaria_data: new Date(),
+        parecer_file: '',
+        decisao_file: '',
+        doc_prorrogacao: '',
+        numero_tj: '',
+        prescricao_data: new Date(),
+        exclusao_text: '',
+        rec_ato_file: '',
+        rec_gov_file: '',
         opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
+        ac_desempenho_bl: '',
+        ac_conduta_bl: '',
+        ac_honra_bl: '',
+        tjpr_file: '',
+        sjd_file: '',
+        sintese_text: '',
         prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        outromotivo: '',
         deletedAt: undefined
-      } as cj,
-      andamentoCogercj,
-      andamentocj,
-      motivoAberturacj,
-      prorogacao,
-      tipoBoletim
+      } as Cj,
+      cdopm: getUserCdopm(),
+      motivoAberturaCd,
+      decorrenciaConselho,
+      situacaoServicoOuFora
     })
 
     async function update () {
@@ -216,8 +235,8 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`cj/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/cj/lista')
+          const { ok } = await api.put(`cd/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push('/cd/lista')
         }
       }
     }
@@ -226,17 +245,17 @@ export default defineComponent({
       if (!vars.register.id) return
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
-        vars.register.id_andamento = getSobrestamento('cj')
-        const { ok } = await api.put(`cj/${id}`, vars.register, { silent: true })
+        vars.register.id_andamento = getSobrestamento('cd')
+        const { ok } = await api.put(`cd/${id}`, vars.register, { silent: true })
         if (ok) return
       }
-      vars.register.id_andamento = getAndamento('cj')
-      await api.put(`cj/${id}`, vars.register, { silent: true })
+      vars.register.id_andamento = getAndamento('cd')
+      await api.put(`cd/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`cj/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`cd/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -246,8 +265,8 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`cj/${id}`)
-        if (ok) vars.register = data as cj
+        const { data, ok } = await api.get(`cd/${id}`)
+        if (ok) vars.register = data as Cd
       }
     }
 
@@ -264,7 +283,6 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
-      denseVal: computed(() => getDense(root)),
       update,
       changeAndamento,
       validateNavigation

@@ -35,6 +35,8 @@ export type Cd = {
   sintese_txt: string
   outromotivo: string
   prioridade: boolean
+  completo: boolean
+  parecer_comissao: string
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date

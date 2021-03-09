@@ -26,7 +26,7 @@
             <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
           </div>
           <div class="q-pa-md col-4">
-            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="cd" :cdopm="register.cdopm"/>
+            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
           </div>
           <div class="q-pa-md col-4">
             <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
@@ -191,7 +191,7 @@ export default defineComponent({
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('cd', vars.register, { silent: true, debug: true })
         if (ok) {
-          const cd = data as cd
+          const cd = data as Cd
           vars.register.id = Number(cd.id)
           await handlePendence()
           return next()
@@ -229,7 +229,7 @@ export default defineComponent({
         pendencias: ['incompleto'],
         state: [vars.register]
       })
-      incompleteProc(root, '',(_id))
+      incompleteProc(root, String(_id))
     }
 
     async function subforms () {
