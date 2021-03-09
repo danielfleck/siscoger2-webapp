@@ -31,7 +31,11 @@ export type Cd = {
   ac_honra_bl: string
   tjpr_file: string
   sjd_file: string
-  createdAt: Date
-  updatedAt: Date
-  deletedAt: Date
+  prescricao_data: Date
+  sintese_txt: string
+  outromotivo: string
+  prioridade: boolean
+  createdAt?: Date
+  updatedAt?: Date
+  deletedAt?: Date
 }

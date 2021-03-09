@@ -32,20 +32,20 @@
         <div class="q-pa-md col-4">
           <AndamentoCoger v-model="register.id_andamentocoger" type="cd"/>
         </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
+        <div class="q-pa-md col-6">
+          <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturacd" />
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
+        </div>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
+        </div>
+        <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+          <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
-          <OPM v-model="register.cdopm" ref="opm" required/>
-        </div>
-        <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
+          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="cd" :cdopm="register.cdopm"/>
         </div>
         <div class="q-pa-md col-4">
           <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
@@ -57,26 +57,42 @@
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+          <InputDate v-model="register.fato_data" label="Data da fato" />
         </div>
         <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
+          <InputDate v-model="register.abertura_data" label="Data da abertura" />
         </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
+        <div class="q-pa-md col-4">
+          <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
         </div>
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
         </div>
         <template v-if="register.id">
           <ProcedOrigem type="cd" :data="{ id_cd: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_cd: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_cd: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_cd: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cd: register.id }"/>
+          <Membro label="Escrivão" ref="Escrivão" :data="{ situacao: 'Escrivão', id_cd: register.id }"/>
+          <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_cd: register.id }"/>
+          <Acusado label="Acusado" :data="{ id_cd: register.id }"/>
           <Vitima :data="{ id_cd: register.id }"/>
-          <FileUpload label="Relatório do Encarregado" :data="{ proc: 'cd', campo: 'relatorio_encarregado_file', id_proc: register.id}"/>
-          <FileUpload label="Solução do Comandante" :data="{ proc: 'cd', campo: 'solucao_cmt_file', id_proc: register.id}"/>
-          <FileUpload label="Solução CMT Geral" :data="{ proc: 'cd', campo: 'solucao_cmtgeral_file', id_proc: register.id}"/>
+          <FileUpload label="Libelo" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Resumo do parecer da comissão" v-model="register.parecer_comissao" :options="parecerComissao" />
+          </div>
+          <FileUpload label="Parecer Comissão" :data="{ proc: 'cd', campo: 'parecer_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Resumo do parecer do Cmt. Geral" v-model="register.parecer_cmtgeral" :options="parecerCmtgeral" />
+          </div>
+          <FileUpload label="Decisão do Cmt Geral" :data="{ proc: 'cd', campo: 'decisao_file', id_proc: register.id}"/>
+          <div class="q-pa-md col-4">
+            <InputText label="Documento da prorrogação de prazo" v-model="register.doc_prorrogacao" />
+          </div>
+
+          <FileUpload label="Reconsideração de ato (solução)" :data="{ proc: 'cd', campo: 'rec_ato_file', id_proc: register.id}"/>
+          <FileUpload label="Recurso ao Governador (solução)" :data="{ proc: 'cd', campo: 'stj_file', id_proc: register.id}"/>
+
+          <FileUpload label="TJ-PR" :data="{ proc: 'cd', campo: 'tjpr_file', id_proc: register.id}"/>
+          <FileUpload label="STJ/STF" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
       </q-tab-panel>
@@ -125,11 +141,10 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogercd, andamentocd, motivoAberturacd, prorogacao, tipoBoletim } from 'src/config/selects'
-import { getDense } from 'src/store/utils'
+import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
-import { cd } from 'src/types'
-import { api, errorNotify, validate } from 'src/services'
+import { Cd } from 'src/types'
+import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -174,40 +189,41 @@ export default defineComponent({
       register: {
         id: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
-        cdopm: '',
+        id_andamento: 0,
+        id_motivoconselho: 0,
+        id_decorrenciaconselho: 0,
+        id_situacaoconselho: 0,
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        motivo_outros: '',
+        fato_data: new Date(),
+        abertura_data: new Date(),
+        sintese_text: '',
+        libelo_file: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
         portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        portaria_data: new Date(),
+        parecer_file: '',
+        decisao_file: '',
+        doc_prorrogacao: '',
+        prescricao_comissao: '',
+        parecer_cmtgeral: '',
+        exclusao_text: '',
+        rec_ato_file: '',
+        rec_gov_file: '',
+        cdopm: '',
+        ac_desempenho_bl: '',
+        ac_conduta_bl: '',
+        ac_honra_bl: '',
+        tjpr_file: '',
+        sjd_file: '',
         deletedAt: undefined
-      } as cd,
-      andamentoCogercd,
-      andamentocd,
-      motivoAberturacd,
-      prorogacao,
-      tipoBoletim
+      } as Cd,
+      cdopm: getUserCdopm(),
+      motivoAberturaCd,
+      decorrenciaConselho,
+      situacaoServicoOuFora
     })
 
     async function update () {

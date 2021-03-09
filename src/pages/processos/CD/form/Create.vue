@@ -13,16 +13,19 @@
           <div class="q-pa-md col-4">
             <InputText label="Andamento" value="Andamento" disable/>
           </div>
-          <div class="q-pa-md col-4">
-            <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
+          <div class="q-pa-md col-6">
+            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaCd" />
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
+          </div>
+          <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+            <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
-            <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="cd" :cdopm="register.cdopm"/>
           </div>
           <div class="q-pa-md col-4">
@@ -35,13 +38,13 @@
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+            <InputDate v-model="register.fato_data" label="Data da fato" />
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturacd" />
+          <div class="q-pa-md col-4">
+            <InputDate v-model="register.abertura_data" label="Data da abertura" />
           </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+          <div class="q-pa-md col-4">
+            <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
           </div>
           <div class="q-pa-md col-12">
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
@@ -100,8 +103,8 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogercd, andamentocd, motivoAberturacd, prorogacao, tipoBoletim } from 'src/config/selects'
-import { cd } from 'src/types'
+import { Cd } from 'src/types'
+import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
@@ -147,41 +150,41 @@ export default defineComponent({
       register: {
         id: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
-        cdopm: '',
+        id_andamento: 0,
+        id_motivoconselho: 0,
+        id_decorrenciaconselho: 0,
+        id_situacaoconselho: 0,
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        motivo_outros: '',
+        fato_data: new Date(),
+        abertura_data: new Date(),
+        sintese_text: '',
+        libelo_file: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
         portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        portaria_data: new Date(),
+        parecer_file: '',
+        decisao_file: '',
+        doc_prorrogacao: '',
+        prescricao_comissao: '',
+        parecer_cmtgeral: '',
+        exclusao_text: '',
+        rec_ato_file: '',
+        rec_gov_file: '',
+        cdopm: '',
+        ac_desempenho_bl: '',
+        ac_conduta_bl: '',
+        ac_honra_bl: '',
+        tjpr_file: '',
+        sjd_file: '',
         deletedAt: undefined
-      },
+      } as Cd,
       cdopm: getUserCdopm(),
-      andamentoCogercd,
-      andamentocd,
-      motivoAberturacd,
-      prorogacao,
-      tipoBoletim
+      motivoAberturaCd,
+      decorrenciaConselho,
+      situacaoServicoOuFora
     })
 
     async function create () {
@@ -226,7 +229,7 @@ export default defineComponent({
         pendencias: ['incompleto'],
         state: [vars.register]
       })
-      incompleteProc(root, String(_id))
+      incompleteProc(root, '',(_id))
     }
 
     async function subforms () {
@@ -242,7 +245,7 @@ export default defineComponent({
     const previous = () => refs.stepper.previous()
 
     async function getPendence () {
-      vars.incompleto = String(root.$route.query.incompleto)
+      vars.incompleto = '',(root.$route.query.incompleto)
       const state = await getPendenceById(vars.incompleto)
       if (state?.length) vars.register = state[0]
       next()
