@@ -1,4 +1,4 @@
-import { Option } from './selects'
+import { Option } from './'
 
 export const motivoFATD: Option[] = [
   { value: '', label: 'SELECIONE' },

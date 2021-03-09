@@ -119,6 +119,7 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
+import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { ProcOutros } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 const fields = [
@@ -199,7 +200,9 @@ export default defineComponent({
         num_pid: '',
         limite_data: new Date(),
         deletedAt: undefined
-      } as ProcOutros
+      } as ProcOutros,
+      docOrigemProcOutros,
+      motivoAberturaProcOutros
     })
 
     async function update () {
