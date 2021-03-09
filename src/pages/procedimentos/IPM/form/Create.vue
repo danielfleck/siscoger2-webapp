@@ -164,7 +164,7 @@ const fields = [
   'defensor_nome',
   'relcomplementar_file',
   'relcomplementar_data',
-  'opm_meta4',
+  'opm_meta4'
 ]
 
 export default defineComponent({

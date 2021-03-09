@@ -39,11 +39,11 @@ export default defineComponent({
         { name: 'fato', label: 'Fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'portaria_data', label: 'Portaria', field: 'portaria_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'prescricao_data', label: 'Prescrição', field: 'prescricao_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'libelo_file', label: 'Libelo', field: 'libelo_file', format: (val) => val ?? 'Não há', sortable: true },
-        { name: 'parecer_file', label: 'Parecer', field: 'parecer_file', format: (val) => val ?? 'Não há', sortable: true },
-        { name: 'decisao_file', label: 'Decisão', field: 'decisao_file', format: (val) => val ?? 'Não há', sortable: true },
-        { name: 'rec_ato_file', label: 'Rec. ato', field: 'rec_ato_file', format: (val) => val ?? 'Não há', sortable: true },
-        
+        { name: 'libelo_file', label: 'Libelo', field: 'libelo_file', format: (val) => String(val) || 'Não há', sortable: true },
+        { name: 'parecer_file', label: 'Parecer', field: 'parecer_file', format: (val) => String(val) || 'Não há', sortable: true },
+        { name: 'decisao_file', label: 'Decisão', field: 'decisao_file', format: (val) => String(val) || 'Não há', sortable: true },
+        { name: 'rec_ato_file', label: 'Rec. ato', field: 'rec_ato_file', format: (val) => String(val) || 'Não há', sortable: true },
+
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })

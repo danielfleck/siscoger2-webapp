@@ -21,7 +21,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { changeDate, getOpmByCode } from 'src/filters'
+import { changeDate } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Cj, Columns } from 'src/types'

@@ -29,7 +29,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
+import { changeDate, getCurrentDate, getPrazoDecorrido } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Cj, Columns } from 'src/types'

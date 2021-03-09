@@ -1,6 +1,6 @@
 <template>
   <q-tab-panel name="prazos">
-    <q-banner class="bg-green text-white">  
+    <q-banner class="bg-green text-white">
     Calculo do prazo dos cd - contado em dias uteis, conta-se o primeiro dia.
     Sao descontados os dias em que o procedimento ficou sobrestado.
       <template v-slot:action>
@@ -29,7 +29,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
+import { changeDate, getCurrentDate, getPrazoDecorrido } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Cd, Columns } from 'src/types'

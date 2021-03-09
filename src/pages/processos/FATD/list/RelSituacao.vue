@@ -41,7 +41,7 @@ export default defineComponent({
         { name: 'inputacao', label: 'inputacao*', field: 'inputacao', sortable: true },
         { name: 'relatorio', label: 'relatorio*', field: 'relatorio', sortable: true },
         { name: 'solucao', label: 'solucao*', field: 'solucao', sortable: true },
-        { name: 'n_punicao', label: 'n_punicao*', field: 'n_punicao', sortable: true },     
+        { name: 'n_punicao', label: 'n_punicao*', field: 'n_punicao', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })

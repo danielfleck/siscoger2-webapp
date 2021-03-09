@@ -24,7 +24,7 @@ import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
 import { Apfd, Columns } from 'src/types'
-import { getOpmByCode, changeDate } from 'src/filters'
+import { changeDate } from 'src/filters'
 
 export default defineComponent({
   name: 'RelSituacao',

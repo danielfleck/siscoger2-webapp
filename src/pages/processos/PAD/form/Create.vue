@@ -157,7 +157,7 @@ export default defineComponent({
         prioridade: 0,
         deletedAt: undefined
       } as Pad,
-      cdopm: getUserCdopm(),
+      cdopm: getUserCdopm()
     })
 
     async function create () {

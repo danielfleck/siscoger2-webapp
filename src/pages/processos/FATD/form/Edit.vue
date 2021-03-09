@@ -174,7 +174,7 @@ const fields = [
   'prioridade',
   'situacao_fatd',
   'motivo_fatd',
-  'motivo_outros',
+  'motivo_outros'
 ]
 export default defineComponent({
   name: 'Form',

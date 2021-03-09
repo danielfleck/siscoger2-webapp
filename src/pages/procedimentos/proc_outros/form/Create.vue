@@ -180,7 +180,7 @@ export default defineComponent({
         limite_data: new Date(),
         deletedAt: undefined
       } as ProcOutros,
-      cdopm: getUserCdopm()
+      cdopm: getUserCdopm(),
       docOrigemProcOutros,
       motivoAberturaProcOutros
     })

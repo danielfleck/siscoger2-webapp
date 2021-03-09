@@ -245,7 +245,7 @@ export default defineComponent({
     const previous = () => refs.stepper.previous()
 
     async function getPendence () {
-      vars.incompleto = '',(root.$route.query.incompleto)
+      vars.incompleto = String(root.$route.query.incompleto)
       const state = await getPendenceById(vars.incompleto)
       if (state?.length) vars.register = state[0]
       next()

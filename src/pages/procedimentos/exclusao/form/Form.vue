@@ -3,7 +3,7 @@
   { label: 'Lista', link: '/exclusao/lista' },
   { label: register.id ? 'Editar' : 'Inserir', link: '/exclusao/editar' },
   ]">
-    
+
     <div  class="q-pa-md col-12">
       <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="exclusao"/>
     </div>
@@ -90,9 +90,8 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-
 import { ExclusaoJudicial } from 'src/types'
-import { api, errorNotify, validate } from 'src/services'
+import { api, validate } from 'src/services'
 import PostoGrad from 'src/components/form/PostoGrad.vue'
 import ProcedTipos from 'src/components/form/ProcedTipos.vue'
 const fields = [
@@ -113,7 +112,7 @@ const fields = [
   'obs_txt',
   'portaria_numero',
   'bg_numero',
-  'bg_ano',
+  'bg_ano'
 ]
 export default defineComponent({
   name: 'Form',
@@ -172,10 +171,10 @@ export default defineComponent({
     async function save () {
       if (validate(refs, fields)) {
         if (vars.register.id) {
-          const { ok } = await api.post(`exclusao`, vars.register)
-          if (ok) return root.$router.push('/exclusao/lista') 
+          const { ok } = await api.post('exclusao', vars.register)
+          if (ok) return root.$router.push('/exclusao/lista')
         }
-        const { ok } = await api.put(`exclusao/${vars.register.id}`, vars.register)
+        const { ok } = await api.put(`exclusao/${String(vars.register.id)}`, vars.register)
         if (ok) return root.$router.push('/exclusao/lista')
       }
     }
@@ -186,15 +185,6 @@ export default defineComponent({
         const { data, ok } = await api.get(`exclusao/${id}`)
         if (ok) vars.register = data as ExclusaoJudicial
       }
-    }
-
-    function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
-        return false
-      }
-      return true
     }
     // eslint-disable-next-line no-void
     void loadData()

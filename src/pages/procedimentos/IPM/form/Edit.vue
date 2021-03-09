@@ -186,7 +186,7 @@ const fields = [
   'defensor_nome',
   'relcomplementar_file',
   'relcomplementar_data',
-  'opm_meta4',
+  'opm_meta4'
 ]
 export default defineComponent({
   name: 'Form',
@@ -262,7 +262,7 @@ export default defineComponent({
         bou_numero: 0,
         prioridade: 0,
         deletedAt: undefined
-      } as Ipm,
+      } as Ipm
     })
 
     async function update () {
@@ -276,7 +276,6 @@ export default defineComponent({
         }
       }
     }
-
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {

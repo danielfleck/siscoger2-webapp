@@ -102,7 +102,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable camelcase */
-import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
+import { defineComponent, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import BannerDeleted from 'components/pages/BannerDeleted.vue'
@@ -144,7 +144,7 @@ const fields = [
   'termo_inclusao',
   'termo_inclusao_pub',
   'opm_meta4',
-  'referenciavajme',
+  'referenciavajme'
 ]
 export default defineComponent({
   name: 'Form',
@@ -204,7 +204,7 @@ export default defineComponent({
       termoExclusaoAgregacao,
       termoApresentacaoCaptura,
       desercaoPericia,
-      termoInclusaoReversao,
+      termoInclusaoReversao
     })
 
     async function update () {
@@ -218,7 +218,6 @@ export default defineComponent({
         }
       }
     }
-
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {

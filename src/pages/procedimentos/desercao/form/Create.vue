@@ -121,7 +121,7 @@ const fields = [
   'termo_inclusao',
   'termo_inclusao_pub',
   'opm_meta4',
-  'referenciavajme',
+  'referenciavajme'
 ]
 
 export default defineComponent({
@@ -180,7 +180,7 @@ export default defineComponent({
       termoExclusaoAgregacao,
       termoApresentacaoCaptura,
       desercaoPericia,
-      termoInclusaoReversao,
+      termoInclusaoReversao
     })
 
     async function create () {
@@ -225,7 +225,7 @@ export default defineComponent({
         pendencias: ['incompleto'],
         state: [vars.register]
       })
-      incompleteProc(root, '',_id))
+      incompleteProc(root, String(_id))
     }
 
     async function subforms () {
@@ -241,7 +241,7 @@ export default defineComponent({
     const previous = () => refs.stepper.previous()
 
     async function getPendence () {
-      vars.incompleto = '',root.$route.query.incompleto)
+      vars.incompleto = String(root.$route.query.incompleto)
       const state = await getPendenceById(vars.incompleto)
       if (state?.length) vars.register = state[0]
       next()

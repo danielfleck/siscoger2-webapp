@@ -118,7 +118,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable camelcase */
-import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
+import { defineComponent, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import BannerDeleted from 'components/pages/BannerDeleted.vue'
@@ -235,7 +235,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`cd/${vars.register.id}`, vars.register)
+          const { ok } = await api.put(`cd/${String(vars.register.id)}`, vars.register)
           if (ok) return root.$router.push('/cd/lista')
         }
       }
@@ -246,11 +246,11 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('cd')
-        const { ok } = await api.put(`cd/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`cd/${String(id)}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('cd')
-      await api.put(`cd/${id}`, vars.register, { silent: true })
+      await api.put(`cd/${String(id)}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {

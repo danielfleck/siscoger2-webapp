@@ -33,6 +33,7 @@ export type Cj = {
   sjd_file: string
   sintese_text: string
   prioridade: boolean
+  completo: boolean
   outromotivo: string
   createdAt?: Date
   updatedAt?: Date

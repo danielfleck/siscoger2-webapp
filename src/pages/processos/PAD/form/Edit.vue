@@ -92,7 +92,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable camelcase */
-import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
+import { defineComponent, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import BannerDeleted from 'components/pages/BannerDeleted.vue'
@@ -178,7 +178,7 @@ export default defineComponent({
         solucao_file: '',
         prioridade: 0,
         deletedAt: undefined
-      } as Pad,
+      } as Pad
     })
 
     async function update () {

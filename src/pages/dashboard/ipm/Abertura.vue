@@ -21,7 +21,7 @@ import { Columns, Pendencia } from 'src/types'
 export default defineComponent({
   name: 'DashboardIPM',
   components: { Table },
-  setup (_, { root }) {
+  setup () {
     const vars = reactive({
       data: [] as readonly Pendencia[],
       columns: [
