@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.49.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.48.0...v0.49.0) (2021-03-09)
+
+
+### Features
+
+* finalize basic module iso ([2b5530e](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/2b5530e6e780a6a15b9e66d2d238620f2c661ea0))
+
 ## [0.48.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.47.0...v0.48.0) (2021-03-09)
 
 
