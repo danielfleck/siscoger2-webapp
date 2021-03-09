@@ -10,4 +10,5 @@ export type Recurso = {
   sjd_ref_ano: number;
   datahora: Date; // datetime
   id_movimento: number;
+  deletedAt?: Date;
 };
