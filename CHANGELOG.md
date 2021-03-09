@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.48.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.47.0...v0.48.0) (2021-03-09)
+
+
+### Features
+
+* implement cd lists ([f5ec254](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/f5ec254d15ce6d84e7290a76ca19d5b251f99474))
+* implement cj lists ([c567439](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/c56743943134c762ea32aec67e0e9f8d32460194))
+* implement pad lists ([d8595b5](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/d8595b51e96255ad5fe72dbcc05dc58a862ac876))
+
 ## [0.47.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.46.0...v0.47.0) (2021-03-08)
 
 
