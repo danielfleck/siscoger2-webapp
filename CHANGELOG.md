@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.50.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.49.0...v0.50.0) (2021-03-09)
+
+
+### Features
+
+* finalize basic module proc_outros ([1f150e7](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/1f150e7143b7230fc1d4401543d07e4c83fb3e06))
+
 ## [0.49.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.48.0...v0.49.0) (2021-03-09)
 
 
