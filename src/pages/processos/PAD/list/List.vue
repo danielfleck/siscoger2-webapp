@@ -21,9 +21,10 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
+import { changeDate } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { pad, Columns } from 'src/types'
+import { Pad, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 
 export default defineComponent({
@@ -31,25 +32,28 @@ export default defineComponent({
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly pad[],
+      data: [] as readonly Pad[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
+        { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
+        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('pad/andamento')
-      vars.data = Object.freeze(data as pad[])
+      vars.data = Object.freeze(data as Pad[])
     }
 
-    function onEdit (row: pad) {
+    function onEdit (row: Pad) {
       void root.$router.push(`/pad/editar/${row.id}`)
     }
 
-    function onDelete (row: pad) {
+    function onDelete (row: Pad) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`pad/${row.id}`)
         if (ok) void loadData()

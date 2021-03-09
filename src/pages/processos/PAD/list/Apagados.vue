@@ -24,39 +24,42 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { api, confirm } from 'src/services'
-import { pad, Columns } from 'src/types'
+import { Pad, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly pad[],
+      data: [] as readonly Pad[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
+        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
+        { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
+        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('pad/deleted')
-      vars.data = Object.freeze(data as pad[])
+      vars.data = Object.freeze(data as Pad[])
     }
 
-    function onEdit (row: pad) {
+    function onEdit (row: Pad) {
       void root.$router.push(`/pad/editar/${row.id}`)
     }
 
-    function onRestore (row: pad) {
+    function onRestore (row: Pad) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`pad/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: pad) {
+    function onDelete (row: Pad) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`pad/${row.id}/force`)
         if (ok) void loadData()
