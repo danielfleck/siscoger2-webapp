@@ -24,20 +24,22 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { cd, Columns } from 'src/types'
+import { Cd, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Andamento',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly cd[],
+      data: [] as readonly Cd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
         { name: 'fato', label: 'Fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val):string => val ? String(val) : 'Não há', sortable: true },
+        { name: 'portaria_data', label: 'Portaria', field: 'portaria_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'prescricao_comissao', label: 'Prescrição', field: 'prescricao_comissao', sortable: true },
+        { name: 'presidente', label: 'Presidente', field: 'name', format: (val):string => val ? String(val) : 'Não há', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
@@ -46,14 +48,14 @@ export default defineComponent({
 
     async function loadData () {
       const { data } = await api.get('cd')
-      vars.data = Object.freeze(data as cd[])
+      vars.data = Object.freeze(data as Cd[])
     }
 
-    function onEdit (row: cd) {
+    function onEdit (row: Cd) {
       void root.$router.push(`/cd/editar/${row.id}`)
     }
 
-    function onDelete (row: cd) {
+    function onDelete (row: Cd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`cd/${row.id}`)
         if (ok) void loadData()

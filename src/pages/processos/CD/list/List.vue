@@ -21,35 +21,35 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
+import { getMotivoConselho } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { cd, Columns } from 'src/types'
-import { getOpmByCode } from 'src/utils'
+import { Cd, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'List',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly cd[],
+      data: [] as readonly Cd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
+        { name: 'motivo', label: 'Motivo', field: 'id_motivoconselho', format: (val) => getMotivoConselho(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('cd/andamento')
-      vars.data = Object.freeze(data as cd[])
+      vars.data = Object.freeze(data as Cd[])
     }
 
-    function onEdit (row: cd) {
+    function onEdit (row: Cd) {
       void root.$router.push(`/cd/editar/${row.id}`)
     }
 
-    function onDelete (row: cd) {
+    function onDelete (row: Cd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`cd/${row.id}`)
         if (ok) void loadData()

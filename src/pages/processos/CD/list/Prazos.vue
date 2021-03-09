@@ -32,7 +32,7 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { cd, Columns } from 'src/types'
+import { Cd, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Prazos',
@@ -40,13 +40,12 @@ export default defineComponent({
   setup (_, { root }) {
     const vars = reactive({
       today: getCurrentDate('pt-br'),
-      data: [] as readonly cd[],
+      data: [] as readonly Cd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
         { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val) => val || 'Não há', sortable: true },
+        { name: 'presidente', label: 'Presidente', field: 'name', format: (val) => val || 'Não há', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
         { name: 'diasuteis_sobrestado', label: 'Sobrestamento', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
@@ -57,14 +56,14 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('cd/andamento')
-      vars.data = Object.freeze(data as cd[])
+      vars.data = Object.freeze(data as Cd[])
     }
 
-    function onEdit (row: cd) {
+    function onEdit (row: Cd) {
       void root.$router.push(`/cd/editar/${row.id}`)
     }
 
-    function onDelete (row: cd) {
+    function onDelete (row: Cd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`cd/${row.id}`)
         if (ok) void loadData()

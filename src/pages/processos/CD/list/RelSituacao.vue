@@ -23,7 +23,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { cd, Columns } from 'src/types'
+import { Cd, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
 
 export default defineComponent({
@@ -31,29 +31,31 @@ export default defineComponent({
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly cd[],
+      data: [] as readonly Cd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
         { name: 'fato', label: 'Fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'portaria', label: 'Portaria', field: 'portaria_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'sol_cmt', label: 'Sol. OPM', field: 'sol_cmt_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'sol_cmtgeral', label: 'Sol. CG', field: 'sol_cmtgeral_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'prescricao_comissao', label: 'Prescrição', field: 'prescricao_comissao', sortable: true },
+        { name: 'libelo_file', label: 'Libelo', field: 'libelo_file', format: (val) => val ? 'Sim' : 'Não', sortable: true },
+        { name: 'parecer_file', label: 'Parecer', field: 'parecer_file', format: (val) => val ? 'Sim' : 'Não', sortable: true },
+        { name: 'decisao_file', label: 'Decisão', field: 'decisao_file', format: (val) => val ? 'Sim' : 'Não', sortable: true },
+        { name: 'rec_ato_file', label: 'Rec. Ato', field: 'rec_ato_file', format: (val) => val ? 'Sim' : 'Não', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('cd')
-      vars.data = Object.freeze(data as cd[])
+      vars.data = Object.freeze(data as Cd[])
     }
 
-    function onEdit (row: cd) {
+    function onEdit (row: Cd) {
       void root.$router.push(`/cd/editar/${row.id}`)
     }
 
-    function onDelete (row: cd) {
+    function onDelete (row: Cd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`cd/${row.id}`)
         if (ok) void loadData()

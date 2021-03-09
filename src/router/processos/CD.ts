@@ -15,7 +15,7 @@ export default [
           { path: 'apagados', component: () => import('pages/processos/CD/list/Apagados.vue'), meta: { auth: true, ...cdRules.toShow } },
           { path: 'prazos', component: () => import('pages/processos/CD/list/Prazos.vue'), meta: { auth: true, ...cdRules.toShow } },
           { path: 'rel_situacao', component: () => import('pages/processos/CD/list/RelSituacao.vue'), meta: { auth: true, ...cdRules.toShow } },
-          { path: 'resultado', component: () => import('pages/processos/CD/list/Resultado.vue'), meta: { auth: true, ...cdRules.toShow } }
+          { path: 'julgamento', component: () => import('src/pages/processos/CD/list/Julgamento.vue'), meta: { auth: true, ...cdRules.toShow } }
         ]
       }
     ]

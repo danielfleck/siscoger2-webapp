@@ -57,7 +57,7 @@ export default defineComponent({
         { link: '/cd/lista', label: 'Consulta' },
         { link: '/cd/rel_situacao', label: 'Rel.  Situação' },
         { link: '/cd/andamento', label: 'Andamento' },
-        { link: '/cd/resultado', label: 'Resultado' },
+        { link: '/cd/julgamento', label: 'Julgamento' },
         { link: '/cd/prazos', label: 'Prazos' },
         { link: '/cd/apagados', label: 'Apagados' }
       ] as Link[],

@@ -24,35 +24,36 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { cd, Columns } from 'src/types'
+import { Cd, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Resultado',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly cd[],
+      data: [] as readonly Cd[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
-        { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'sindicado', label: 'Sindicado', field: 'name', sortable: true },
+        { name: 'fato_data', label: 'Data do fato', field: 'fato_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
+        { name: 'acusado', label: 'Acusado', field: 'name', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
-        { name: 'resultado', label: 'Resultado', field: 'resultado', sortable: true },
+        { name: 'prescricao_comissao', label: 'Comissao', field: 'prescricao_comissao', sortable: true },
+        { name: 'parecer_cmtgeral', label: 'Cmt. Geral', field: 'parecer_cmtgeral', sortable: true },
+        { name: 'exclusao_text', label: 'Julgamento', field: 'exclusao_text', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('cd/resultado')
-      vars.data = Object.freeze(data as cd[])
+      vars.data = Object.freeze(data as Cd[])
     }
 
-    function onEdit (row: cd) {
+    function onEdit (row: Cd) {
       void root.$router.push(`/cd/editar/${row.id}`)
     }
 
-    function onDelete (row: cd) {
+    function onDelete (row: Cd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
         const { ok } = await api.delete(`cd/${row.id}`)
         if (ok) void loadData()
