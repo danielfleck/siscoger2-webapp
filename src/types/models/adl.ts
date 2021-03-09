@@ -4,7 +4,7 @@ export type Adl = {
   id_andamento: number;
   id_andamentocoger: number;
   id_motivoconselho: number;
-  id_decorrenciaconselho: boolean;
+  id_decorrenciaconselho: number;
   id_situacaoconselho: number;
   outromotivo: string;
   cdopm: string;
@@ -33,4 +33,6 @@ export type Adl = {
   tjpr_file: string;
   stj_file: string;
   prioridade: number;
+  completo?: boolean;
+  deletedAt?: Date;
 }

@@ -13,16 +13,19 @@
           <div class="q-pa-md col-4">
             <InputText label="Andamento" value="Andamento" disable/>
           </div>
-          <div class="q-pa-md col-4">
-            <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
+          <div class="q-pa-md col-6">
+            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" />
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
+          </div>
+          <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+            <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
-            <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
           </div>
           <div class="q-pa-md col-4">
@@ -35,13 +38,13 @@
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+            <InputDate v-model="register.fato_data" label="Data da fato" />
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturaadl" />
+          <div class="q-pa-md col-4">
+            <InputDate v-model="register.abertura_data" label="Data da abertura" />
           </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+          <div class="q-pa-md col-4">
+            <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
           </div>
           <div class="q-pa-md col-12">
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
@@ -52,9 +55,10 @@
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
           <ProcedOrigem type="adl" :data="{ id_adl: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_adl: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_adl: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_adl: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_adl: register.id }"/>
+          <Membro label="Escrivão" ref="Escrivão" :data="{ situacao: 'Escrivão', id_adl: register.id }"/>
+          <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_adl: register.id }"/>
+          <Acusado label="Acusado" :data="{ id_adl: register.id }"/>
           <Vitima :data="{ id_adl: register.id }"/>
         </template>
       </q-step>
@@ -100,8 +104,8 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogeradl, andamentoadl, motivoAberturaadl, prorogacao, tipoBoletim } from 'src/config/selects'
-import { adl } from 'src/types'
+import { Adl } from 'src/types'
+import { motivoAberturaAdl, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
 const fields = [
@@ -146,49 +150,51 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
+        id_andamento: 0,
         id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        id_motivoconselho: 0,
+        id_decorrenciaconselho: 0,
+        id_situacaoconselho: 0,
+        outromotivo: '',
         cdopm: '',
+        fato_data: new Date(),
+        abertura_data: new Date(),
+        sintese_txt: '',
+        libelo_file: '',
         doc_tipo: '',
         doc_numero: '',
-        doc_origem_txt: '',
         portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
-        motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        portaria_data: new Date(),
+        parecer_file: '',
+        decisao_file: '',
+        doc_prorrogacao: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        prescricao_data: new Date(),
+        parecer_comissao: '',
+        parecer_cmtgeral: '',
+        exclusao_txt: '',
+        rec_ato_file: '',
+        rec_gov_file: '',
+        ac_desempenho_bl: '',
+        ac_conduta_bl: '',
+        ac_honra_bl: '',
+        tjpr_file: '',
+        stj_file: '',
+        prioridade: 0,
         deletedAt: undefined
-      },
+      } as Adl,
       cdopm: getUserCdopm(),
-      andamentoCogeradl,
-      andamentoadl,
-      motivoAberturaadl,
-      prorogacao,
-      tipoBoletim
+      motivoAberturaAdl,
+      decorrenciaConselho,
+      situacaoServicoOuFora
     })
 
     async function create () {
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('adl', vars.register, { silent: true, debug: true })
         if (ok) {
-          const adl = data as adl
+          const adl = data as Adl
           vars.register.id = Number(adl.id)
           await handlePendence()
           return next()

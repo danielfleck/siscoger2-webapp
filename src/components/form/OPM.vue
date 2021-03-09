@@ -28,7 +28,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
-import { opms } from 'src/config/opms'
+import { opms } from 'src/config'
 import { getDense } from 'src/store/utils'
 
 export default defineComponent({
