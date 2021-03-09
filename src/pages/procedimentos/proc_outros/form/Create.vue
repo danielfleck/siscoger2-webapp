@@ -7,41 +7,38 @@
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-12">
-            <Prioridade v-model="register.prioridade"/>
+          <div class="q-pa-md col-4">
+            <InputText label="Andamento" value="Abertura" disable/>
           </div>
           <div class="q-pa-md col-4">
-            <InputText label="Andamento" value="Andamento" disable/>
+            <InputText label="N° PID" v-model="register.num_pid" ref="num_pid" required/>
           </div>
           <div class="q-pa-md col-4">
-            <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
+            <InputDate v-model="register.data" label="Data da fato" />
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.fato_data" label="Data da fato" />
+            <InputDate v-model="register.abertura_data" label="Data de recebimento" />
           </div>
           <div class="q-pa-md col-4">
-            <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
-            <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="proc_outros" :cdopm="register.cdopm"/>
+            <InputDate v-model="register.limite_data" label="Data limite" />
           </div>
           <div class="q-pa-md col-4">
-            <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-          </div>
-          <div class="q-pa-md col-4">
-            <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-4">
-            <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-4">
-            <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+            <OPM v-model="register.cdopm_apuracao" ref="cdopm_apuracao" required/>
           </div>
           <div class="q-pa-md col-6">
-            <InputSelect label="Motivo abertura" v-model="register.motivo_abertura" :options="motivoAberturaproc_outros" />
+            <InputSelect label="Doc. Origem" v-model="register.doc_origem" :options="docOrigemProcOutros" />
           </div>
-          <div class="q-pa-md col-6" v-if="register.motivo_abertura === 'Outro'">
-            <InputText label="Descreva o motivo" v-model="register.motivo_outros" ref="motivo_outros" required/>
+          <div class="q-pa-md col-6" >
+            <InputText label="Nº Documento, ou descrição outros documentos" v-model="register.num_doc_origem" ref="motivo_outros" required/>
+          </div>
+          <div class="q-pa-md col-6">
+            <InputSelect label="Doc. Origem" v-model="register.motivo_abertura" :options="motivoAberturaProcOutros" />
+          </div>
+          <div class="q-pa-md col-6">
+            <InputAno label="BOU Ano" v-model="register.bou_ano"/>
+          </div>
+          <div class="q-pa-md col-6">
+            <InputNumber label="BOU Número" v-model="register.bou_numero"/>
           </div>
           <div class="q-pa-md col-12">
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
@@ -51,10 +48,9 @@
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
-          <ProcedOrigem type="proc_outros" :data="{ id_proc_outros: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_proc_outros: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_proc_outros: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_proc_outros: register.id }"/>
+          <!-- <ProcedResultante type="proc_outros" :data="{ id_proc_outros: register.id }"/> -->
+          <!-- <Viaturas :data="{ proc: 'proc_outros', id_proc: register.id }"/> -->
+          <Acusado label="Envolvido" :data="{ situacao: 'Envolvido', id_proc_outros: register.id }"/>
           <Vitima :data="{ id_proc_outros: register.id }"/>
         </template>
       </q-step>
@@ -100,9 +96,9 @@ import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
-import { andamentoCogerproc_outros, andamentoproc_outros, motivoAberturaproc_outros, prorogacao, tipoBoletim } from 'src/config/selects'
-import { proc_outros } from 'src/types'
+import { ProcOutros } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
+import InputAno from 'src/components/form/InputAno.vue'
 
 const fields = [
   'motivo_cancelamento',
@@ -113,7 +109,7 @@ const fields = [
   'portaria_data',
   'prorogacao_dias',
   'motivo_outros',
-  'sindicante',
+  'Envolvido',
   'escrivao'
 ]
 
@@ -137,7 +133,8 @@ export default defineComponent({
     InputNumber,
     InputSN,
     OPM,
-    Portaria
+    Portaria,
+    InputAno
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -146,50 +143,51 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
-        id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        rg_cadastro: '',
         cdopm: '',
-        doc_tipo: '',
-        doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
+        opm_abreviatura: '',
+        cdopm_apuracao: '',
+        abertura_data: new Date(),
+        data: new Date(),
+        bou_ano: '',
+        bou_numero: '',
+        id_municipio: 0,
+        doc_origem: '',
+        num_doc_origem: '',
         motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        sintese_txt: '', // text
+        relatorio1: '',
+        relatorio1_file: '',
+        relatorio1_data: new Date(),
+        relatorio2: '',
+        relatorio2_file: '',
+        relatorio2_data: new Date(),
+        relatorio3: '',
+        relatorio3_file: '',
+        relatorio3_data: new Date(),
+        desc_outros: '',
+        andamento: 'Abertura',
+        andamentocoger: '',
+        vtr1_placa: '',
+        vtr1_prefixo: '',
+        vtr2_placa: '',
+        vtr2_prefixo: '',
+        digitador: '',
+        num_pid: '',
+        limite_data: new Date(),
         deletedAt: undefined
-      },
-      cdopm: getUserCdopm(),
-      andamentoCogerproc_outros,
-      andamentoproc_outros,
-      motivoAberturaproc_outros,
-      prorogacao,
-      tipoBoletim
+      } as ProcOutros,
+      cdopm: getUserCdopm()
     })
 
     async function create () {
       if (validate(refs, fields)) {
         const { ok, data } = await api.post('proc_outros', vars.register, { silent: true, debug: true })
         if (ok) {
-          const proc_outros = data as proc_outros
-          vars.register.id = Number(proc_outros.id)
+          const procOutros = data as ProcOutros
+          vars.register.id = Number(procOutros.id)
           await handlePendence()
           return next()
         }
@@ -230,9 +228,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Envolvido = await refs.Envolvido.getState()
+      if (Envolvido === 'toInsert') {
+        errorNotify('Insira o Envolvido')
         return false
       }
       return true

@@ -35,4 +35,6 @@ export type ProcOutros = {
   digitador: string;
   num_pid: string;
   limite_data: Date;
+  completo: boolean;
+  deletedAt?: Date
 };

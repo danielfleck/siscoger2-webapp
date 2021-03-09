@@ -23,47 +23,41 @@
         <div  class="q-pa-md col-12">
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="proc_outros"/>
         </div>
-        <div class="q-pa-md col-12">
-          <Prioridade v-model="register.prioridade"/>
+        <div class="q-pa-md col-4">
+          <Andamento v-model="register.andamento" type="proc_outros"/>
         </div>
         <div class="q-pa-md col-4">
-          <Andamento v-model="register.id_andamento" type="proc_outros"/>
+          <AndamentoCoger v-model="register.andamentocoger" type="proc_outros"/>
         </div>
         <div class="q-pa-md col-4">
-          <AndamentoCoger v-model="register.id_andamentocoger" type="proc_outros"/>
-        </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
-          <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
+          <InputText label="N° PID" v-model="register.num_pid" ref="num_pid" required/>
         </div>
         <div class="q-pa-md col-4">
-          <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
+          <InputDate v-model="register.data" label="Data da fato" />
         </div>
         <div class="q-pa-md col-4">
-          <InputDate v-model="register.fato_data" label="Data da fato" />
+          <InputDate v-model="register.abertura_data" label="Data de recebimento" />
         </div>
         <div class="q-pa-md col-4">
-          <OPM v-model="register.cdopm" ref="opm" required/>
+          <InputDate v-model="register.limite_data" label="Data limite" />
         </div>
         <div class="q-pa-md col-4">
-          <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
+          <OPM v-model="register.cdopm_apuracao" ref="cdopm_apuracao" required/>
         </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
+        <div class="q-pa-md col-6">
+          <InputSelect label="Doc. Origem" v-model="register.doc_origem" :options="docOrigemProcOutros" />
         </div>
-        <div class="q-pa-md col-4">
-          <TipoBoletim v-model="register.doc_tipo"/>
+        <div class="q-pa-md col-6" >
+          <InputText label="Nº Documento, ou descrição outros documentos" v-model="register.num_doc_origem" ref="motivo_outros" required/>
         </div>
-        <div class="q-pa-md col-4">
-          <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
+        <div class="q-pa-md col-6">
+          <InputSelect label="Doc. Origem" v-model="register.motivo_abertura" :options="motivoAberturaProcOutros" />
         </div>
-        <div class="q-pa-md col-4">
-          <InputDate v-model="register.abertura_data" label="Data da abertura"/>
+        <div class="q-pa-md col-6">
+          <InputAno label="BOU Ano" v-model="register.bou_ano"/>
         </div>
-        <div class="q-pa-md col-4">
-          <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
-        </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
-          <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
+        <div class="q-pa-md col-6">
+          <InputNumber label="BOU Número" v-model="register.bou_numero"/>
         </div>
         <div class="q-pa-md col-12">
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
@@ -102,7 +96,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable camelcase */
-import { defineComponent, computed, toRefs, reactive } from '@vue/composition-api'
+import { defineComponent, toRefs, reactive } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
 import BannerDeleted from 'components/pages/BannerDeleted.vue'
@@ -125,10 +119,7 @@ import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
-import { andamentoCogerproc_outros, andamentoproc_outros, motivoAberturaproc_outros, prorogacao, tipoBoletim } from 'src/config/selects'
-import { getDense } from 'src/store/utils'
-import { getAndamento, getSobrestamento } from 'src/utils'
-import { proc_outros } from 'src/types'
+import { ProcOutros } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
@@ -173,41 +164,42 @@ export default defineComponent({
       loading: false,
       register: {
         id: 0,
-        id_andamentocoger: 0,
-        id_andamento: 6,
-        fato_data: undefined,
-        abertura_data: undefined,
-        sintese_txt: '',
+        sjd_ref: 0,
+        sjd_ref_ano: 0,
+        rg_cadastro: '',
         cdopm: '',
-        doc_tipo: '',
-        doc_numero: '',
-        doc_origem_txt: '',
-        portaria_numero: '',
-        portaria_data: undefined,
-        sol_cmt_file: '',
-        sol_cmt_data: undefined,
-        sol_cmtgeral_file: '',
-        sol_cmtgeral_data: undefined,
-        opm_meta4: '',
-        relatorio_file: '',
-        relatorio_data: undefined,
-        prioridade: false,
-        motivo_cancelamento: '',
+        opm_abreviatura: '',
+        cdopm_apuracao: '',
+        abertura_data: new Date(),
+        data: new Date(),
+        bou_ano: '',
+        bou_numero: '',
+        id_municipio: 0,
+        doc_origem: '',
+        num_doc_origem: '',
         motivo_abertura: '',
-        motivo_outros: '',
-        prorogacao: false,
-        prorogacao_dias: 0,
-        completo: false,
-        diasuteis_sobrestado: 0,
-        motivo_sobrestado: '',
-        prazo_decorrido: 0,
+        sintese_txt: '', // text
+        relatorio1: '',
+        relatorio1_file: '',
+        relatorio1_data: new Date(),
+        relatorio2: '',
+        relatorio2_file: '',
+        relatorio2_data: new Date(),
+        relatorio3: '',
+        relatorio3_file: '',
+        relatorio3_data: new Date(),
+        desc_outros: '',
+        andamento: '',
+        andamentocoger: '',
+        vtr1_placa: '',
+        vtr1_prefixo: '',
+        vtr2_placa: '',
+        vtr2_prefixo: '',
+        digitador: '',
+        num_pid: '',
+        limite_data: new Date(),
         deletedAt: undefined
-      } as proc_outros,
-      andamentoCogerproc_outros,
-      andamentoproc_outros,
-      motivoAberturaproc_outros,
-      prorogacao,
-      tipoBoletim
+      } as ProcOutros
     })
 
     async function update () {
@@ -220,18 +212,6 @@ export default defineComponent({
           if (ok) return root.$router.push('/proc_outros/lista')
         }
       }
-    }
-
-    async function changeAndamento (sobrestamento: { termino_data: string }) {
-      if (!vars.register.id) return
-      const { id } = vars.register
-      if (!sobrestamento.termino_data) {
-        vars.register.id_andamento = getSobrestamento('proc_outros')
-        const { ok } = await api.put(`proc_outros/${id}`, vars.register, { silent: true })
-        if (ok) return
-      }
-      vars.register.id_andamento = getAndamento('proc_outros')
-      await api.put(`proc_outros/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
@@ -247,7 +227,7 @@ export default defineComponent({
       const { id } = root.$route.params
       if (id) {
         const { data, ok } = await api.get(`proc_outros/${id}`)
-        if (ok) vars.register = data as proc_outros
+        if (ok) vars.register = data as ProcOutros
       }
     }
 
@@ -264,9 +244,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
-      denseVal: computed(() => getDense(root)),
       update,
-      changeAndamento,
       validateNavigation
     }
   }
