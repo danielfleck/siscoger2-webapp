@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.52.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.51.0...v0.52.0) (2021-03-09)
+
+
+### Features
+
+* finalize basic module adl ([ee611f7](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ee611f7bb128bd3103f4a0ff3558f875da7915d8))
+
 ## [0.51.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.50.0...v0.51.0) (2021-03-09)
 
 
