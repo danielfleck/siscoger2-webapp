@@ -1,8 +1,8 @@
 <template>
   <q-tab-panel name="prazos">
-    <q-banner class="bg-green text-white">
-      Calculo do prazo dos cd - contado em dias uteis, EXCLUI-SE o primeiro dia. (Portaria 338)
-      Sao descontados os dias em que o procedimento ficou sobrestado.
+    <q-banner class="bg-green text-white">  
+    Calculo do prazo dos cd - contado em dias uteis, conta-se o primeiro dia.
+    Sao descontados os dias em que o procedimento ficou sobrestado.
       <template v-slot:action>
         Data de referência: HOJE ({{ today }})
       </template>

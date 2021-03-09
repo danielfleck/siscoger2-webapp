@@ -23,40 +23,41 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
+import { getMotivoConselho } from 'src/filters'
 import { api, confirm } from 'src/services'
-import { cj, Columns } from 'src/types'
+import { Cj, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Apagados',
   components: { Table },
   setup (_, { root }) {
     const vars = reactive({
-      data: [] as readonly cj[],
+      data: [] as readonly Cj[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm' },
+        { name: 'motivo', label: 'Motivo', field: 'id_motivoconselho', format: (val) => getMotivoConselho(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
       ] as Columns[]
     })
     async function loadData () {
       const { data } = await api.get('cj/deleted')
-      vars.data = Object.freeze(data as cj[])
+      vars.data = Object.freeze(data as Cj[])
     }
 
-    function onEdit (row: cj) {
+    function onEdit (row: Cj) {
       void root.$router.push(`/cj/editar/${row.id}`)
     }
 
-    function onRestore (row: cj) {
+    function onRestore (row: Cj) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
         const { ok } = await api.put(`cj/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
-    function onDelete (row: cj) {
+    function onDelete (row: Cj) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
         const { ok } = await api.delete(`cj/${row.id}/force`)
         if (ok) void loadData()

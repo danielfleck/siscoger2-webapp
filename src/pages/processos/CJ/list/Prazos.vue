@@ -32,7 +32,7 @@ import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
 import { api } from 'src/services'
-import { cj, Columns } from 'src/types'
+import { Cj, Columns } from 'src/types'
 
 export default defineComponent({
   name: 'Prazos',
@@ -40,13 +40,12 @@ export default defineComponent({
   setup (_, { root }) {
     const vars = reactive({
       today: getCurrentDate('pt-br'),
-      data: [] as readonly cj[],
+      data: [] as readonly Cj[],
       columns: [
         { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val), sortable: true },
         { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
-        { name: 'encarregado', label: 'Encarregado', field: 'name', format: (val) => val || 'Não há', sortable: true },
+        { name: 'presidente', label: 'Presidente', field: 'name', format: (val) => val || 'Não há', sortable: true },
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
         { name: 'diasuteis_sobrestado', label: 'Sobrestamento', field: 'diasuteis_sobrestado', format: (val) => val || 'Não há', sortable: true },
@@ -57,10 +56,10 @@ export default defineComponent({
     })
     async function loadData () {
       const { data } = await api.get('cj/andamento')
-      vars.data = Object.freeze(data as cj[])
+      vars.data = Object.freeze(data as Cj[])
     }
 
-    function onEdit (row: cj) {
+    function onEdit (row: Cj) {
       void root.$router.push(`/cj/editar/${row.id}`)
     }
 
