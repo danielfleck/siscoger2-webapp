@@ -23,7 +23,7 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getMotivoConselho } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, errorNotify } from 'src/services'
 import { Adl, Columns } from 'src/types'
 
 export default defineComponent({
@@ -41,17 +41,19 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('adls')
+      const { data } = await api.get('adl')
       vars.data = Object.freeze(data as Adl[])
     }
 
     function onEdit (row: Adl) {
+      if (!row.id) return errorNotify('Sem id')
       void root.$router.push(`/adl/editar/${row.id}`)
     }
 
     function onDelete (row: Adl) {
+      if (!row.id) return errorNotify('Sem id')
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`adls/${row.id}`)
+        const { ok } = await api.delete(`adl/${row.id}`)
         if (ok) void loadData()
       })
     }

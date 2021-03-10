@@ -45,7 +45,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('cd/resultado')
+      const { data } = await api.get('cd/julgamento')
       vars.data = Object.freeze(data as Cd[])
     }
 

@@ -1,54 +1,54 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/adl/lista' },
+    { label: 'Lista', link: '/adl' },
     { label: 'Criar', link: '/adl/inserir' },
     ]">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-12">
+          <DivForm full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputText label="Andamento" value="Andamento" disable/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" required ref="id_motivoconselho"/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" required ref="id_situacaoconselho"/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" required ref="id_decorrenciaconselho"/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12" v-if="register.id_decorrenciaconselho === 13">
+          </DivForm>
+          <DivForm v-if="register.id_decorrenciaconselho === 13">
             <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputDate v-model="register.abertura_data" label="Data da abertura" />
-          </div>
-          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+          </DivForm>
+          <DivForm>
             <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
-          </div>
-          <div class="q-pa-md col-12">
+          </DivForm>
+          <DivForm>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </DivForm>
         </form>
       </q-step>
 
@@ -86,6 +86,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
+import DivForm from 'components/form/DivForm.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
 import Acusado from 'components/subform/Acusado.vue'
 import Vitima from 'components/subform/Vitima.vue'
@@ -112,6 +113,7 @@ import { adlRequiredFields } from 'src/rules'
 export default defineComponent({
   name: 'Form',
   components: {
+    DivForm,
     Page,
     ProcedOrigem,
     Acusado,
@@ -172,7 +174,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, adlRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('adls', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post('adl', vars.register, { silent: true, debug: true })
         if (ok) {
           const adl = data as Adl
           vars.register.id = Number(adl.id)
@@ -184,7 +186,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, adlRequiredFields.toEdit)) {
-        const { ok } = await api.put(`adls/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`adl/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()

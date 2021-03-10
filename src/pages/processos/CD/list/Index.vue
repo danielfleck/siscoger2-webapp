@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'cd',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/cd/lista', label: 'Consulta' },
+        { link: '/cd', label: 'Consulta' },
         { link: '/cd/rel_situacao', label: 'Rel.  Situação' },
         { link: '/cd/andamento', label: 'Andamento' },
         { link: '/cd/julgamento', label: 'Julgamento' },

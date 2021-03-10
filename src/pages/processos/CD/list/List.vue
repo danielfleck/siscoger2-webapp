@@ -41,7 +41,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('cd/andamento')
+      const { data } = await api.get('cd')
       vars.data = Object.freeze(data as Cd[])
     }
 

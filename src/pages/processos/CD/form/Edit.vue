@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-  { label: 'Lista', link: '/cd/lista' },
+  { label: 'Lista', link: '/cd' },
   { label: 'Editar', link: '/cd/editar' },
   ]">
     <q-tabs
@@ -20,54 +20,54 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="cd"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Andamento v-model="register.id_andamento" type="cd"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <AndamentoCoger v-model="register.id_andamentocoger" type="cd"/>
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturacd" />
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
-        </div>
-        <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+        </div-form>
+        <div-form v-if="register.id_decorrenciaconselho === 13">
           <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="cd" :cdopm="register.cdopm"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <TipoBoletim v-model="register.doc_tipo"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.abertura_data" label="Data da abertura" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-        </div>
+        </div-form>
         <template v-if="register.id">
           <ProcedOrigem type="cd" :data="{ id_cd: register.id }"/>
           <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cd: register.id }"/>
@@ -76,17 +76,17 @@
           <Acusado label="Acusado" :data="{ id_cd: register.id }"/>
           <Vitima :data="{ id_cd: register.id }"/>
           <FileUpload label="Libelo" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-6">
+          <div-form>
             <InputSelect label="Resumo do parecer da comissão" v-model="register.parecer_comissao" :options="parecerComissao" />
-          </div>
+          </div-form>
           <FileUpload label="Parecer Comissão" :data="{ proc: 'cd', campo: 'parecer_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-6">
+          <div-form>
             <InputSelect label="Resumo do parecer do Cmt. Geral" v-model="register.parecer_cmtgeral" :options="parecerCmtgeral" />
-          </div>
+          </div-form>
           <FileUpload label="Decisão do Cmt Geral" :data="{ proc: 'cd', campo: 'decisao_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-4">
+          <div-form>
             <InputText label="Documento da prorrogação de prazo" v-model="register.doc_prorrogacao" />
-          </div>
+          </div-form>
 
           <FileUpload label="Reconsideração de ato (solução)" :data="{ proc: 'cd', campo: 'rec_ato_file', id_proc: register.id}"/>
           <FileUpload label="Recurso ao Governador (solução)" :data="{ proc: 'cd', campo: 'stj_file', id_proc: register.id}"/>
@@ -134,29 +134,21 @@ import InputDate from 'components/form/InputDate.vue'
 import TipoBoletim from 'components/form/TipoBoletim.vue'
 import Prioridade from 'components/form/Prioridade.vue'
 import InputText from 'components/form/InputText.vue'
+import InputSelect from 'components/form/InputSelect.vue'
 import InputNumber from 'components/form/InputNumber.vue'
 import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Cd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
-]
+import { cdRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -179,7 +171,9 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -196,14 +190,11 @@ export default defineComponent({
         sjd_ref: 0,
         sjd_ref_ano: 0,
         motivo_outros: '',
-        fato_data: new Date(),
-        abertura_data: new Date(),
         sintese_text: '',
         libelo_file: '',
         doc_tipo: '',
         doc_numero: '',
         portaria_numero: '',
-        portaria_data: new Date(),
         parecer_file: '',
         decisao_file: '',
         doc_prorrogacao: '',
@@ -226,8 +217,12 @@ export default defineComponent({
       situacaoServicoOuFora
     })
 
+    function getRequiredFields () {
+      return vars.register.id_andamento === 10 ? cdRequiredFields.toFinalize : cdRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -251,7 +246,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`cd/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
