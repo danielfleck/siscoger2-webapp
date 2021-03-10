@@ -107,16 +107,7 @@ import Portaria from 'components/form/Portaria.vue'
 import { Adl } from 'src/types'
 import { motivoAberturaAdl, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const requiredFields = [
-  'id_motivoconselho',
-  'id_decorrenciaconselho',
-  'id_situacaoconselho',
-  'outromotivo',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data'
-]
+import { adlRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -180,7 +171,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, requiredFields)) {
+      if (validate(refs, adlRequiredFields.toCreate)) {
         const { ok, data } = await api.post('adls', vars.register, { silent: true, debug: true })
         if (ok) {
           const adl = data as Adl
@@ -192,7 +183,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, requiredFields)) {
+      if (validate(refs, adlRequiredFields.toEdit)) {
         const { ok } = await api.put(`adls/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -202,7 +193,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, requiredFields)) {
+      if (validate(refs, adlRequiredFields.toEdit)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {

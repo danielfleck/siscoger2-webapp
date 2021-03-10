@@ -42,7 +42,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('adl/deleted')
+      const { data } = await api.get('adls/deleted')
       vars.data = Object.freeze(data as Adl[])
     }
 
@@ -52,14 +52,14 @@ export default defineComponent({
 
     function onRestore (row: Adl) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`adl/${row.id}/restore`, {})
+        const { ok } = await api.put(`adls/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Adl) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`adl/${row.id}/force`)
+        const { ok } = await api.delete(`adls/${row.id}/force`)
         if (ok) void loadData()
       })
     }

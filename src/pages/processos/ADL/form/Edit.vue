@@ -147,18 +147,8 @@ import { getAndamento, getSobrestamento } from 'src/utils'
 import { Adl } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'Preseidente',
-  'escrivao'
-]
+import { adlRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -228,8 +218,11 @@ export default defineComponent({
       situacaoServicoOuFora
     })
 
+    function getRequiredFields () {
+      return vars.register.id_andamento === 16 ? adlRequiredFields.toFinalize : adlRequiredFields.toEdit
+    }
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -253,7 +246,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`adls/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {

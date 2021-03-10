@@ -45,7 +45,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('adl/resultado')
+      const { data } = await api.get('adls/resultado')
       vars.data = Object.freeze(data as Adl[])
     }
 
@@ -55,7 +55,7 @@ export default defineComponent({
 
     function onDelete (row: Adl) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`adl/${row.id}`)
+        const { ok } = await api.delete(`adls/${row.id}`)
         if (ok) void loadData()
       })
     }
