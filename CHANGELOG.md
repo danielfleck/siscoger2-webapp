@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.55.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.55.0...v0.55.1) (2021-03-10)
+
+
+### Bug Fixes
+
+* solve adl list and forms ([93bfe15](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/93bfe15e2edf526bf0b8dc093a0d578715ac5c0e))
+
 ## [0.55.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.54.1...v0.55.0) (2021-03-10)
 
 
