@@ -1,20 +1,58 @@
-import { Rules } from './'
+import { RequiredFields, Rules } from './'
 
-export const gradacaoRules = {
+export const gradacaoRules: Rules = {
   toShow: {
-    permissions: [/* 'listar-sidicancias', 'ver-gradacaos' */],
+    permissions: [/* 'listar-gradacao', 'ver-gradacao' */],
     roles: []
-  } as Rules,
+  },
   toCreate: {
-    permissions: [/* 'listar-sidicancias', 'ver-gradacaos' */],
+    permissions: [/* 'criar-gradacao' */],
     roles: []
-  } as Rules,
+  },
   toEdit: {
-    permissions: [/* 'listar-sidicancias', 'ver-gradacaos' */],
+    permissions: [/* 'editar-gradacao' */],
     roles: []
-  } as Rules,
+  },
   toDelete: {
-    permissions: [/* 'listar-sidicancias', 'ver-gradacaos' */],
+    permissions: [/* 'apagar-gradacao' */],
     roles: []
-  } as Rules
+  },
+  toRestore: {
+    permissions: [/* 'restaurar-gradacao' */],
+    roles: []
+  },
+  toForceDelete: {
+    permissions: [/* 'apagar-definitivo-gradacao' */],
+    roles: []
+  }
+}
+
+export const gradacaoRequiredFields: RequiredFields = {
+  toCreate: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toEdit: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toFinalize: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ]
 }

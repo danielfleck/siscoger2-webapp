@@ -32,7 +32,7 @@ export type Adl = {
   ac_honra_bl: string;
   tjpr_file: string;
   stj_file: string;
-  prioridade: number;
+  prioridade: boolean | number;
   completo?: boolean;
   deletedAt?: Date;
 }

@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/APFD/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/APFD/list/List.vue'), meta: { auth: true, ...apfdRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/APFD/list/List.vue'), meta: { auth: true, ...apfdRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/APFD/list/Apagados.vue'), meta: { auth: true, ...apfdRules.toDelete } },
           { path: 'rel_situacao', component: () => import('pages/procedimentos/APFD/list/RelSituacao.vue'), meta: { auth: true, ...apfdRules.toShow } }
         ]

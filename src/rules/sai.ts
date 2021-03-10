@@ -1,20 +1,58 @@
-import { Rules } from './'
+import { RequiredFields, Rules } from './'
 
-export const saiRules = {
+export const saiRules: Rules = {
   toShow: {
-    permissions: [/* 'listar-sidicancias', 'ver-sais' */],
+    permissions: [/* 'listar-sai', 'ver-sai' */],
     roles: []
-  } as Rules,
+  },
   toCreate: {
-    permissions: [/* 'listar-sidicancias', 'ver-sais' */],
+    permissions: [/* 'criar-sai' */],
     roles: []
-  } as Rules,
+  },
   toEdit: {
-    permissions: [/* 'listar-sidicancias', 'ver-sais' */],
+    permissions: [/* 'editar-sai' */],
     roles: []
-  } as Rules,
+  },
   toDelete: {
-    permissions: [/* 'listar-sidicancias', 'ver-sais' */],
+    permissions: [/* 'apagar-sai' */],
     roles: []
-  } as Rules
+  },
+  toRestore: {
+    permissions: [/* 'restaurar-sai' */],
+    roles: []
+  },
+  toForceDelete: {
+    permissions: [/* 'apagar-definitivo-sai' */],
+    roles: []
+  }
+}
+
+export const saiRequiredFields: RequiredFields = {
+  toCreate: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toEdit: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toFinalize: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ]
 }

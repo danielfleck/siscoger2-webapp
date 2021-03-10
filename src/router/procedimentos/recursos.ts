@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/recursos/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/recursos/list/List.vue'), meta: { auth: true, ...recursoRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/recursos/list/List.vue'), meta: { auth: true, ...recursoRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/recursos/list/Apagados.vue'), meta: { auth: true, ...recursoRules.toDelete } }
         ]
       }

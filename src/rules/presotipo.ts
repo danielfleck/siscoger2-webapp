@@ -1,20 +1,58 @@
-import { Rules } from './'
+import { RequiredFields, Rules } from './'
 
-export const presotipoRules = {
+export const presotipoRules: Rules = {
   toShow: {
-    permissions: [/* 'listar-sidicancias', 'ver-presotipos' */],
+    permissions: [/* 'listar-presotipo', 'ver-presotipo' */],
     roles: []
-  } as Rules,
+  },
   toCreate: {
-    permissions: [/* 'listar-sidicancias', 'ver-presotipos' */],
+    permissions: [/* 'criar-presotipo' */],
     roles: []
-  } as Rules,
+  },
   toEdit: {
-    permissions: [/* 'listar-sidicancias', 'ver-presotipos' */],
+    permissions: [/* 'editar-presotipo' */],
     roles: []
-  } as Rules,
+  },
   toDelete: {
-    permissions: [/* 'listar-sidicancias', 'ver-presotipos' */],
+    permissions: [/* 'apagar-presotipo' */],
     roles: []
-  } as Rules
+  },
+  toRestore: {
+    permissions: [/* 'restaurar-presotipo' */],
+    roles: []
+  },
+  toForceDelete: {
+    permissions: [/* 'apagar-definitivo-presotipo' */],
+    roles: []
+  }
+}
+
+export const presotipoRequiredFields: RequiredFields = {
+  toCreate: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toEdit: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toFinalize: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ]
 }

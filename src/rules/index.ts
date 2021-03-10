@@ -1,6 +1,20 @@
-export interface Rules {
+interface Rule {
   permissions: string[]
   roles: string[]
+}
+export interface Rules {
+  toShow: Rule
+  toCreate: Rule
+  toEdit: Rule
+  toDelete: Rule
+  toRestore: Rule
+  toForceDelete: Rule
+}
+
+export interface RequiredFields {
+  toCreate: string[]
+  toEdit: string[]
+  toFinalize: string[]
 }
 
 export * from './adl'
@@ -49,3 +63,4 @@ export * from './situacao'
 export * from './sobrestamento'
 export * from './upload'
 export * from './user'
+

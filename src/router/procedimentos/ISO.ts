@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/ISO/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/ISO/list/List.vue'), meta: { auth: true, ...isoRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/ISO/list/List.vue'), meta: { auth: true, ...isoRules.toShow } },
           { path: 'andamento', component: () => import('pages/procedimentos/ISO/list/Andamento.vue'), meta: { auth: true, ...isoRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/ISO/list/Apagados.vue'), meta: { auth: true, ...isoRules.toDelete } },
           { path: 'prazos', component: () => import('pages/procedimentos/ISO/list/Prazos.vue'), meta: { auth: true, ...isoRules.toShow } }

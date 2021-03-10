@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/processos/CD/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/processos/CD/list/List.vue'), meta: { auth: true, ...cdRules.toShow } },
+          { path: '', component: () => import('pages/processos/CD/list/List.vue'), meta: { auth: true, ...cdRules.toShow } },
           { path: 'andamento', component: () => import('pages/processos/CD/list/Andamento.vue'), meta: { auth: true, ...cdRules.toShow } },
           { path: 'apagados', component: () => import('pages/processos/CD/list/Apagados.vue'), meta: { auth: true, ...cdRules.toShow } },
           { path: 'prazos', component: () => import('pages/processos/CD/list/Prazos.vue'), meta: { auth: true, ...cdRules.toShow } },

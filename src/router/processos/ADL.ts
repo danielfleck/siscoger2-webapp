@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/processos/ADL/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/processos/ADL/list/List.vue'), meta: { auth: true, ...adlRules.toShow } },
+          { path: '', component: () => import('pages/processos/ADL/list/List.vue'), meta: { auth: true, ...adlRules.toShow } },
           { path: 'andamento', component: () => import('pages/processos/ADL/list/Andamento.vue'), meta: { auth: true, ...adlRules.toShow } },
           { path: 'apagados', component: () => import('pages/processos/ADL/list/Apagados.vue'), meta: { auth: true, ...adlRules.toShow } },
           { path: 'prazos', component: () => import('pages/processos/ADL/list/Prazos.vue'), meta: { auth: true, ...adlRules.toShow } },

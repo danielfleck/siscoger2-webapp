@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/sindicancia/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/sindicancia/list/List.vue'), meta: { auth: true, ...sindicanciaRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/sindicancia/list/List.vue'), meta: { auth: true, ...sindicanciaRules.toShow } },
           { path: 'andamento', component: () => import('pages/procedimentos/sindicancia/list/Andamento.vue'), meta: { auth: true, ...sindicanciaRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/sindicancia/list/Apagados.vue'), meta: { auth: true, ...sindicanciaRules.toShow } },
           { path: 'prazos', component: () => import('pages/procedimentos/sindicancia/list/Prazos.vue'), meta: { auth: true, ...sindicanciaRules.toShow } },

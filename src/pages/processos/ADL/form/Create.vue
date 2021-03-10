@@ -10,40 +10,40 @@
           <div class="q-pa-md col-12">
             <Prioridade v-model="register.prioridade"/>
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputText label="Andamento" value="Andamento" disable/>
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" />
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" required ref="id_motivoconselho"/>
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+            <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" required ref="id_situacaoconselho"/>
           </div>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
+            <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" required ref="id_decorrenciaconselho"/>
           </div>
-          <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12" v-if="register.id_decorrenciaconselho === 13">
             <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <TipoBoletim v-model="register.doc_tipo"/>
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputDate v-model="register.fato_data" label="Data da fato" />
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputDate v-model="register.abertura_data" label="Data da abertura" />
           </div>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
           </div>
           <div class="q-pa-md col-12">
@@ -108,17 +108,14 @@ import { Adl } from 'src/types'
 import { motivoAberturaAdl, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
+const requiredFields = [
+  'id_motivoconselho',
+  'id_decorrenciaconselho',
+  'id_situacaoconselho',
+  'outromotivo',
   'portaria_numero',
   'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
+  'portaria_data'
 ]
 
 export default defineComponent({
@@ -152,25 +149,18 @@ export default defineComponent({
         id: 0,
         id_andamento: 0,
         id_andamentocoger: 0,
-        id_motivoconselho: 0,
-        id_decorrenciaconselho: 0,
-        id_situacaoconselho: 0,
         outromotivo: '',
-        cdopm: '',
-        fato_data: new Date(),
-        abertura_data: new Date(),
+        cdopm: getUserCdopm(),
         sintese_txt: '',
         libelo_file: '',
         doc_tipo: '',
         doc_numero: '',
         portaria_numero: '',
-        portaria_data: new Date(),
         parecer_file: '',
         decisao_file: '',
         doc_prorrogacao: '',
         sjd_ref: 0,
         sjd_ref_ano: 0,
-        prescricao_data: new Date(),
         parecer_comissao: '',
         parecer_cmtgeral: '',
         exclusao_txt: '',
@@ -181,18 +171,17 @@ export default defineComponent({
         ac_honra_bl: '',
         tjpr_file: '',
         stj_file: '',
-        prioridade: 0,
+        prioridade: false,
         deletedAt: undefined
       } as Adl,
-      cdopm: getUserCdopm(),
       motivoAberturaAdl,
       decorrenciaConselho,
       situacaoServicoOuFora
     })
 
     async function create () {
-      if (validate(refs, fields)) {
-        const { ok, data } = await api.post('adl', vars.register, { silent: true, debug: true })
+      if (validate(refs, requiredFields)) {
+        const { ok, data } = await api.post('adls', vars.register, { silent: true, debug: true })
         if (ok) {
           const adl = data as Adl
           vars.register.id = Number(adl.id)
@@ -203,8 +192,8 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
-        const { ok } = await api.put(`adl/${id}`, vars.register, { silent: true, debug: true })
+      if (validate(refs, requiredFields)) {
+        const { ok } = await api.put(`adls/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -213,14 +202,14 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, requiredFields)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           await api.put(`adl/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/adl/lista')
+          return root.$router.push('/adl')
         }
       }
     }
@@ -236,9 +225,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = await refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

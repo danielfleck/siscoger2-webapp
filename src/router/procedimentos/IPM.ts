@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/IPM/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/IPM/list/List.vue'), meta: { auth: true, ...ipmRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/IPM/list/List.vue'), meta: { auth: true, ...ipmRules.toShow } },
           { path: 'andamento', component: () => import('pages/procedimentos/IPM/list/Andamento.vue'), meta: { auth: true, ...ipmRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/IPM/list/Apagados.vue'), meta: { auth: true, ...ipmRules.toShow } },
           { path: 'prazos', component: () => import('pages/procedimentos/IPM/list/Prazos.vue'), meta: { auth: true, ...ipmRules.toShow } },

@@ -1,20 +1,58 @@
-import { Rules } from './'
+import { RequiredFields, Rules } from './'
 
-export const decorrenciaconselhoRules = {
+export const decorrenciaconselhoRules: Rules = {
   toShow: {
-    permissions: [/* 'listar-sidicancias', 'ver-decorrenciaconselhos' */],
+    permissions: [/* 'listar-decorrenciaconselho', 'ver-decorrenciaconselho' */],
     roles: []
-  } as Rules,
+  },
   toCreate: {
-    permissions: [/* 'listar-sidicancias', 'ver-decorrenciaconselhos' */],
+    permissions: [/* 'criar-decorrenciaconselho' */],
     roles: []
-  } as Rules,
+  },
   toEdit: {
-    permissions: [/* 'listar-sidicancias', 'ver-decorrenciaconselhos' */],
+    permissions: [/* 'editar-decorrenciaconselho' */],
     roles: []
-  } as Rules,
+  },
   toDelete: {
-    permissions: [/* 'listar-sidicancias', 'ver-decorrenciaconselhos' */],
+    permissions: [/* 'apagar-decorrenciaconselho' */],
     roles: []
-  } as Rules
+  },
+  toRestore: {
+    permissions: [/* 'restaurar-decorrenciaconselho' */],
+    roles: []
+  },
+  toForceDelete: {
+    permissions: [/* 'apagar-definitivo-decorrenciaconselho' */],
+    roles: []
+  }
+}
+
+export const decorrenciaconselhoRequiredFields: RequiredFields = {
+  toCreate: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toEdit: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ],
+  toFinalize: [
+    'id_motivoconselho',
+    'id_decorrenciaconselho',
+    'id_situacaoconselho',
+    'outromotivo',
+    'portaria_numero',
+    'sintese_txt',
+    'portaria_data'
+  ]
 }

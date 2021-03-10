@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/processos/FATD/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/processos/FATD/list/List.vue'), meta: { auth: true, ...fatdRules.toShow } },
+          { path: '', component: () => import('pages/processos/FATD/list/List.vue'), meta: { auth: true, ...fatdRules.toShow } },
           { path: 'andamento', component: () => import('pages/processos/FATD/list/Andamento.vue'), meta: { auth: true, ...fatdRules.toShow } },
           { path: 'apagados', component: () => import('pages/processos/FATD/list/Apagados.vue'), meta: { auth: true, ...fatdRules.toDelete } },
           { path: 'prazos', component: () => import('pages/processos/FATD/list/Prazos.vue'), meta: { auth: true, ...fatdRules.toShow } },

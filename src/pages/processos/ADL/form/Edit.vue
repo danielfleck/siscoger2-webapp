@@ -26,43 +26,43 @@
         <div class="q-pa-md col-12">
           <Prioridade v-model="register.prioridade"/>
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <Andamento v-model="register.id_andamento" type="adl"/>
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <AndamentoCoger v-model="register.id_andamentocoger" type="adl"/>
         </div>
-        <div class="q-pa-md col-6">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" />
         </div>
-        <div class="q-pa-md col-6">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
         </div>
-        <div class="q-pa-md col-6">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
         </div>
-        <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12" v-if="register.id_decorrenciaconselho === 13">
           <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <TipoBoletim v-model="register.doc_tipo"/>
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputDate v-model="register.fato_data" label="Data da fato" />
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputDate v-model="register.abertura_data" label="Data da abertura" />
         </div>
-        <div class="q-pa-md col-4">
+        <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
           <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
         </div>
         <div class="q-pa-md col-12">
@@ -76,15 +76,15 @@
           <Acusado label="Acusado" :data="{ id_adl: register.id }"/>
           <Vitima :data="{ id_adl: register.id }"/>
           <FileUpload label="Libelo" :data="{ proc: 'adl', campo: 'libelo_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-6">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputSelect label="Resumo do parecer da comissão" v-model="register.parecer_comissao" :options="parecerComissao" />
           </div>
           <FileUpload label="Parecer Comissão" :data="{ proc: 'adl', campo: 'parecer_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-6">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputSelect label="Resumo do parecer do Cmt. Geral" v-model="register.parecer_cmtgeral" :options="parecerCmtgeral" />
           </div>
           <FileUpload label="Decisão do Cmt Geral" :data="{ proc: 'adl', campo: 'decisao_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-4">
+          <div class="q-pa-md col-lg-4 col-md-6 col-xs-12">
             <InputText label="Documento da prorrogação de prazo" v-model="register.doc_prorrogacao" />
           </div>
 
@@ -146,6 +146,7 @@ import { motivoAberturaAdl, situacaoServicoOuFora, decorrenciaConselho } from 's
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Adl } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
+import InputSelect from 'src/components/form/InputSelect.vue'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -155,7 +156,7 @@ const fields = [
   'portaria_data',
   'prorogacao_dias',
   'motivo_outros',
-  'sindicante',
+  'Preseidente',
   'escrivao'
 ]
 export default defineComponent({
@@ -180,7 +181,8 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -191,9 +193,6 @@ export default defineComponent({
         id: 0,
         id_andamento: 0,
         id_andamentocoger: 0,
-        id_motivoconselho: 0,
-        id_decorrenciaconselho: 0,
-        id_situacaoconselho: 0,
         outromotivo: '',
         cdopm: '',
         fato_data: new Date(),
@@ -235,7 +234,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`adl/${vars.register.id}`, vars.register)
+          const { ok } = await api.put(`adls/${vars.register.id}`, vars.register)
           if (ok) return root.$router.push('/adl/lista')
         }
       }
@@ -246,7 +245,7 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('adl')
-        const { ok } = await api.put(`adl/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`adls/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('adl')
@@ -255,7 +254,7 @@ export default defineComponent({
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`adl/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`adls/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -265,15 +264,15 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`adl/${id}`)
+        const { data, ok } = await api.get(`adls/${id}`)
         if (ok) vars.register = data as Adl
       }
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Preseidente = refs.Preseidente.getState()
+      if (Preseidente === 'toInsert') {
+        errorNotify('Insira o Preseidente')
         return false
       }
       return true

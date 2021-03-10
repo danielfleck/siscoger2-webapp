@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'adl',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/adl/lista', label: 'Consulta' },
+        { link: '/adl', label: 'Consulta' },
         { link: '/adl/rel_situacao', label: 'Rel.  Situação' },
         { link: '/adl/andamento', label: 'Andamento' },
         { link: '/adl/resultado', label: 'Resultado' },

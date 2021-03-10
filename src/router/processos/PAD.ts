@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/processos/PAD/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/processos/PAD/list/List.vue'), meta: { auth: true, ...padRules.toShow } },
+          { path: '', component: () => import('pages/processos/PAD/list/List.vue'), meta: { auth: true, ...padRules.toShow } },
           { path: 'apagados', component: () => import('pages/processos/PAD/list/Apagados.vue'), meta: { auth: true, ...padRules.toDelete } }
         ]
       }

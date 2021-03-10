@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/proc_outros/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/proc_outros/list/List.vue'), meta: { auth: true, ...procoutroRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/proc_outros/list/List.vue'), meta: { auth: true, ...procoutroRules.toShow } },
           { path: 'andamento', component: () => import('pages/procedimentos/proc_outros/list/Andamento.vue'), meta: { auth: true, ...procoutroRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/proc_outros/list/Apagados.vue'), meta: { auth: true, ...procoutroRules.toDelete } },
           { path: 'prazos', component: () => import('pages/procedimentos/proc_outros/list/Prazos.vue'), meta: { auth: true, ...procoutroRules.toShow } },

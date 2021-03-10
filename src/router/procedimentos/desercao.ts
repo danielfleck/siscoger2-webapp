@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/desercao/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/desercao/list/List.vue'), meta: { auth: true, ...desercaoRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/desercao/list/List.vue'), meta: { auth: true, ...desercaoRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/desercao/list/Apagados.vue'), meta: { auth: true, ...desercaoRules.toDelete } },
           { path: 'rel_situacao', component: () => import('pages/procedimentos/desercao/list/RelSituacao.vue'), meta: { auth: true, ...desercaoRules.toShow } }]
       }

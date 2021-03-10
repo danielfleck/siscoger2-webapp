@@ -143,7 +143,7 @@ import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 
 import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
-import { Cd } from 'src/types'
+import { Cj } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 const fields = [
   'motivo_cancelamento',
@@ -266,7 +266,7 @@ export default defineComponent({
       const { id } = root.$route.params
       if (id) {
         const { data, ok } = await api.get(`cd/${id}`)
-        if (ok) vars.register = data as Cd
+        if (ok) vars.register = data as Cj
       }
     }
 

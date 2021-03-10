@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/processos/CJ/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/processos/CJ/list/List.vue'), meta: { auth: true, ...cjRules.toShow } },
+          { path: '', component: () => import('pages/processos/CJ/list/List.vue'), meta: { auth: true, ...cjRules.toShow } },
           { path: 'andamento', component: () => import('pages/processos/CJ/list/Andamento.vue'), meta: { auth: true, ...cjRules.toShow } },
           { path: 'apagados', component: () => import('pages/processos/CJ/list/Apagados.vue'), meta: { auth: true, ...cjRules.toDelete } },
           { path: 'prazos', component: () => import('pages/processos/CJ/list/Prazos.vue'), meta: { auth: true, ...cjRules.toShow } },

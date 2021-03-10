@@ -10,7 +10,7 @@ export default [
         path: '',
         component: () => import('pages/procedimentos/exclusao/list/Index.vue'),
         children: [
-          { path: 'lista', component: () => import('pages/procedimentos/exclusao/list/List.vue'), meta: { auth: true, ...exclusaojudicialRules.toShow } },
+          { path: '', component: () => import('pages/procedimentos/exclusao/list/List.vue'), meta: { auth: true, ...exclusaojudicialRules.toShow } },
           { path: 'apagados', component: () => import('pages/procedimentos/exclusao/list/Apagados.vue'), meta: { auth: true, ...exclusaojudicialRules.toDelete } }
         ]
       }
