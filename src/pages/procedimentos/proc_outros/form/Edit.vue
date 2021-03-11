@@ -124,18 +124,8 @@ import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { ProcOutros } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
-]
+import { procoutroRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -209,8 +199,12 @@ export default defineComponent({
       motivoAberturaProcOutros
     })
 
+    function getRequiredFields () {
+      return vars.register.andamento === 'Concluído' ? procoutroRequiredFields.toFinalize : procoutroRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -222,7 +216,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`procoutros/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {

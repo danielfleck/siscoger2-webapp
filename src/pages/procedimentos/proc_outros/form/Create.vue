@@ -100,19 +100,7 @@ import { ProcOutros } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import InputAno from 'src/components/form/InputAno.vue'
 import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
-
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'Envolvido',
-  'escrivao'
-]
+import { procoutroRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -186,7 +174,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, procoutroRequiredFields.toCreate)) {
         const { ok, data } = await api.post('procoutros', vars.register, { silent: true, debug: true })
         if (ok) {
           const procOutros = data as ProcOutros
@@ -198,7 +186,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, procoutroRequiredFields.toCreate)) {
         const { ok } = await api.put(`procoutros/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -208,7 +196,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, procoutroRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {
