@@ -29,30 +29,36 @@ export const isoRules: Rules = {
 
 export const isoRequiredFields: RequiredFields = {
   toCreate: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
+    'motivo_cancelamento',
+    'doc_origem_txt',
+    'opm',
     'portaria_numero',
     'sintese_txt',
-    'portaria_data'
+    'portaria_data',
+    'prorogacao_dias',
+    'motivo_outros',
+    'Encarregado'
   ],
   toEdit: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
+    'motivo_cancelamento',
+    'doc_origem_txt',
+    'opm',
     'portaria_numero',
     'sintese_txt',
-    'portaria_data'
+    'portaria_data',
+    'prorogacao_dias',
+    'motivo_outros',
+    'Encarregado'
   ],
   toFinalize: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
+    'motivo_cancelamento',
+    'doc_origem_txt',
+    'opm',
     'portaria_numero',
     'sintese_txt',
-    'portaria_data'
+    'portaria_data',
+    'prorogacao_dias',
+    'motivo_outros',
+    'Encarregado'
   ]
 }

@@ -91,18 +91,7 @@ import Portaria from 'components/form/Portaria.vue'
 
 import { Iso } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'Encarregado'
-]
+import { isoRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -184,7 +173,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, isoRequiredFields.toCreate)) {
         const { ok, data } = await api.post('isos', vars.register, { silent: true, debug: true })
         if (ok) {
           const iso = data as Iso
@@ -196,7 +185,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, isoRequiredFields.toCreate)) {
         const { ok } = await api.put(`isos/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -206,7 +195,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, isoRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {
