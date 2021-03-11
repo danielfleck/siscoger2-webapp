@@ -67,7 +67,7 @@ export default defineComponent({
       required: true
     },
     value: {
-      type: String,
+      type: [String, Date],
       default: ''
     },
     required: {

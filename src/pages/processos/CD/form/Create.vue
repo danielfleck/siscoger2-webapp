@@ -14,7 +14,7 @@
             <InputText label="Andamento" value="Andamento" disable/>
           </div-form>
           <div-form>
-            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaCd" />
+            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoConselho" />
           </div-form>
           <div-form>
             <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
@@ -105,7 +105,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { Cd } from 'src/types'
-import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
+import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { cdRequiredFields } from 'src/rules'
 
@@ -169,7 +169,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Cd,
       cdopm: getUserCdopm(),
-      motivoAberturaCd,
+      motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
     })
@@ -204,7 +204,7 @@ export default defineComponent({
           vars.register.completo = true
           await api.put(`cd/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/cd/lista')
+          return root.$router.push('/cd')
         }
       }
     }

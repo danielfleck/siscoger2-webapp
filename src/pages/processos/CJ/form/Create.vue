@@ -1,61 +1,61 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/cj/lista' },
+    { label: 'Lista', link: '/cj' },
     { label: 'Criar', link: '/cj/inserir' },
     ]">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-12">
+          <div-form full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Andamento" value="Andamento" disable/>
-          </div>
-          <div class="q-pa-md col-6">
-            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaCj" />
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
+            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoConselho" />
+          </div-form>
+          <div-form>
             <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
-          </div>
-          <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+          </div-form>
+          <div-form v-if="register.id_decorrenciaconselho === 13">
             <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.abertura_data" label="Data da abertura" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
-          </div>
-          <div class="q-pa-md col-12">
+          </div-form>
+          <div-form full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </div-form>
         </form>
       </q-step>
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
           <ProcedOrigem type="cj" :data="{ id_cj: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_cj: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cj: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_cj: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_cj: register.id }"/>
           <Vitima :data="{ id_cj: register.id }"/>
@@ -85,6 +85,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Page from 'components/pages/Page.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 import ProcedOrigem from 'components/subform/ProcedOrigem.vue'
 import Acusado from 'components/subform/Acusado.vue'
 import Vitima from 'components/subform/Vitima.vue'
@@ -104,21 +105,9 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { Cj } from 'src/types'
-import { motivoAberturaCj, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
+import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
-]
+import { cjRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -140,7 +129,8 @@ export default defineComponent({
     InputNumber,
     InputSN,
     OPM,
-    Portaria
+    Portaria,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -155,7 +145,7 @@ export default defineComponent({
         id_decorrenciaconselho: 0,
         id_situacaoconselho: 0,
         motivo_outros: '',
-        cdopm: '',
+        cdopm: getUserCdopm(),
         sjd_ref: 0,
         sjd_ref_ano: 0,
         abertura_data: new Date(),
@@ -179,19 +169,19 @@ export default defineComponent({
         ac_honra_bl: '',
         tjpr_file: '',
         sjd_file: '',
-        sintese_text: '',
+        sintese_txt: '',
         prioridade: false,
         outromotivo: '',
         deletedAt: undefined
       } as Cj,
       cdopm: getUserCdopm(),
-      motivoAberturaCj,
+      motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, cjRequiredFields.toCreate)) {
         const { ok, data } = await api.post('cj', vars.register, { silent: true, debug: true })
         if (ok) {
           const cj = data as Cj
@@ -203,7 +193,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, cjRequiredFields.toEdit)) {
         const { ok } = await api.put(`cj/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -213,14 +203,14 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, cjRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           await api.put(`cj/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/cj/lista')
+          return root.$router.push('/cj')
         }
       }
     }
@@ -236,9 +226,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = await refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-  { label: 'Lista', link: '/desercao/lista' },
+  { label: 'Lista', link: '/desercao' },
   { label: 'Editar', link: '/desercao/editar' },
   ]">
     <q-tabs
@@ -214,7 +214,7 @@ export default defineComponent({
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           const { ok } = await api.put(`desercao/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/desercao/lista')
+          if (ok) return root.$router.push('/desercao')
         }
       }
     }

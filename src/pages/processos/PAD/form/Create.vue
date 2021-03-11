@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/pad/lista' },
+    { label: 'Lista', link: '/pad' },
     { label: 'Criar', link: '/pad/inserir' },
     ]">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
@@ -190,7 +190,7 @@ export default defineComponent({
           vars.register.completo = true
           await api.put(`pad/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/pad/lista')
+          return root.$router.push('/pad')
         }
       }
     }

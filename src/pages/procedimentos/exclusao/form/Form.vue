@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-  { label: 'Lista', link: '/exclusao/lista' },
+  { label: 'Lista', link: '/exclusao' },
   { label: register.id ? 'Editar' : 'Inserir', link: '/exclusao/editar' },
   ]">
 
@@ -172,10 +172,10 @@ export default defineComponent({
       if (validate(refs, fields)) {
         if (vars.register.id) {
           const { ok } = await api.post('exclusao', vars.register)
-          if (ok) return root.$router.push('/exclusao/lista')
+          if (ok) return root.$router.push('/exclusao')
         }
         const { ok } = await api.put(`exclusao/${String(vars.register.id)}`, vars.register)
-        if (ok) return root.$router.push('/exclusao/lista')
+        if (ok) return root.$router.push('/exclusao')
       }
     }
 

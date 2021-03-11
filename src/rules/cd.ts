@@ -37,7 +37,7 @@ export const cdRequiredFields: RequiredFields = {
     'portaria_data',
     'prorogacao_dias',
     'motivo_outros',
-    'sindicante',
+    'Presidente',
     'escrivao'
   ],
   toEdit: [
@@ -49,7 +49,7 @@ export const cdRequiredFields: RequiredFields = {
     'portaria_data',
     'prorogacao_dias',
     'motivo_outros',
-    'sindicante',
+    'Presidente',
     'escrivao'
   ],
   toFinalize: [
@@ -61,7 +61,7 @@ export const cdRequiredFields: RequiredFields = {
     'portaria_data',
     'prorogacao_dias',
     'motivo_outros',
-    'sindicante',
+    'Presidente',
     'escrivao'
   ]
 }

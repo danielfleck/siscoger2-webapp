@@ -1,9 +1,9 @@
 export type Locales = 'pt-br' | 'en' | 'fr-ca'
 
-export const changeDate = (dateString: string, locale: Locales, { extensive = false, debug = false } = {}) => {
+export const changeDate = (dateString: string | Date, locale: Locales, { extensive = false, debug = false } = {}) => {
   if (debug) console.log({ dateString })
   if (!dateString) return ''
-  if (['/'].indexOf(dateString)) {
+  if (typeof dateString === 'string' && ['/'].indexOf(dateString)) {
     dateString = dateString.split('/').reverse().join('-')
   }
 

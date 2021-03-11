@@ -33,7 +33,7 @@
           <AndamentoCoger v-model="register.id_andamentocoger" type="adl"/>
         </div-form>
         <div-form>
-          <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" />
+          <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoConselho" />
         </div-form>
         <div-form>
           <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
@@ -143,7 +143,7 @@ import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 import DivForm from 'src/components/form/DivForm.vue'
 import InputSelect from 'src/components/form/InputSelect.vue'
 
-import { motivoAberturaAdl, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
+import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Adl } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
@@ -214,7 +214,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Adl,
       cdopm: getUserCdopm(),
-      motivoAberturaAdl,
+      motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
     })
@@ -229,7 +229,7 @@ export default defineComponent({
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           const { ok } = await api.put(`adl/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/adl/lista')
+          if (ok) return root.$router.push('/adl')
         }
       }
     }

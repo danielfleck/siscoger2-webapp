@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/proc_outros/lista' },
+    { label: 'Lista', link: '/proc_outros' },
     { label: 'Criar', link: '/proc_outros/inserir' },
     ]">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
@@ -215,7 +215,7 @@ export default defineComponent({
           vars.register.completo = true
           await api.put(`proc_outros/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/proc_outros/lista')
+          return root.$router.push('/proc_outros')
         }
       }
     }

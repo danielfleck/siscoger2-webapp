@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-  { label: 'Lista', link: '/cd/lista' },
+  { label: 'Lista', link: '/cd' },
   { label: 'Editar', link: '/cd/editar' },
   ]">
     <q-tabs
@@ -20,54 +20,54 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="cd"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Andamento v-model="register.id_andamento" type="cd"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <AndamentoCoger v-model="register.id_andamentocoger" type="cd"/>
-        </div>
-        <div class="q-pa-md col-6">
-          <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturacd" />
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
+          <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoConselho" />
+        </div-form>
+        <div-form>
           <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" />
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
-        </div>
-        <div class="q-pa-md col-4" v-if="register.id_decorrenciaconselho === 13">
+        </div-form>
+        <div-form v-if="register.id_decorrenciaconselho === 13">
           <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="cd" :cdopm="register.cdopm"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <TipoBoletim v-model="register.doc_tipo"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.abertura_data" label="Data da abertura" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-        </div>
+        </div-form>
         <template v-if="register.id">
           <ProcedOrigem type="cd" :data="{ id_cd: register.id }"/>
           <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cd: register.id }"/>
@@ -76,17 +76,8 @@
           <Acusado label="Acusado" :data="{ id_cd: register.id }"/>
           <Vitima :data="{ id_cd: register.id }"/>
           <FileUpload label="Libelo" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Resumo do parecer da comissão" v-model="register.parecer_comissao" :options="parecerComissao" />
-          </div>
           <FileUpload label="Parecer Comissão" :data="{ proc: 'cd', campo: 'parecer_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-6">
-            <InputSelect label="Resumo do parecer do Cmt. Geral" v-model="register.parecer_cmtgeral" :options="parecerCmtgeral" />
-          </div>
           <FileUpload label="Decisão do Cmt Geral" :data="{ proc: 'cd', campo: 'decisao_file', id_proc: register.id}"/>
-          <div class="q-pa-md col-4">
-            <InputText label="Documento da prorrogação de prazo" v-model="register.doc_prorrogacao" />
-          </div>
 
           <FileUpload label="Reconsideração de ato (solução)" :data="{ proc: 'cd', campo: 'rec_ato_file', id_proc: register.id}"/>
           <FileUpload label="Recurso ao Governador (solução)" :data="{ proc: 'cd', campo: 'stj_file', id_proc: register.id}"/>
@@ -140,23 +131,15 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/DivForm.vue'
+import InputSelect from 'src/components/form/InputSelect.vue'
 
-import { motivoAberturaCd, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
+import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Cj } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
-]
+import { cjRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -179,7 +162,9 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -194,7 +179,7 @@ export default defineComponent({
         id_decorrenciaconselho: 0,
         id_situacaoconselho: 0,
         motivo_outros: '',
-        cdopm: '',
+        cdopm: getUserCdopm(),
         sjd_ref: 0,
         sjd_ref_ano: 0,
         abertura_data: new Date(),
@@ -218,25 +203,30 @@ export default defineComponent({
         ac_honra_bl: '',
         tjpr_file: '',
         sjd_file: '',
-        sintese_text: '',
+        sintese_txt: '',
         prioridade: false,
         outromotivo: '',
         deletedAt: undefined
       } as Cj,
       cdopm: getUserCdopm(),
-      motivoAberturaCd,
+      motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
     })
 
+    function getRequiredFields () {
+      return vars.register.id_andamento === 13 ? cjRequiredFields.toFinalize : cjRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      console.log('here')
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`cd/${String(vars.register.id)}`, vars.register)
-          if (ok) return root.$router.push('/cd/lista')
+          const { ok } = await api.put(`cj/${String(vars.register.id)}`, vars.register)
+          if (ok) return root.$router.push('/cj')
         }
       }
     }
@@ -245,17 +235,17 @@ export default defineComponent({
       if (!vars.register.id) return
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
-        vars.register.id_andamento = getSobrestamento('cd')
-        const { ok } = await api.put(`cd/${String(id)}`, vars.register, { silent: true })
+        vars.register.id_andamento = getSobrestamento('cj')
+        const { ok } = await api.put(`cj/${String(id)}`, vars.register, { silent: true })
         if (ok) return
       }
-      vars.register.id_andamento = getAndamento('cd')
-      await api.put(`cd/${String(id)}`, vars.register, { silent: true })
+      vars.register.id_andamento = getAndamento('cj')
+      await api.put(`cj/${String(id)}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
-        const { ok } = await api.put(`cd/${String(vars.register.id)}`, vars.register, { silent: true })
+      if (validate(refs, getRequiredFields())) {
+        const { ok } = await api.put(`cj/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -265,15 +255,15 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`cd/${id}`)
+        const { data, ok } = await api.get(`cj/${id}`)
         if (ok) vars.register = data as Cj
       }
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

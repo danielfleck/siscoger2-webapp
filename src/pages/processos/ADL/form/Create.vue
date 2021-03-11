@@ -14,7 +14,7 @@
             <InputText label="Andamento" value="Andamento" disable/>
           </DivForm>
           <DivForm>
-            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoAberturaAdl" required ref="id_motivoconselho"/>
+            <InputSelect tooltip="Lei nº 16.544/2010" label="Motivo abertura" v-model="register.id_motivoconselho" :options="motivoConselho" required ref="id_motivoconselho"/>
           </DivForm>
           <DivForm>
             <InputSelect label="Situação" v-model="register.id_situacaoconselho" :options="situacaoServicoOuFora" required ref="id_situacaoconselho"/>
@@ -106,7 +106,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { Adl } from 'src/types'
-import { motivoAberturaAdl, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
+import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { adlRequiredFields } from 'src/rules'
 
@@ -167,7 +167,7 @@ export default defineComponent({
         prioridade: false,
         deletedAt: undefined
       } as Adl,
-      motivoAberturaAdl,
+      motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
     })

@@ -1,6 +1,6 @@
 <template>
   <page :breadcrumbs="[
-    { label: 'Lista', link: '/iso/lista' },
+    { label: 'Lista', link: '/iso' },
     { label: 'Criar', link: '/iso/inserir' },
     ]">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
@@ -213,7 +213,7 @@ export default defineComponent({
           vars.register.completo = true
           await api.put(`iso/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/iso/lista')
+          return root.$router.push('/iso')
         }
       }
     }
