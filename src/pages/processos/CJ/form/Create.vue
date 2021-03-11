@@ -146,8 +146,6 @@ export default defineComponent({
         id_situacaoconselho: 0,
         motivo_outros: '',
         cdopm: getUserCdopm(),
-        sjd_ref: 0,
-        sjd_ref_ano: 0,
         abertura_data: new Date(),
         fato_data: new Date(),
         libelo_file: '',

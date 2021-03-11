@@ -20,54 +20,54 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="sindicancias"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Andamento v-model="register.id_andamento" type="sindicancia"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <AndamentoCoger v-model="register.id_andamentocoger" type="sindicancia"/>
-        </div>
-        <div v-if="register.id_andamentocoger == 99" class="q-pa-md col-4">
+        </div-form>
+        <div-form v-if="register.id_andamentocoger == 99">
           <InputText label="Motivo cancelamento" v-model="register.motivo_cancelamento" ref="motivo_cancelamento" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <OPM v-model="register.cdopm" ref="opm" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.portaria_data" label="Data da Portaria" ref="portaria_data" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <TipoBoletim v-model="register.doc_tipo"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.abertura_data" label="Data da abertura"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputSN v-model="register.prorogacao" label="Houve prorogação"/>
-        </div>
-        <div v-if="register.prorogacao" class="q-pa-md col-4">
+        </div-form>
+        <div-form v-if="register.prorogacao">
           <InputNumber label="Quantos dias?" v-model="register.prorogacao_dias" ref="prorogacao_dias" required/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-        </div>
+        </div-form>
         <template v-if="register.id">
           <ProcedOrigem type="sindicancia" :data="{ id_sindicancia: register.id }"/>
           <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_sindicancia: register.id }"/>
@@ -124,6 +124,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
 import { getDense } from 'src/store/utils'
@@ -164,6 +165,7 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
+    DivForm,
     BannerDeleted
   },
   setup (_, { refs, root }) {

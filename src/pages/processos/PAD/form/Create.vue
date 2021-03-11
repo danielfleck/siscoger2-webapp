@@ -7,39 +7,39 @@
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-12">
+          <div-form full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Andamento" value="Andamento" disable/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
+          </div-form>
+          <div-form v-if="register.cdopm">
             <Portaria label="Nº da portaria de designação" v-model="register.portaria_numero" ref="portaria_numero" required proc="pad" :cdopm="register.cdopm"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.portaria_data" label="Data da portaria de designação" ref="portaria_data" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.abertura_data" label="Data da abertura"/>
-          </div>
-          <div class="q-pa-md col-12">
+          </div-form>
+          <div-form full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </div-form>
         </form>
       </q-step>
 
@@ -93,6 +93,7 @@ import InputNumber from 'components/form/InputNumber.vue'
 import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { Pad } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
@@ -130,7 +131,8 @@ export default defineComponent({
     InputNumber,
     InputSN,
     OPM,
-    Portaria
+    Portaria,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({

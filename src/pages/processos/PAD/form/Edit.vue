@@ -20,45 +20,45 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="pad"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Andamento v-model="register.id_andamento" type="pad"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <AndamentoCoger v-model="register.id_andamentocoger" type="pad"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="Documento de origem" v-model="register.doc_origem_txt" ref="doc_origem_txt" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.fato_data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <OPM v-model="register.cdopm" ref="opm" required/>
-        </div>
-        <div class="q-pa-md col-4" v-if="register.cdopm">
+        </div-form>
+        <div-form v-if="register.cdopm">
           <Portaria label="Nº da portaria de designação" v-model="register.portaria_numero" ref="portaria_numero" required proc="pad" :cdopm="register.cdopm"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.portaria_data" label="Data da portaria de designação" ref="portaria_data" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <TipoBoletim v-model="register.doc_tipo"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.abertura_data" label="Data da abertura"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-        </div>
+        </div-form>
         <template v-if="register.id">
           <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_pad: register.id }"/>
           <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_pad: register.id }"/>
@@ -114,6 +114,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Pad } from 'src/types'
@@ -152,7 +153,8 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({

@@ -20,60 +20,60 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="desercao"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <Prioridade v-model="register.prioridade"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <Andamento v-model="register.id_andamento" type="desercao"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <AndamentoCoger v-model="register.id_andamentocoger" type="desercao"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Termo exclusão/agregação" v-model="register.termo_exclusao" :options="termoExclusaoAgregacao" ref="termo_exclusao" required/>
-          </div>
-          <div class="q-pa-md col-6" v-if="register.termo_exclusao">
+          </div-form>
+          <div-form v-if="register.termo_exclusao">
             <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_exclusao_pub" ref="termo_exclusao_pub" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Motivo abertura" v-model="register.termo_captura" :options="termoApresentacaoCaptura" ref="termo_captura" required/>
-          </div>
-          <div class="q-pa-md col-6" v-if="register.termo_captura">
+          </div-form>
+          <div-form v-if="register.termo_captura">
             <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_captura_pub" ref="termo_captura_pub" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Motivo abertura" v-model="register.pericia" :options="desercaoPericia" ref="pericia" required/>
-          </div>
-          <div class="q-pa-md col-6" v-if="register.pericia">
+          </div-form>
+          <div-form v-if="register.pericia">
             <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.pericia_pub" ref="pericia_pub" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Motivo abertura" v-model="register.termo_inclusao" :options="termoInclusaoReversao" ref="termo_inclusao" required/>
-          </div>
-          <div class="q-pa-md col-6" v-if="register.termo_inclusao">
+          </div-form>
+          <div-form v-if="register.termo_inclusao">
             <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_inclusao_pub" ref="termo_inclusao_pub" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputText tooltip="Nº do processo, vara" label="Referencia VAJME" v-model="register.referenciavajme" ref="referenciavajme" required/>
-          </div>
+          </div-form>
         <template v-if="register.id">
           <Acusado label="Desertor" :data="{ situacao: 'desertor', id_desercao: register.id }"/>
           <!-- <FileUpload label="Solução do Comandante" :data="{ proc: 'desercao', campo: 'solucao_cmt_file', id_proc: register.id}"/> -->
@@ -124,10 +124,12 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/Div-formForm.vue'
 
 import { andamentoCogerDesercao, termoExclusaoAgregacao, termoApresentacaoCaptura, desercaoPericia, termoInclusaoReversao } from 'src/config'
 import { Desercao } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
+import InputSelect from 'src/components/form/InputSelect.vue'
 
 const fields = [
   'decorrenciaconselho',
@@ -168,7 +170,9 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({

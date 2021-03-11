@@ -20,48 +20,48 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="proc_outros"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <Andamento v-model="register.andamento" type="proc_outros"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <AndamentoCoger v-model="register.andamentocoger" type="proc_outros"/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputText label="N° PID" v-model="register.num_pid" ref="num_pid" required/>
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.data" label="Data da fato" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.abertura_data" label="Data de recebimento" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <InputDate v-model="register.limite_data" label="Data limite" />
-        </div>
-        <div class="q-pa-md col-4">
+        </div-form>
+        <div-form>
           <OPM v-model="register.cdopm_apuracao" ref="cdopm_apuracao" required/>
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputSelect label="Doc. Origem" v-model="register.doc_origem" :options="docOrigemProcOutros" />
-        </div>
-        <div class="q-pa-md col-6" >
+        </div-form>
+        <div-form >
           <InputText label="Nº Documento, ou descrição outros documentos" v-model="register.num_doc_origem" ref="motivo_outros" required/>
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputSelect label="Doc. Origem" v-model="register.motivo_abertura" :options="motivoAberturaProcOutros" />
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputAno label="BOU Ano" v-model="register.bou_ano"/>
-        </div>
-        <div class="q-pa-md col-6">
+        </div-form>
+        <div-form>
           <InputNumber label="BOU Número" v-model="register.bou_numero"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
           <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-        </div>
+        </div-form>
         <template v-if="register.id">
           <ProcedOrigem type="proc_outros" :data="{ id_proc_outros: register.id }"/>
           <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_proc_outros: register.id }"/>
@@ -118,10 +118,12 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/Div-formForm.vue'
 
 import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { ProcOutros } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
+import InputSelect from 'src/components/form/InputSelect.vue'
 const fields = [
   'motivo_cancelamento',
   'doc_origem_txt',
@@ -156,7 +158,9 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({

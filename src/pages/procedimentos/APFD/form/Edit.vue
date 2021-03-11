@@ -20,45 +20,45 @@
     </q-tabs>
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="main" class="row">
-        <div  class="q-pa-md col-12">
+        <div-form full>
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="apfd"/>
-        </div>
-        <div class="q-pa-md col-12">
+        </div-form>
+        <div-form full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Tipo" v-model="register.tipo" :options="tipoApfd" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <Andamento v-model="register.id_andamento" type="apfd"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <AndamentoCoger v-model="register.id_andamentocoger" type="apfd"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-           <div class="q-pa-md col-6">
+          </div-form>
+           <div-form>
             <InputSelect tooltip="Do mais grave ao menos grave" label="Tipos penais" v-model="register.tipo_penal_novo" :options="crime" />
-          </div>
-          <div v-if="register.tipo_penal_novo === 'Outros'" class="q-pa-md col-4">
+          </div-form>
+          <div-form v-if="register.tipo_penal_novo === 'Outros'">
             <InputText label="Documento de origem" v-model="register.especificar" ref="especificar" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText tooltip="Nº do processo e vara" label="Referencia da VAJME" v-model="register.referenciavajme" />
-          </div>
-          <div class="q-pa-md col-12">
+          </div-form>
+          <div-form full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </div-form>
         <template v-if="register.id">
           <Membro label="Presidente" ref="presidente" required :data="{ situacao: 'presidente', id_apfd: register.id }"/>
           <Membro label="Condutor" ref="condutor" required :data="{ situacao: 'condutor', id_apfd: register.id }"/>
@@ -119,6 +119,8 @@ import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Apfd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
+import DivForm from 'src/components/form/Div-formForm.vue'
+import InputSelect from 'src/components/form/InputSelect.vue'
 const fields = [
   'tipo',
   'cdopm',
@@ -155,7 +157,9 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({

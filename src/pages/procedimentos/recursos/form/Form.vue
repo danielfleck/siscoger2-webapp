@@ -3,27 +3,27 @@
   { label: 'Lista', link: '/recursos' },
   { label: 'Editar', link: '/recursos/editar' },
   ]">
-    <div  class="q-pa-md col-12">
+    <div-form full>
       <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="recursos"/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form>
       <ProcedTipos v-model="register.procedimento" label="Processo/Procedimento" ref="origem_proc" required/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form>
       <InputText label="Referência" v-model="register.sjd_ref" ref="origem_sjd_ref" mask="######" required/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form>
       <InputAno v-model="register.sjd_ref_ano" ref="origem_sjd_ref_ano" required/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form>
       <InputText label="Data e hora do recebimento (automático)" v-model="register.datahora" disable/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form full>
       <q-btn-group spread>
         <BtnStack v-if="register.id" label="Atualizar" icon="fa fa-pen" @click="save"/>
         <BtnStack v-else label="Inserir" icon="fa fa-plus" @click="create"/>
       </q-btn-group>
-    </div>
+    </div-form>
     <q-btn @click="save" color="primary" label="Salvar" class="full-width"/>
   </page>
 </template>
@@ -55,6 +55,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { Recurso } from 'src/types'
 import { api, getUserCdopm, validate } from 'src/services'
@@ -92,7 +93,8 @@ export default defineComponent({
     Portaria,
     Andamento,
     AndamentoCoger,
-    BannerDeleted
+    BannerDeleted,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({

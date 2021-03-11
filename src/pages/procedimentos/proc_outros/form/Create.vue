@@ -7,42 +7,42 @@
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-4">
+          <div-form>
             <InputText label="Andamento" value="Abertura" disable/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° PID" v-model="register.num_pid" ref="num_pid" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.abertura_data" label="Data de recebimento" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.limite_data" label="Data limite" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <OPM v-model="register.cdopm_apuracao" ref="cdopm_apuracao" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Doc. Origem" v-model="register.doc_origem" :options="docOrigemProcOutros" />
-          </div>
-          <div class="q-pa-md col-6" >
+          </div-form>
+          <div-form >
             <InputText label="Nº Documento, ou descrição outros documentos" v-model="register.num_doc_origem" ref="motivo_outros" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Doc. Origem" v-model="register.motivo_abertura" :options="motivoAberturaProcOutros" />
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputAno label="BOU Ano" v-model="register.bou_ano"/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputNumber label="BOU Número" v-model="register.bou_numero"/>
-          </div>
-          <div class="q-pa-md col-12">
+          </div-form>
+          <div-form full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </div-form>
         </form>
       </q-step>
 

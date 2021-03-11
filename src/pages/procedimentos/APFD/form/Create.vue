@@ -7,36 +7,36 @@
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-12">
+          <div-form full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Tipo" v-model="register.tipo" :options="tipoApfd" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-           <div class="q-pa-md col-6">
+          </div-form>
+           <div-form>
             <InputSelect tooltip="Do mais grave ao menos grave" label="Tipos penais" v-model="register.tipo_penal_novo" :options="crime" />
-          </div>
-          <div v-if="register.tipo_penal_novo === 'Outros'" class="q-pa-md col-4">
+          </div-form>
+          <div-form v-if="register.tipo_penal_novo === 'Outros'" >
             <InputText label="Documento de origem" v-model="register.especificar" ref="especificar" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <TipoBoletim v-model="register.doc_tipo"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText tooltip="Nº do processo e vara" label="Referencia da VAJME" v-model="register.referenciavajme" />
-          </div>
-          <div class="q-pa-md col-12">
+          </div-form>
+          <div-form full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </div-form>
         </form>
       </q-step>
 

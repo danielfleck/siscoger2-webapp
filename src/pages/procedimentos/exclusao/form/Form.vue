@@ -4,60 +4,60 @@
   { label: register.id ? 'Editar' : 'Inserir', link: '/exclusao/editar' },
   ]">
 
-    <div  class="q-pa-md col-12">
+    <div-form full>
       <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="exclusao"/>
-    </div>
-    <div class="q-pa-xs col-4">
-        <InputText label="RG" ref="rg" v-model="register.rg" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
+      <InputText label="RG" ref="rg" v-model="register.rg" required/>
+    </div-form>
+    <div-form>
       <InputText :disable="disabled" label="Nome" ref="nome" v-model="register.nome" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
       <PostoGrad :disable="disabled" v-model="register.cargo" ref="cargo" required/>
-    </div>
-    <div class="q-pa-md col-4">
+    </div-form>
+    <div-form>
       <OPM v-model="register.cdopm_quandoexcluido" ref="cdopm_quandoexcluido" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
       <ProcedTipos v-model="register.origem_proc" label="Processo/Procedimento" ref="origem_proc" required/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form>
       <InputAno v-model="register.origem_sjd_ref_ano" ref="origem_sjd_ref_ano" required/>
-    </div>
-    <div class="q-pa-xs col-3">
+    </div-form>
+    <div-form>
       <InputText label="Referência" v-model="register.origem_sjd_ref" ref="origem_sjd_ref" mask="######" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
       <InputText tooltip="Ex: Ação Penal Militar nº 2010.0000XXX-X - Curitiba" label="Processo, Nº do processo - Comarca" v-model="register.processo" ref="processo" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
       <InputText tooltip="Ex: Art. 121 § 2º CP" label="Artigos da Infração penal" v-model="register.complemento" ref="complemento" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
       <InputText tooltip="Ex: 3ª Vara Criminal de Curitiba" label="Vara e Comarca" v-model="register.vara" ref="vara" required/>
-    </div>
-    <div class="q-pa-xs col-4">
+    </div-form>
+    <div-form>
       <InputText tooltip="Ex: 0003956-00.2012.8.16.0013" label="Nº único" v-model="register.numerounico" ref="numerounico" required/>
-    </div>
-    <div class="q-pa-md col-4">
+    </div-form>
+    <div-form>
       <InputDate v-model="register.data" label="Data da sentença" ref="data" required/>
-    </div>
-    <div class="q-pa-md col-4">
+    </div-form>
+    <div-form>
       <InputDate v-model="register.exclusao_data" label="Data da exclusão (data que publicou a portaria)" ref="exclusao_data" required/>
-    </div>
-    <div class="q-pa-md col-4">
+    </div-form>
+    <div-form>
       <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required/>
-    </div>
-    <div class="q-pa-md col-4">
+    </div-form>
+    <div-form>
       <InputNumber label="BG número" v-model="register.bg_numero" ref="bg_numero" required/>
-    </div>
-    <div class="q-pa-md col-4">
+    </div-form>
+    <div-form>
       <InputAno label="BG Ano" v-model="register.bg_ano" ref="bg_ano" required/>
-    </div>
-    <div class="q-pa-md col-12">
+    </div-form>
+    <div-form full>
       <InputText label="Sintese do fato" v-model="register.obs_txt" ref="obs_txt" :minLength="200" autogrow required :lorem="200"/>
-    </div>
+    </div-form>
     <q-btn @click="save" color="primary" label="Salvar" class="full-width"/>
   </page>
 </template>
@@ -94,6 +94,7 @@ import { ExclusaoJudicial } from 'src/types'
 import { api, validate } from 'src/services'
 import PostoGrad from 'src/components/form/PostoGrad.vue'
 import ProcedTipos from 'src/components/form/ProcedTipos.vue'
+import DivForm from 'src/components/form/Div-formForm.vue'
 const fields = [
   'rg',
   'cargo',
@@ -138,7 +139,8 @@ export default defineComponent({
     AndamentoCoger,
     BannerDeleted,
     PostoGrad,
-    ProcedTipos
+    ProcedTipos,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({

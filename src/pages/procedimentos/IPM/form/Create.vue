@@ -7,66 +7,66 @@
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
         <form class="row">
-          <div class="q-pa-md col-12">
+          <div-form full>
             <Prioridade v-model="register.prioridade"/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Andamento" value="Andamento" disable/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <OPM v-model="register.cdopm" ref="opm" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.abertura_data" label="Data da portaria de delegação de poderes" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputDate v-model="register.autuacao_data" label="Data da portaria de instauração" />
-          </div>
-          <div class="q-pa-md col-4" v-if="register.cdopm">
+          </div-form>
+          <div-form v-if="register.cdopm">
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="ipm" :cdopm="register.cdopm"/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Motivo da abertura (crime)" v-model="register.crime" :options="crime" />
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Tipo (crime)" v-model="register.tentado" :options="tentado" />
-          </div>
-          <div v-if="register.crime === 'Outros'" class="q-pa-md col-4">
+          </div-form>
+          <div-form v-if="register.crime === 'Outros'">
             <InputText label="Documento de origem" v-model="register.crime_especificar" ref="crime_especificar" required/>
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             <InputSelect label="Situação" v-model="register.id_situacao" :options="situacaoServicoOuFora" />
-          </div>
-          <div class="q-pa-md col-6">
+          </div-form>
+          <div-form>
             CIDADE DO FATO - TODO
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Boletim" mask="#######" v-model="register.bou_numero" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputAno label="Bou Ano" v-model="register.bou_ano" ref="bou_ano" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="N° Eproc" mask="#######" v-model="register.n_eproc" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputAno label="Eproc Ano" v-model="register.ano_eproc" ref="bou_ano" required/>
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Conclusão do encarregado" v-model="register.relato_enc" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Solução do Cmt OPM" v-model="register.relato_cmtopm" />
-          </div>
-          <div class="q-pa-md col-4">
+          </div-form>
+          <div-form>
             <InputText label="Decisão do Cmt Geral" v-model="register.relato_cmtgeral" />
-          </div>
-          <div class="q-pa-md col-12">
+          </div-form>
+          <div-form full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div>
+          </div-form>
         </form>
       </q-step>
 
@@ -124,6 +124,7 @@ import Portaria from 'components/form/Portaria.vue'
 import { andamentoCogerIPM, andamentoIPM } from 'src/config'
 import { Ipm } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
+import DivForm from 'src/components/form/div-formForm.vue'
 
 const fields = [
   'id_andamento',
@@ -187,7 +188,8 @@ export default defineComponent({
     InputNumber,
     InputSN,
     OPM,
-    Portaria
+    Portaria,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({
