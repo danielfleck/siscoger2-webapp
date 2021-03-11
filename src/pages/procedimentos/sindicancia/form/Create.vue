@@ -104,19 +104,7 @@ import DivForm from 'src/components/form/DivForm.vue'
 import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindicancia, prorogacao, tipoBoletim } from 'src/config/selects'
 import { Sindicancia } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
-]
+import { sindicanciaRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -187,7 +175,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, sindicanciaRequiredFields.toCreate)) {
         const { ok, data } = await api.post('sindicancias', vars.register, { silent: true, debug: true })
         if (ok) {
           const sindicancia = data as Sindicancia
@@ -199,7 +187,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, sindicanciaRequiredFields.toCreate)) {
         const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -209,7 +197,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, sindicanciaRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {

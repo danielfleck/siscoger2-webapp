@@ -131,18 +131,8 @@ import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Sindicancia } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'sindicante',
-  'escrivao'
-]
+import { sindicanciaRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -212,8 +202,12 @@ export default defineComponent({
       tipoBoletim
     })
 
+    function getRequiredFields () {
+      return vars.register.id_andamento === 7 ? sindicanciaRequiredFields.toFinalize : sindicanciaRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -237,7 +231,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`sindicancias/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
