@@ -201,7 +201,6 @@ export default defineComponent({
       },
       async replace (): Promise<boolean> {
         const substitute = await this.create()
-        console.log(substitute)
         if (substitute) {
           const { id } = vars.substituted
           vars.substituted.rg_substituto = substitute.rg

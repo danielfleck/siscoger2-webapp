@@ -42,7 +42,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('recursos/andamento')
+      const { data } = await api.get('recursos')
       vars.data = Object.freeze(data as Recurso[])
     }
 

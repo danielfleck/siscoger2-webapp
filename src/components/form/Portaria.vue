@@ -62,7 +62,7 @@ export default defineComponent({
       required: true
     },
     value: {
-      type: String,
+      type: [String, Number],
       default: ''
     },
     proc: {
@@ -116,8 +116,8 @@ export default defineComponent({
         refs.root.validate()
         return vars.isValid
       },
-      async checkDuplicated (value: string) {
-        if (props.proc && props.cdopm && value.length > 3) {
+      async checkDuplicated (value: string | number) {
+        if (props.proc && props.cdopm && String(value).length > 3) {
           const proc = toLowercase(props.proc, true)
           const response = await post(`${String(proc)}/portarias`, {
             cdopm: props.cdopm,

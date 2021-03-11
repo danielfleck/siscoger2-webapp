@@ -101,6 +101,7 @@ import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incomplet
 import InputAno from 'src/components/form/InputAno.vue'
 import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { procoutroRequiredFields } from 'src/rules'
+import DivForm from 'src/components/form/DivForm.vue'
 
 export default defineComponent({
   name: 'Form',
@@ -123,7 +124,8 @@ export default defineComponent({
     InputSN,
     OPM,
     Portaria,
-    InputAno
+    InputAno,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -197,14 +199,14 @@ export default defineComponent({
 
     async function finalize () {
       if (validate(refs, procoutroRequiredFields.toCreate)) {
-        const validateSubforms = await subforms()
+        // const validateSubforms = await subforms()
 
-        if (validateSubforms && vars.register.id) {
+        // if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           await api.put(`procoutros/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
           return root.$router.push('/proc_outros')
-        }
+        // }
       }
     }
 

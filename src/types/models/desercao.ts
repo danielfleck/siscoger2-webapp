@@ -20,7 +20,7 @@ export type Desercao = {
   termo_inclusao_pub: string;
   opm_meta4: string;
   referenciavajme: string;
-  prioridade: number;
+  prioridade: boolean;
   completo: boolean,
   deletedAt?: Date
 };

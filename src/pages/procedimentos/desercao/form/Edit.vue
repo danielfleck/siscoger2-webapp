@@ -26,56 +26,53 @@
         <div-form full>
           <Prioridade v-model="register.prioridade"/>
         </div-form>
-        <div-form full>
-            <Prioridade v-model="register.prioridade"/>
-          </div-form>
-          <div-form>
-            <Andamento v-model="register.id_andamento" type="desercao"/>
-          </div-form>
-          <div-form>
-            <AndamentoCoger v-model="register.id_andamentocoger" type="desercao"/>
-          </div-form>
-          <div-form>
-            <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div-form>
-          <div-form>
-            <OPM v-model="register.cdopm" ref="opm" required/>
-          </div-form>
-          <div-form>
-            <TipoBoletim v-model="register.doc_tipo"/>
-          </div-form>
-          <div-form>
-            <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div-form>
-          <div-form>
-            <InputSelect label="Termo exclusão/agregação" v-model="register.termo_exclusao" :options="termoExclusaoAgregacao" ref="termo_exclusao" required/>
-          </div-form>
-          <div-form v-if="register.termo_exclusao">
-            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_exclusao_pub" ref="termo_exclusao_pub" required/>
-          </div-form>
-          <div-form>
-            <InputSelect label="Motivo abertura" v-model="register.termo_captura" :options="termoApresentacaoCaptura" ref="termo_captura" required/>
-          </div-form>
-          <div-form v-if="register.termo_captura">
-            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_captura_pub" ref="termo_captura_pub" required/>
-          </div-form>
-          <div-form>
-            <InputSelect label="Motivo abertura" v-model="register.pericia" :options="desercaoPericia" ref="pericia" required/>
-          </div-form>
-          <div-form v-if="register.pericia">
-            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.pericia_pub" ref="pericia_pub" required/>
-          </div-form>
-          <div-form>
-            <InputSelect label="Motivo abertura" v-model="register.termo_inclusao" :options="termoInclusaoReversao" ref="termo_inclusao" required/>
-          </div-form>
-          <div-form v-if="register.termo_inclusao">
-            <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_inclusao_pub" ref="termo_inclusao_pub" required/>
-          </div-form>
-          <div-form>
-            <InputText tooltip="Nº do processo, vara" label="Referencia VAJME" v-model="register.referenciavajme" ref="referenciavajme" required/>
-          </div-form>
+        <div-form>
+          <Andamento v-model="register.id_andamento" type="desercao"/>
+        </div-form>
+        <div-form>
+          <AndamentoCoger v-model="register.id_andamentocoger" type="desercao"/>
+        </div-form>
+        <div-form>
+          <InputDate v-model="register.fato_data" label="Data da fato" />
+        </div-form>
+        <div-form>
+          <OPM v-model="register.cdopm" ref="opm" required/>
+        </div-form>
+        <div-form>
+          <TipoBoletim v-model="register.doc_tipo"/>
+        </div-form>
+        <div-form>
+          <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
+        </div-form>
+        <div-form>
+          <InputSelect label="Termo exclusão/agregação" v-model="register.termo_exclusao" :options="termoExclusaoAgregacao" ref="termo_exclusao" required/>
+        </div-form>
+        <div-form v-if="register.termo_exclusao">
+          <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_exclusao_pub" ref="termo_exclusao_pub" required/>
+        </div-form>
+        <div-form>
+          <InputSelect label="Motivo abertura" v-model="register.termo_captura" :options="termoApresentacaoCaptura" ref="termo_captura" required/>
+        </div-form>
+        <div-form v-if="register.termo_captura">
+          <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_captura_pub" ref="termo_captura_pub" required/>
+        </div-form>
+        <div-form>
+          <InputSelect label="Motivo abertura" v-model="register.pericia" :options="desercaoPericia" ref="pericia" required/>
+        </div-form>
+        <div-form v-if="register.pericia">
+          <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.pericia_pub" ref="pericia_pub" required/>
+        </div-form>
+        <div-form>
+          <InputSelect label="Motivo abertura" v-model="register.termo_inclusao" :options="termoInclusaoReversao" ref="termo_inclusao" required/>
+        </div-form>
+        <div-form v-if="register.termo_inclusao">
+          <InputText tooltip="Ex: BG 110/2010" label="Publicação" v-model="register.termo_inclusao_pub" ref="termo_inclusao_pub" required/>
+        </div-form>
+        <div-form>
+          <InputText tooltip="Nº do processo, vara" label="Referencia VAJME" v-model="register.referenciavajme" ref="referenciavajme" required/>
+        </div-form>
         <template v-if="register.id">
-          <Acusado label="Desertor" :data="{ situacao: 'Desertor', id_desercao: register.id }"/>
+          <Acusado label="Desertor" :data="{ situacao: 'Desertor', id_desercao: register.id }" ref="Desertor" required/>
           <!-- <FileUpload label="Solução do Comandante" :data="{ proc: 'desercao', campo: 'solucao_cmt_file', id_proc: register.id}"/> -->
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
@@ -184,7 +181,7 @@ export default defineComponent({
         termo_inclusao_pub: '',
         opm_meta4: '',
         referenciavajme: '',
-        prioridade: 0,
+        prioridade: false,
         deletedAt: undefined
       } as Desercao,
       cdopm: getUserCdopm(),

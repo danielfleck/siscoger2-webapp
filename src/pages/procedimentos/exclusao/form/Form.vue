@@ -11,10 +11,10 @@
       <InputText label="RG" ref="rg" v-model="register.rg" required/>
     </div-form>
     <div-form>
-      <InputText :disable="disabled" label="Nome" ref="nome" v-model="register.nome" required/>
+      <InputText :disable="false" label="Nome" ref="nome" v-model="register.nome" required/>
     </div-form>
     <div-form>
-      <PostoGrad :disable="disabled" v-model="register.cargo" ref="cargo" required/>
+      <PostoGrad :disable="false" v-model="register.cargo" ref="cargo" required/>
     </div-form>
     <div-form>
       <OPM v-model="register.cdopm_quandoexcluido" ref="cdopm_quandoexcluido" required/>
@@ -96,6 +96,7 @@ import PostoGrad from 'src/components/form/PostoGrad.vue'
 import ProcedTipos from 'src/components/form/ProcedTipos.vue'
 import DivForm from 'src/components/form/DivForm.vue'
 import { exclusaojudicialRequiredFields } from 'src/rules'
+import InputAno from 'src/components/form/InputAno.vue'
 
 export default defineComponent({
   name: 'Form',
@@ -122,7 +123,8 @@ export default defineComponent({
     BannerDeleted,
     PostoGrad,
     ProcedTipos,
-    DivForm
+    DivForm,
+    InputAno
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -134,8 +136,8 @@ export default defineComponent({
         nome: '',
         cdopm_quandoexcluido: '',
         origem_proc: '',
-        origem_sjd_ref: 0,
-        origem_sjd_ref_ano: 0,
+        // origem_sjd_ref: 0,
+        // origem_sjd_ref_ano: 0,
         origem_opm: '',
         processo: '',
         complemento: '',
@@ -152,14 +154,24 @@ export default defineComponent({
       } as ExclusaoJudicial
     })
 
+    function cast () {
+      const { origem_sjd_ref, origem_sjd_ref_ano, portaria_numero } = vars.register
+      return {
+        ...vars.register,
+        origem_sjd_ref: Number(origem_sjd_ref),
+        origem_sjd_ref_ano: Number(origem_sjd_ref_ano),
+        portaria_numero: Number(portaria_numero)
+      }
+    }
     async function save () {
       if (validate(refs, exclusaojudicialRequiredFields.toCreate)) {
-        if (vars.register.id) {
-          const { ok } = await api.post('exclusoesjudicias', vars.register)
+        if (!vars.register.id) {
+          const { ok } = await api.post('exclusoesjudicias', cast())
+          if (ok) return root.$router.push('/exclusao')
+        } else {
+          const { ok } = await api.put(`exclusoesjudicias/${String(vars.register.id)}`, vars.register)
           if (ok) return root.$router.push('/exclusao')
         }
-        const { ok } = await api.put(`exclusoesjudicias/${String(vars.register.id)}`, vars.register)
-        if (ok) return root.$router.push('/exclusao')
       }
     }
 

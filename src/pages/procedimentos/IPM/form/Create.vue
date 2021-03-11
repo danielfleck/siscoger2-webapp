@@ -41,7 +41,7 @@
             <InputSelect label="Situação" v-model="register.id_situacao" :options="situacaoServicoOuFora" />
           </div-form>
           <div-form>
-            CIDADE DO FATO - TODO
+            <City v-model="register.id_municipio"/>
           </div-form>
           <div-form>
             <InputText label="N° Boletim" mask="#######" v-model="register.bou_numero" />
@@ -73,7 +73,7 @@
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
           <ProcedOrigem type="ipm" :data="{ id_ipm: register.id }"/>
-          <Membro label="Encarregado" ref="encarregado" required :data="{ situacao: 'encarregado', id_ipm: register.id }"/>
+          <Membro label="Encarregado" ref="Encarregado" required :data="{ situacao: 'encarregado', id_ipm: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_ipm: register.id }"/>
           <Acusado label="Indiciados" :data="{ situacao: 'indiciado', id_ipm: register.id }"/>
           <Vitima :data="{ id_ipm: register.id }"/>
@@ -126,6 +126,8 @@ import { Ipm } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import DivForm from 'src/components/form/DivForm.vue'
 import { ipmRequiredFields } from 'src/rules'
+import City from 'src/components/form/City.vue'
+import InputAno from 'src/components/form/InputAno.vue'
 
 export default defineComponent({
   name: 'Form',
@@ -148,7 +150,9 @@ export default defineComponent({
     InputSN,
     OPM,
     Portaria,
-    DivForm
+    DivForm,
+    City,
+    InputAno
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -198,7 +202,7 @@ export default defineComponent({
         opm_meta4: '',
         bou_ano: 0,
         bou_numero: 0,
-        prioridade: 0,
+        prioridade: false,
         deletedAt: undefined
       } as Ipm,
       cdopm: getUserCdopm(),
@@ -252,9 +256,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Encarregado = await refs.Encarregado.getState()
+      if (Encarregado === 'toInsert') {
+        errorNotify('Insira o Encarregado')
         return false
       }
       return true

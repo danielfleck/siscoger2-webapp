@@ -225,7 +225,7 @@ export default defineComponent({
         opm_meta4: '',
         bou_ano: 0,
         bou_numero: 0,
-        prioridade: 0,
+        prioridade: false,
         deletedAt: undefined
       } as Ipm
     })

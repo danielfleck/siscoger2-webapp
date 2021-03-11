@@ -55,10 +55,6 @@ export default defineComponent({
       breadcrumbs: [] as Link[],
       tabs: [
         { link: '/recursos', label: 'Consulta' },
-        { link: '/recursos/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/recursos/andamento', label: 'Andamento' },
-        { link: '/recursos/resultado', label: 'Resultado' },
-        { link: '/recursos/prazos', label: 'Prazos' },
         { link: '/recursos/apagados', label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'

@@ -131,10 +131,20 @@ export default defineComponent({
       } as Register,
       registers: [] as Array<Register>,
       disabled: true,
+      situation: 'toInsert',
       resultadoAcusado,
       postograd
     })
     const functions = {
+      validate () {
+        if (props.required) {
+          return validate(refs, fields)
+        }
+        return true
+      },
+      getState () {
+        return vars.situation
+      },
       async loadData (): Promise<void> {
         // resetValidation(refs, fields)
         const response = await post(`${moduleName}/search`, props.data, { silent: true })
@@ -142,6 +152,7 @@ export default defineComponent({
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
+          vars.situation = 'inserted'
           const data = { ...props.data, ...vars.register }
           const response = await post(moduleName, data, { complete: true })
           if (response.returntype === 'success') {
@@ -156,6 +167,7 @@ export default defineComponent({
       },
       async update (register: Register): Promise<void> {
         if (validate(refs, fields)) {
+          vars.situation = 'inserted'
           const data = { ...props.data, ...register }
           const response = await put(`${moduleName}/${register?.id}`, data, { complete: true })
           if (response.returntype === 'success') {

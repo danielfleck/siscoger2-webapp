@@ -28,8 +28,8 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
   })
 
   Router.beforeEach((to: Route, from: Route, next: Next):void => {
-    checkIfIsLogged(next)
     if (to?.meta?.auth) {
+      checkIfIsLogged(next)
     }
 
     if (to?.meta?.roles?.length) {
@@ -48,7 +48,13 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
       checkIfHasTerms(next)
     }
 
-    checkIfHasIncomplete(to, from, next)
+    if (
+      from.path !== '/login' &&
+        to.path !== '/login' &&
+        to.path !== '/termos'
+    ) {
+      checkIfHasIncomplete(to, from, next)
+    }
 
     next()
   })

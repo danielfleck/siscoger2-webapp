@@ -42,7 +42,7 @@ export type Ipm = {
   opm_meta4: string;
   bou_ano: number;
   bou_numero: number;
-  prioridade: number;
+  prioridade: boolean;
   n_eproc: string;
   ano_eproc: string;
   completo: boolean;

@@ -24,41 +24,41 @@
           <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="apfd"/>
         </div-form>
         <div-form full>
-            <Prioridade v-model="register.prioridade"/>
-          </div-form>
+          <Prioridade v-model="register.prioridade"/>
+        </div-form>
+        <div-form>
+          <InputSelect label="Tipo" v-model="register.tipo" :options="tipoApfd" />
+        </div-form>
+        <div-form>
+          <OPM v-model="register.cdopm" ref="opm" required/>
+        </div-form>
+        <div-form>
+          <Andamento v-model="register.id_andamento" type="apfd"/>
+        </div-form>
+        <div-form>
+          <AndamentoCoger v-model="register.id_andamentocoger" type="apfd"/>
+        </div-form>
+        <div-form>
+          <InputDate v-model="register.fato_data" label="Data da fato" />
+        </div-form>
           <div-form>
-            <InputSelect label="Tipo" v-model="register.tipo" :options="tipoApfd" />
-          </div-form>
-          <div-form>
-            <OPM v-model="register.cdopm" ref="opm" required/>
-          </div-form>
-          <div-form>
-            <Andamento v-model="register.id_andamento" type="apfd"/>
-          </div-form>
-          <div-form>
-            <AndamentoCoger v-model="register.id_andamentocoger" type="apfd"/>
-          </div-form>
-          <div-form>
-            <InputDate v-model="register.fato_data" label="Data da fato" />
-          </div-form>
-           <div-form>
-            <InputSelect tooltip="Do mais grave ao menos grave" label="Tipos penais" v-model="register.tipo_penal_novo" :options="crime" />
-          </div-form>
-          <div-form v-if="register.tipo_penal_novo === 'Outros'">
-            <InputText label="Documento de origem" v-model="register.especificar" ref="especificar" required/>
-          </div-form>
-          <div-form>
-            <TipoBoletim v-model="register.doc_tipo"/>
-          </div-form>
-          <div-form>
-            <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
-          </div-form>
-          <div-form>
-            <InputText tooltip="Nº do processo e vara" label="Referencia da VAJME" v-model="register.referenciavajme" />
-          </div-form>
-          <div-form full>
-            <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
-          </div-form>
+          <InputSelect tooltip="Do mais grave ao menos grave" label="Tipos penais" v-model="register.tipo_penal_novo" :options="crime" />
+        </div-form>
+        <div-form v-if="register.tipo_penal_novo === 'Outros'">
+          <InputText label="Documento de origem" v-model="register.especificar" ref="especificar" required/>
+        </div-form>
+        <div-form>
+          <TipoBoletim v-model="register.doc_tipo"/>
+        </div-form>
+        <div-form>
+          <InputText label="N° Boletim" mask="#######/####" reverse v-model="register.doc_numero" />
+        </div-form>
+        <div-form>
+          <InputText tooltip="Nº do processo e vara" label="Referencia da VAJME" v-model="register.referenciavajme" />
+        </div-form>
+        <div-form full>
+          <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
+        </div-form>
         <template v-if="register.id">
           <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_apfd: register.id }"/>
           <Membro label="Condutor" ref="condutor" required :data="{ situacao: 'condutor', id_apfd: register.id }"/>

@@ -92,6 +92,7 @@ import Portaria from 'components/form/Portaria.vue'
 import { Iso } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { isoRequiredFields } from 'src/rules'
+import DivForm from 'src/components/form/DivForm.vue'
 
 export default defineComponent({
   name: 'Form',
@@ -113,7 +114,8 @@ export default defineComponent({
     InputNumber,
     InputSN,
     OPM,
-    Portaria
+    Portaria,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -124,50 +126,25 @@ export default defineComponent({
         id: 0,
         id_andamento: 0,
         id_andamentocoger: 0,
-        id_municipio: 0,
-        id_situacao: 0,
-        cdopm: '',
-        opm_sigla: '',
-        opm_ref: 0,
-        opm_ref_ano: 0,
         sjd_ref: 0,
         sjd_ref_ano: 0,
-        abertura_data: new Date(),
+        cdopm: '',
         fato_data: new Date(),
-        autuacao_data: new Date(),
-        crime: '',
-        tentado: '',
-        crime_especificar: '',
-        sintese_txt: '', // text
-        relato_enc: '',
-        relato_enc_data: new Date(),
-        relato_cmtopm: '',
-        relato_cmtopm_data: new Date(),
-        relato_cmtgeral: '',
-        relato_cmtgeral_data: new Date(),
-        vajme_ref: '',
-        justicacomum_ref: '',
-        vitima: '',
-        confronto_armado_bl: '',
-        vitima_qtdd: 0,
-        julgamento: '',
-        portaria_numero: '',
-        exclusao_txt: '', // text
-        relato_enc_file: '',
-        relato_cmtopm_file: '',
-        relato_cmtgeral_file: '',
-        defensor_oab: '',
-        defensor_nome: '',
-        relcomplementar_file: '',
-        relcomplementar_data: new Date(),
-        opm_meta4: '',
-        bou_ano: 0,
-        bou_numero: 0,
-        prioridade: 0,
+        abertura_data: new Date(),
+        sintese_txt: '',
         tipo_penal: '',
         doc_tipo: '',
         doc_numero: '',
-        portaria_data: new Date()
+        portaria_numero: '',
+        portaria_data: new Date(),
+        exclusao_txt: '',
+        opm_meta4: '',
+        relatoriomedico_file: '',
+        relatoriomedico_data: new Date(),
+        solucaoautoridade_file: '',
+        solucaoautoridade_data: new Date(),
+        prioridade: false,
+        completo: false,
       } as Iso,
       cdopm: getUserCdopm()
     })

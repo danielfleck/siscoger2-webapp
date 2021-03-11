@@ -42,10 +42,10 @@
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
-          <Membro label="Presidente" ref="presidente" required :data="{ situacao: 'presidente', id_apfd: register.id }"/>
-          <Membro label="Condutor" ref="condutor" required :data="{ situacao: 'condutor', id_apfd: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_apfd: register.id }"/>
-          <Acusado label="Acusado" :data="{ situacao: 'acusado', id_apfd: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_apfd: register.id }"/>
+          <Membro label="Condutor" ref="Condutor" required :data="{ situacao: 'Condutor', id_apfd: register.id }"/>
+          <Membro label="Escrivão" ref="Escrivão" :data="{ situacao: 'Escrivão', id_apfd: register.id }"/>
+          <Acusado label="Acusado" :data="{ situacao: 'Acusado', id_apfd: register.id }"/>
           <Vitima :data="{ id_apfd: register.id }"/>
         </template>
       </q-step>
@@ -90,6 +90,7 @@ import InputNumber from 'components/form/InputNumber.vue'
 import InputSN from 'components/form/InputSN.vue'
 import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { andamentoCogerAPFD, crime, tipoApfd } from 'src/config'
 import { Apfd } from 'src/types'
@@ -116,7 +117,8 @@ export default defineComponent({
     InputNumber,
     InputSN,
     OPM,
-    Portaria
+    Portaria,
+    DivForm
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -196,9 +198,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = await refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

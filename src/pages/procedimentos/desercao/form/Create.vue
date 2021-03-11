@@ -57,7 +57,7 @@
 
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
-          <Acusado label="Desertor" :data="{ situacao: 'desertor', id_desercao: register.id }"/>
+          <Acusado label="Desertor" :data="{ situacao: 'Desertor', id_desercao: register.id }" ref="Desertor" required/>
         </template>
       </q-step>
 
@@ -155,7 +155,7 @@ export default defineComponent({
         termo_inclusao_pub: '',
         opm_meta4: '',
         referenciavajme: '',
-        prioridade: 0,
+        prioridade: false,
         deletedAt: undefined
       } as Desercao,
       cdopm: getUserCdopm(),
