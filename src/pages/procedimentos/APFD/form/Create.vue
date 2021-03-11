@@ -94,21 +94,7 @@ import Portaria from 'components/form/Portaria.vue'
 import { andamentoCogerAPFD, crime, tipoApfd } from 'src/config'
 import { Apfd } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'tipo',
-  'cdopm',
-  'fato_data',
-  'sintese_txt',
-  'tipo_penal',
-  'tipo_penal_novo',
-  'especificar',
-  'doc_tipo',
-  'doc_numero',
-  'exclusao_txt',
-  'opm_meta4',
-  'referenciavajme'
-]
+import { apfdRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -165,7 +151,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, apfdRequiredFields.toCreate)) {
         const { ok, data } = await api.post('apfd', vars.register, { silent: true, debug: true })
         if (ok) {
           const apfd = data as Apfd
@@ -177,7 +163,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, apfdRequiredFields.toCreate)) {
         const { ok } = await api.put(`apfd/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -187,7 +173,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, apfdRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {

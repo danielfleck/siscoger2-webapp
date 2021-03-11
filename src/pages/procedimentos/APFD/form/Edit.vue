@@ -121,20 +121,8 @@ import { Apfd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import DivForm from 'src/components/form/DivForm.vue'
 import InputSelect from 'src/components/form/InputSelect.vue'
-const fields = [
-  'tipo',
-  'cdopm',
-  'fato_data',
-  'sintese_txt',
-  'tipo_penal',
-  'tipo_penal_novo',
-  'especificar',
-  'doc_tipo',
-  'doc_numero',
-  'exclusao_txt',
-  'opm_meta4',
-  'referenciavajme'
-]
+import { apfdRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -193,8 +181,13 @@ export default defineComponent({
       tipoApfd
     })
 
+    function getRequiredFields () {
+      // return vars.register.id_andamento === 10 ? apfdRequiredFields.toFinalize : apfdRequiredFields.toEdit
+      return apfdRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -218,7 +211,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`apfd/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {

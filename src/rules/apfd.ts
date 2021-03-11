@@ -29,30 +29,45 @@ export const apfdRules: Rules = {
 
 export const apfdRequiredFields: RequiredFields = {
   toCreate: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
-    'portaria_numero',
+    'tipo',
+    'cdopm',
+    'fato_data',
     'sintese_txt',
-    'portaria_data'
+    'tipo_penal',
+    'tipo_penal_novo',
+    'especificar',
+    'doc_tipo',
+    'doc_numero',
+    'exclusao_txt',
+    'opm_meta4',
+    'referenciavajme'
   ],
   toEdit: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
-    'portaria_numero',
+    'tipo',
+    'cdopm',
+    'fato_data',
     'sintese_txt',
-    'portaria_data'
+    'tipo_penal',
+    'tipo_penal_novo',
+    'especificar',
+    'doc_tipo',
+    'doc_numero',
+    'exclusao_txt',
+    'opm_meta4',
+    'referenciavajme'
   ],
   toFinalize: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
-    'portaria_numero',
+    'tipo',
+    'cdopm',
+    'fato_data',
     'sintese_txt',
-    'portaria_data'
+    'tipo_penal',
+    'tipo_penal_novo',
+    'especificar',
+    'doc_tipo',
+    'doc_numero',
+    'exclusao_txt',
+    'opm_meta4',
+    'referenciavajme'
   ]
 }
