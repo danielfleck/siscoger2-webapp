@@ -94,7 +94,7 @@ import { ExclusaoJudicial } from 'src/types'
 import { api, validate } from 'src/services'
 import PostoGrad from 'src/components/form/PostoGrad.vue'
 import ProcedTipos from 'src/components/form/ProcedTipos.vue'
-import DivForm from 'src/components/form/Div-formForm.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 const fields = [
   'rg',
   'cargo',

@@ -124,7 +124,7 @@ import Portaria from 'components/form/Portaria.vue'
 import { andamentoCogerIPM, andamentoIPM } from 'src/config'
 import { Ipm } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-import DivForm from 'src/components/form/div-formForm.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 const fields = [
   'id_andamento',

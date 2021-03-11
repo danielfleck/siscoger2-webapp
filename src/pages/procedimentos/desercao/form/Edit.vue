@@ -124,7 +124,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
-import DivForm from 'src/components/form/Div-formForm.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 
 import { andamentoCogerDesercao, termoExclusaoAgregacao, termoApresentacaoCaptura, desercaoPericia, termoInclusaoReversao } from 'src/config'
 import { Desercao } from 'src/types'

@@ -119,7 +119,7 @@ import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Apfd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
-import DivForm from 'src/components/form/Div-formForm.vue'
+import DivForm from 'src/components/form/DivForm.vue'
 import InputSelect from 'src/components/form/InputSelect.vue'
 const fields = [
   'tipo',
