@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'cj',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/cj/lista', label: 'Consulta' },
+        { link: '/cj', label: 'Consulta' },
         { link: '/cj/rel_situacao', label: 'Rel.  Situação' },
         { link: '/cj/andamento', label: 'Andamento' },
         { link: '/cj/julgamento', label: 'Julgamento' },
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/cj/lista', label: 'Lista' })
+    functions.load({ link: '/cj', label: 'Lista' })
 
     return {
       ...toRefs(vars),

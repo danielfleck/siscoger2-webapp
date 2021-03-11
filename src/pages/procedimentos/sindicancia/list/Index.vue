@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'sindicancias',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/sindicancias/lista', label: 'Consulta' },
+        { link: '/sindicancias', label: 'Consulta' },
         { link: '/sindicancias/rel_situacao', label: 'Rel.  Situação' },
         { link: '/sindicancias/andamento', label: 'Andamento' },
         { link: '/sindicancias/resultado', label: 'Resultado' },
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/sindicancias/lista', label: 'Lista' })
+    functions.load({ link: '/sindicancias', label: 'Lista' })
 
     return {
       ...toRefs(vars),

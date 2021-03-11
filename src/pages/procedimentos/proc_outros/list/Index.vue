@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'proc_outros',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/proc_outros/lista', label: 'Consulta' },
+        { link: '/proc_outros', label: 'Consulta' },
         { link: '/proc_outros/envolvidos', label: 'Envolvidos' },
         { link: '/proc_outros/andamento', label: 'Andamento' },
         { link: '/proc_outros/resultado', label: 'Resultado' },
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/proc_outros/lista', label: 'Lista' })
+    functions.load({ link: '/proc_outros', label: 'Lista' })
 
     return {
       ...toRefs(vars),

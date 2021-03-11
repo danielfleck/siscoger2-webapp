@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'iso',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/iso/lista', label: 'Consulta' },
+        { link: '/iso', label: 'Consulta' },
         { link: '/iso/rel_situacao', label: 'Rel.  Situação' },
         { link: '/iso/andamento', label: 'Andamento' },
         { link: '/iso/resultado', label: 'Resultado' },
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/iso/lista', label: 'Lista' })
+    functions.load({ link: '/iso', label: 'Lista' })
 
     return {
       ...toRefs(vars),

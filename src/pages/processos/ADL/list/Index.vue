@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/adl/lista', label: 'Lista' })
+    functions.load({ link: '/adl', label: 'Lista' })
 
     return {
       ...toRefs(vars),

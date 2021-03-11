@@ -1,6 +1,5 @@
 <template>
-  <under-construction/>
-  <!-- <q-page class="doc-container q-pa-md">
+  <q-page class="doc-container q-pa-md">
     <q-card flat>
       <q-card-section>
         <Breadcrumbs :breadcrumbs="breadcrumbs"/>
@@ -34,7 +33,7 @@
         <q-fab-action label="Filtro avançado" color="primary" text-color="white" @click="onClick" icon="fa fa-filter" />
       </q-fab>
     </q-page-sticky>
-  </q-page> -->
+  </q-page>
 </template>
 
 <script lang="ts">
@@ -56,7 +55,7 @@ export default defineComponent({
       module: 'ipm',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/ipm/lista', label: 'Consulta' },
+        { link: '/ipm', label: 'Consulta' },
         { link: '/ipm/rel_situacao', label: 'Rel.  Situação' },
         { link: '/ipm/andamento', label: 'Andamento' },
         { link: '/ipm/resultado', label: 'Resultado' },
@@ -76,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/ipm/lista', label: 'Lista' })
+    functions.load({ link: '/ipm', label: 'Lista' })
 
     return {
       ...toRefs(vars),

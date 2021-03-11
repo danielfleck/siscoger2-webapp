@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'recursos',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/recursos/lista', label: 'Consulta' },
+        { link: '/recursos', label: 'Consulta' },
         { link: '/recursos/rel_situacao', label: 'Rel.  Situação' },
         { link: '/recursos/andamento', label: 'Andamento' },
         { link: '/recursos/resultado', label: 'Resultado' },
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/recursos/lista', label: 'Lista' })
+    functions.load({ link: '/recursos', label: 'Lista' })
 
     return {
       ...toRefs(vars),

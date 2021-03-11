@@ -21,7 +21,7 @@
         <menu-item title="IPM" link="/ipm" v-if="acl(ipmRules.toShow)" class="bg-grey-8"/>
         <menu-item title="ISO" link="/iso" v-if="acl(isoRules.toShow)" class="bg-grey-8"/>
         <menu-item title="Proc. Outros" link="/proc_outros" v-if="acl(procoutroRules.toShow)" class="bg-grey-8"/>
-        <menu-item title="Sindicância" link="/sindicancias/lista" v-if="acl(sindicanciaRules.toShow)" class="bg-grey-8"/>
+        <menu-item title="Sindicância" link="/sindicancias" v-if="acl(sindicanciaRules.toShow)" class="bg-grey-8"/>
       </sub-menu>
     </sub-menu>
     <menu-item title="Recursos" link="/recursos" v-if="acl(recursoRules.toShow)" class="bg-grey-10"/>

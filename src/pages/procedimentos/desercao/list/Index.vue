@@ -1,6 +1,5 @@
 <template>
-  <under-construction />
-  <!-- <q-page class="doc-container q-pa-md">
+  <q-page class="doc-container q-pa-md">
     <q-card flat>
       <q-card-section>
         <Breadcrumbs :breadcrumbs="breadcrumbs"/>
@@ -34,7 +33,7 @@
         <q-fab-action label="Filtro avançado" color="primary" text-color="white" @click="onClick" icon="fa fa-filter" />
       </q-fab>
     </q-page-sticky>
-  </q-page> -->
+  </q-page>
 </template>
 
 <script lang="ts">
@@ -56,7 +55,7 @@ export default defineComponent({
       module: 'desercao',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/desercao/lista', label: 'Consulta' },
+        { link: '/desercao', label: 'Consulta' },
         { link: '/desercao/rel_situacao', label: 'Rel.  Situação' },
         { link: '/desercao/andamento', label: 'Andamento' },
         { link: '/desercao/resultado', label: 'Resultado' },
@@ -76,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/desercao/lista', label: 'Lista' })
+    functions.load({ link: '/desercao', label: 'Lista' })
 
     return {
       ...toRefs(vars),

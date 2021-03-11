@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'pad',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/pad/lista', label: 'Consulta' },
+        { link: '/pad', label: 'Consulta' },
         { link: '/pad/apagados', label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
@@ -70,7 +70,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/pad/lista', label: 'Lista' })
+    functions.load({ link: '/pad', label: 'Lista' })
 
     return {
       ...toRefs(vars),

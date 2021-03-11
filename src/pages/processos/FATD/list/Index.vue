@@ -54,7 +54,7 @@ export default defineComponent({
       module: 'fatd',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/fatd/lista', label: 'Consulta' },
+        { link: '/fatd', label: 'Consulta' },
         { link: '/fatd/rel_situacao', label: 'Rel.  Situação' },
         { link: '/fatd/andamento', label: 'Andamento' },
         { link: '/fatd/resultado', label: 'Resultado' },
@@ -74,7 +74,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/fatd/lista', label: 'Lista' })
+    functions.load({ link: '/fatd', label: 'Lista' })
 
     return {
       ...toRefs(vars),
