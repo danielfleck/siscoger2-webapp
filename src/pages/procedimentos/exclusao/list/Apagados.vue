@@ -45,7 +45,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('exclusao/deleted')
+      const { data } = await api.get('exclusoesjudicias/deleted')
       vars.data = Object.freeze(data as ExclusaoJudicial[])
     }
 
@@ -55,14 +55,14 @@ export default defineComponent({
 
     function onRestore (row: ExclusaoJudicial) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`exclusao/${row.id}/restore`, {})
+        const { ok } = await api.put(`exclusoesjudicias/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: ExclusaoJudicial) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`exclusao/${row.id}/force`)
+        const { ok } = await api.delete(`exclusoesjudicias/${row.id}/force`)
         if (ok) void loadData()
       })
     }

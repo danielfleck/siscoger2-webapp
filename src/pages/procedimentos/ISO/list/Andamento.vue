@@ -45,7 +45,7 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('iso')
+      const { data } = await api.get('isos')
       vars.data = Object.freeze(data as Iso[])
     }
 
@@ -55,7 +55,7 @@ export default defineComponent({
 
     function onDelete (row: Iso) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`iso/${row.id}`)
+        const { ok } = await api.delete(`isos/${row.id}`)
         if (ok) void loadData()
       })
     }

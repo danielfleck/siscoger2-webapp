@@ -185,7 +185,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, fields)) {
-        const { ok, data } = await api.post('iso', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post('isos', vars.register, { silent: true, debug: true })
         if (ok) {
           const iso = data as Iso
           vars.register.id = Number(iso.id)
@@ -197,7 +197,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`iso/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`isos/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -211,7 +211,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`iso/${vars.register.id}`, vars.register)
+          await api.put(`isos/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
           return root.$router.push('/iso')
         }

@@ -44,7 +44,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('desercao/deleted')
+      const { data } = await api.get('desercoes/deleted')
       vars.data = Object.freeze(data as Desercao[])
     }
 
@@ -54,14 +54,14 @@ export default defineComponent({
 
     function onRestore (row: Desercao) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`desercao/${row.id}/restore`, {})
+        const { ok } = await api.put(`desercoes/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Desercao) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`desercao/${row.id}/force`)
+        const { ok } = await api.delete(`desercoes/${row.id}/force`)
         if (ok) void loadData()
       })
     }

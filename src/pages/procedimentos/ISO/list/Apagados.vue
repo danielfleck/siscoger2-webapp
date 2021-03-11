@@ -51,14 +51,14 @@ export default defineComponent({
 
     function onRestore (row: Iso) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`iso/${row.id}/restore`, {})
+        const { ok } = await api.put(`isos/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Iso) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`iso/${row.id}/force`)
+        const { ok } = await api.delete(`isos/${row.id}/force`)
         if (ok) void loadData()
       })
     }

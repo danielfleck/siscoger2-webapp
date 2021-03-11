@@ -249,7 +249,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, fields)) {
-        const { ok, data } = await api.post('ipm', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post('ipms', vars.register, { silent: true, debug: true })
         if (ok) {
           const ipm = data as Ipm
           vars.register.id = Number(ipm.id)
@@ -261,7 +261,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`ipm/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`ipms/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -275,7 +275,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`ipm/${vars.register.id}`, vars.register)
+          await api.put(`ipms/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
           return root.$router.push('/ipm')
         }

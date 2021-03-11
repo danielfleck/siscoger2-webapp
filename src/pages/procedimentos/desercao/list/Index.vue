@@ -57,9 +57,6 @@ export default defineComponent({
       tabs: [
         { link: '/desercao', label: 'Consulta' },
         { link: '/desercao/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/desercao/andamento', label: 'Andamento' },
-        { link: '/desercao/resultado', label: 'Resultado' },
-        { link: '/desercao/prazos', label: 'Prazos' },
         { link: '/desercao/apagados', label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'

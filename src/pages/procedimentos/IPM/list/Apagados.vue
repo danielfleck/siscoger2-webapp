@@ -41,7 +41,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('ipm/deleted')
+      const { data } = await api.get('ipms/deleted')
       vars.data = Object.freeze(data as Ipm[])
     }
 
@@ -51,14 +51,14 @@ export default defineComponent({
 
     function onRestore (row: Ipm) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`ipm/${row.id}/restore`, {})
+        const { ok } = await api.put(`ipms/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Ipm) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`ipm/${row.id}/force`)
+        const { ok } = await api.delete(`ipms/${row.id}/force`)
         if (ok) void loadData()
       })
     }

@@ -45,7 +45,7 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('ipm')
+      const { data } = await api.get('ipms')
       vars.data = Object.freeze(data as Ipm[])
     }
 
@@ -55,7 +55,7 @@ export default defineComponent({
 
     function onDelete (row: Ipm) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`ipm/${row.id}`)
+        const { ok } = await api.delete(`ipms/${row.id}`)
         if (ok) void loadData()
       })
     }

@@ -173,10 +173,10 @@ export default defineComponent({
     async function save () {
       if (validate(refs, fields)) {
         if (vars.register.id) {
-          const { ok } = await api.post('exclusao', vars.register)
+          const { ok } = await api.post('exclusoesjudicias', vars.register)
           if (ok) return root.$router.push('/exclusao')
         }
-        const { ok } = await api.put(`exclusao/${String(vars.register.id)}`, vars.register)
+        const { ok } = await api.put(`exclusoesjudicias/${String(vars.register.id)}`, vars.register)
         if (ok) return root.$router.push('/exclusao')
       }
     }
@@ -184,7 +184,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`exclusao/${id}`)
+        const { data, ok } = await api.get(`exclusoesjudicias/${id}`)
         if (ok) vars.register = data as ExclusaoJudicial
       }
     }

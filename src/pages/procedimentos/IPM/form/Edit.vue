@@ -276,7 +276,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`ipm/${vars.register.id}`, vars.register)
+          const { ok } = await api.put(`ipms/${vars.register.id}`, vars.register)
           if (ok) return root.$router.push('/ipm')
         }
       }
@@ -284,7 +284,7 @@ export default defineComponent({
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`ipm/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`ipms/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -294,7 +294,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`ipm/${id}`)
+        const { data, ok } = await api.get(`ipms/${id}`)
         if (ok) vars.register = data as Ipm
       }
     }

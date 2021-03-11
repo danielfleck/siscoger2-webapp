@@ -45,7 +45,7 @@ export default defineComponent({
       ] as Columns[]
     })
     async function loadData () {
-      const { data } = await api.get('pad/andamento')
+      const { data } = await api.get('pad')
       vars.data = Object.freeze(data as Pad[])
     }
 

@@ -212,7 +212,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`iso/${vars.register.id}`, vars.register)
+          const { ok } = await api.put(`isos/${vars.register.id}`, vars.register)
           if (ok) return root.$router.push('/iso')
         }
       }
@@ -223,7 +223,7 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('iso')
-        const { ok } = await api.put(`iso/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`isos/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('iso')
@@ -232,7 +232,7 @@ export default defineComponent({
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`iso/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`isos/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -242,7 +242,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`iso/${id}`)
+        const { data, ok } = await api.get(`isos/${id}`)
         if (ok) vars.register = data as Iso
       }
     }

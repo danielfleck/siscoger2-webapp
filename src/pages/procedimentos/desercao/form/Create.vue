@@ -185,7 +185,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, fields)) {
-        const { ok, data } = await api.post('desercao', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post('desercoes', vars.register, { silent: true, debug: true })
         if (ok) {
           const desercao = data as Desercao
           vars.register.id = Number(desercao.id)
@@ -197,7 +197,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`desercao/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`desercoes/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -211,7 +211,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`desercao/${vars.register.id}`, vars.register)
+          await api.put(`desercoes/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
           return root.$router.push('/desercao')
         }

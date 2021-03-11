@@ -187,7 +187,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, fields)) {
-        const { ok, data } = await api.post('proc_outros', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post('procoutros', vars.register, { silent: true, debug: true })
         if (ok) {
           const procOutros = data as ProcOutros
           vars.register.id = Number(procOutros.id)
@@ -199,7 +199,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`proc_outros/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`procoutros/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -213,7 +213,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`proc_outros/${vars.register.id}`, vars.register)
+          await api.put(`procoutros/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
           return root.$router.push('/proc_outros')
         }

@@ -46,7 +46,7 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('proc_outros')
+      const { data } = await api.get('procoutros')
       vars.data = Object.freeze(data as ProcOutros[])
     }
 
@@ -56,7 +56,7 @@ export default defineComponent({
 
     function onDelete (row: ProcOutros) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`proc_outros/${row.id}`)
+        const { ok } = await api.delete(`procoutros/${row.id}`)
         if (ok) void loadData()
       })
     }

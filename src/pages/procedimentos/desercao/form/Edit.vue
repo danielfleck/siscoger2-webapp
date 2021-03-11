@@ -217,7 +217,7 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`desercao/${vars.register.id}`, vars.register)
+          const { ok } = await api.put(`desercoes/${vars.register.id}`, vars.register)
           if (ok) return root.$router.push('/desercao')
         }
       }
@@ -225,7 +225,7 @@ export default defineComponent({
 
     async function validateNavigation (tab: string) {
       if (validate(refs, fields)) {
-        const { ok } = await api.put(`desercao/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`desercoes/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -235,7 +235,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`desercao/${id}`)
+        const { data, ok } = await api.get(`desercoes/${id}`)
         if (ok) vars.register = data as Desercao
       }
     }
