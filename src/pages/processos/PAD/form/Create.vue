@@ -97,19 +97,7 @@ import DivForm from 'src/components/form/DivForm.vue'
 
 import { Pad } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'motivo_cancelamento',
-  'doc_origem_txt',
-  'opm',
-  'portaria_numero',
-  'sintese_txt',
-  'portaria_data',
-  'prorogacao_dias',
-  'motivo_outros',
-  'Presidente',
-  'escrivao'
-]
+import { padRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -163,7 +151,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, padRequiredFields.toCreate)) {
         const { ok, data } = await api.post('pad', vars.register, { silent: true, debug: true })
         if (ok) {
           const pad = data as Pad
@@ -175,7 +163,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, padRequiredFields.toCreate)) {
         const { ok } = await api.put(`pad/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -185,7 +173,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, padRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {

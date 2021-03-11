@@ -219,7 +219,7 @@ export default defineComponent({
     })
 
     function getRequiredFields () {
-      return vars.register.id_andamento === 13 ? fatdRequiredFields.toFinalize : fatdRequiredFields.toEdit
+      return vars.register.id_andamento === 2 ? fatdRequiredFields.toFinalize : fatdRequiredFields.toEdit
     }
 
     async function update () {

@@ -29,30 +29,39 @@ export const padRules: Rules = {
 
 export const padRequiredFields: RequiredFields = {
   toCreate: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
+    'motivo_cancelamento',
+    'doc_origem_txt',
+    'opm',
     'portaria_numero',
     'sintese_txt',
-    'portaria_data'
+    'portaria_data',
+    'prorogacao_dias',
+    'motivo_outros',
+    'Presidente',
+    'escrivao'
   ],
   toEdit: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
+    'motivo_cancelamento',
+    'doc_origem_txt',
+    'opm',
     'portaria_numero',
     'sintese_txt',
-    'portaria_data'
+    'portaria_data',
+    'prorogacao_dias',
+    'motivo_outros',
+    'Presidente',
+    'escrivao'
   ],
   toFinalize: [
-    'id_motivoconselho',
-    'id_decorrenciaconselho',
-    'id_situacaoconselho',
-    'outromotivo',
+    'motivo_cancelamento',
+    'doc_origem_txt',
+    'opm',
     'portaria_numero',
     'sintese_txt',
-    'portaria_data'
+    'portaria_data',
+    'prorogacao_dias',
+    'motivo_outros',
+    'Presidente',
+    'escrivao'
   ]
 }
