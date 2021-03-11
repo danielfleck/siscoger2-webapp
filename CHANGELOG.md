@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.64.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.63.0...v0.64.0) (2021-03-11)
+
+
+### Features
+
+* finalize exclusaojudicial module ([20413db](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/20413dbd945da56f4ee3de3594d6278e06ab6e36))
+
 ## [0.63.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.62.0...v0.63.0) (2021-03-11)
 
 
