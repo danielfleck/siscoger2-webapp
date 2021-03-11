@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.68.2](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.68.1...v0.68.2) (2021-03-11)
+
+
+### Bug Fixes
+
+* solve insertions of procs ([76110f0](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/76110f0bad851fa4495c442b3fad4758a54f46b1))
+
 ### [0.68.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.68.0...v0.68.1) (2021-03-11)
 
 
