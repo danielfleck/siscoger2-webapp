@@ -22,9 +22,9 @@
           <div-form>
             <InputSelect label="Em decorrência de" v-model="register.id_decorrenciaconselho" :options="decorrenciaConselho" />
           </div-form>
-          <div-form v-if="register.id_decorrenciaconselho === 13">
+          <!-- <div-form v-if="register.id_decorrenciaconselho === 13">
             <InputText label="Especificar (no caso de outros motivos)" v-model="register.outromotivo" ref="outromotivo" required/>
-          </div-form>
+          </div-form> -->
           <div-form>
             <Portaria label="N° Portaria" v-model="register.portaria_numero" ref="portaria_numero" required proc="adl" :cdopm="register.cdopm"/>
           </div-form>
@@ -158,7 +158,7 @@ export default defineComponent({
         doc_prorrogacao: '',
         numero_tj: '',
         prescricao_data: new Date(),
-        exclusao_text: '',
+        exclusao_txt: '',
         rec_ato_file: '',
         rec_gov_file: '',
         opm_meta4: '',
@@ -169,7 +169,6 @@ export default defineComponent({
         sjd_file: '',
         sintese_txt: '',
         prioridade: false,
-        outromotivo: '',
         deletedAt: undefined
       } as Cj,
       cdopm: getUserCdopm(),

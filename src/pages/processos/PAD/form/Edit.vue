@@ -128,7 +128,7 @@ const fields = [
   'portaria_data',
   'prorogacao_dias',
   'motivo_outros',
-  'sindicante',
+  'Presidente',
   'escrivao'
 ]
 export default defineComponent({
@@ -225,9 +225,9 @@ export default defineComponent({
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

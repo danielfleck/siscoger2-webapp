@@ -22,7 +22,7 @@ export const setUser = (user: User):void => LocalStorage.set('user', user)
 export const getUser = ():User => LocalStorage.getItem('user') || cleanUser
 export const getUserCdopm = ():string => {
   const user = LocalStorage.getItem('user') as User
-  return user.cdopm
+  return user?.cdopm ?? '-'
 }
 export const getUserLevel = ():User => LocalStorage.getItem('user') || cleanUser
 export const setPermissions = (permissions: string):void => LocalStorage.set('permissions', permissions)

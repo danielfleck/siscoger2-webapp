@@ -71,9 +71,10 @@
         <template v-if="register.id">
           <ProcedOrigem type="cd" :data="{ id_cd: register.id }"/>
           <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cd: register.id }"/>
-          <Membro label="Escrivão" ref="Escrivão" :data="{ situacao: 'Escrivão', id_cd: register.id }"/>
+          <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_cd: register.id }"/>
+          <Membro label="Escrivão" ref="Escrivão" required :data="{ situacao: 'Escrivão', id_cd: register.id }"/>
           <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_cd: register.id }"/>
-          <Acusado label="Acusado" :data="{ id_cd: register.id }"/>
+          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_cd: register.id }"/>
           <Vitima :data="{ id_cd: register.id }"/>
           <FileUpload label="Libelo" :data="{ proc: 'cd', campo: 'libelo_file', id_proc: register.id}"/>
           <div-form>
@@ -143,7 +144,7 @@ import Andamento from 'components/form/Andamento.vue'
 import AndamentoCoger from 'components/form/AndamentoCoger.vue'
 import DivForm from 'src/components/form/DivForm.vue'
 
-import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
+import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho, parecerComissao, parecerCmtgeral } from 'src/config'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Cd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
@@ -212,6 +213,8 @@ export default defineComponent({
         deletedAt: undefined
       } as Cd,
       cdopm: getUserCdopm(),
+      parecerComissao,
+      parecerCmtgeral,
       motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
@@ -263,9 +266,9 @@ export default defineComponent({
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

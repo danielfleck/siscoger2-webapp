@@ -147,6 +147,7 @@ import { getDense } from 'src/store/utils'
 import { getAndamento, getSobrestamento } from 'src/utils'
 import { Fatd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
+import InputSelect from 'src/components/form/InputSelect.vue'
 const fields = [
   'id_andamento',
   'id_andamentocoger',
@@ -200,7 +201,8 @@ export default defineComponent({
     Andamento,
     AndamentoCoger,
     BannerDeleted,
-    DivForm
+    DivForm,
+    InputSelect
   },
   setup (_, { refs, root }) {
     const vars = reactive({
@@ -233,7 +235,7 @@ export default defineComponent({
         opm_meta4: '',
         notapunicao_file: '',
         publicacaonp: '',
-        prioridade: 0,
+        prioridade: false,
         situacao_fatd: '',
         motivo_fatd: '',
         motivo_outros: '',
@@ -286,9 +288,9 @@ export default defineComponent({
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Encarregado = refs.Encarregado.getState()
+      if (Encarregado === 'toInsert') {
+        errorNotify('Insira o Encarregado')
         return false
       }
       return true

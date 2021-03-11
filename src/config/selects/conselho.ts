@@ -38,3 +38,15 @@ export const motivoConselho: Option[] = [
   { value: 7, label: 'Considerado inapto no período de formação' },
   { value: 8, label: 'Integrar partido político ou associação contrária à lei' }
 ]
+
+export const parecerComissao: Option[] = [
+  { value: 'Opta pela exclusao', label: 'Opta pela exclusao' },
+  { value: 'Opta pela permanencia', label: 'Opta pela permanencia' },
+  { value: 'Opta pela reforma', label: 'Opta pela reforma' }
+]
+
+export const parecerCmtgeral: Option[] = [
+  { value: 'Opta pela exclusao', label: 'Opta pela exclusao' },
+  { value: 'Opta pela permanencia', label: 'Opta pela permanencia' },
+  { value: 'Opta pela reforma', label: 'Opta pela reforma' }
+]

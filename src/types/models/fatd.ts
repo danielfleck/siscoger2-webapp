@@ -25,7 +25,7 @@ export type Fatd = {
   opm_meta4: string;
   notapunicao_file: string;
   publicacaonp: string;
-  prioridade: number;
+  prioridade: boolean;
   situacao_fatd: string;
   motivo_fatd: string;
   motivo_outros: string;

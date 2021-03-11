@@ -22,7 +22,7 @@ export type Cj = {
   doc_prorrogacao: string
   numero_tj: string
   prescricao_data: Date
-  exclusao_text: string
+  exclusao_txt: string
   rec_ato_file: string
   rec_gov_file: string
   opm_meta4: string
@@ -34,7 +34,6 @@ export type Cj = {
   sintese_txt: string
   prioridade: boolean
   completo: boolean
-  outromotivo: string
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date

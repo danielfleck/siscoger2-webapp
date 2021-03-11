@@ -46,7 +46,7 @@
           <DivForm>
             <InputDate v-model="register.prescricao_data" label="Data da prescrição" />
           </DivForm>
-          <DivForm>
+          <DivForm full>
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
           </DivForm>
         </form>

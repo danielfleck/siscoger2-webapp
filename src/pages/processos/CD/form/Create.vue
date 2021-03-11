@@ -55,8 +55,10 @@
       <q-step :name="2" title="Envolvidos" icon="create_new_folder" :done="step > 2">
         <template v-if="register.id">
           <ProcedOrigem type="cd" :data="{ id_cd: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_cd: register.id }"/>
-          <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_cd: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_cd: register.id }"/>
+          <Membro label="Membro" ref="Membro" required :data="{ situacao: 'Membro', id_cd: register.id }"/>
+          <Membro label="Escrivão" ref="Escrivão" required :data="{ situacao: 'Escrivão', id_cd: register.id }"/>
+          <Membro label="Defensor" ref="Defensor" :data="{ situacao: 'Defensor', id_cd: register.id }"/>
           <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_cd: register.id }"/>
           <Vitima :data="{ id_cd: register.id }"/>
         </template>
@@ -144,8 +146,6 @@ export default defineComponent({
         id_motivoconselho: 0,
         id_decorrenciaconselho: 0,
         id_situacaoconselho: 0,
-        sjd_ref: 0,
-        sjd_ref_ano: 0,
         motivo_outros: '',
         sintese_text: '',
         libelo_file: '',
@@ -160,7 +160,7 @@ export default defineComponent({
         exclusao_text: '',
         rec_ato_file: '',
         rec_gov_file: '',
-        cdopm: '',
+        cdopm: getUserCdopm(),
         ac_desempenho_bl: '',
         ac_conduta_bl: '',
         ac_honra_bl: '',
@@ -220,9 +220,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = await refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

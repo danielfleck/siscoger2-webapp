@@ -172,8 +172,6 @@ export default defineComponent({
         id: 0,
         id_andamento: 0,
         id_andamentocoger: 0,
-        sjd_ref: 0,
-        sjd_ref_ano: 0,
         fato_data: new Date(),
         abertura_data: new Date(),
         sintese_txt: '', // text
@@ -194,7 +192,7 @@ export default defineComponent({
         opm_meta4: '',
         notapunicao_file: '',
         publicacaonp: '',
-        prioridade: 0,
+        prioridade: false,
         situacao_fatd: '',
         motivo_fatd: '',
         motivo_outros: '',
@@ -251,9 +249,9 @@ export default defineComponent({
     }
 
     async function subforms () {
-      const sindicante = await refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Encarregado = await refs.Encarregado.getState()
+      if (Encarregado === 'toInsert') {
+        errorNotify('Insira o Encarregado')
         return false
       }
       return true
