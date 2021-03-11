@@ -95,26 +95,8 @@ import { api, validate } from 'src/services'
 import PostoGrad from 'src/components/form/PostoGrad.vue'
 import ProcedTipos from 'src/components/form/ProcedTipos.vue'
 import DivForm from 'src/components/form/DivForm.vue'
-const fields = [
-  'rg',
-  'cargo',
-  'nome',
-  'cdopm_quandoexcluido',
-  'origem_proc',
-  'origem_sjd_ref',
-  'origem_sjd_ref_ano',
-  'origem_opm',
-  'processo',
-  'complemento',
-  'vara',
-  'numerounico',
-  'data',
-  'exclusao_data',
-  'obs_txt',
-  'portaria_numero',
-  'bg_numero',
-  'bg_ano'
-]
+import { exclusaojudicialRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -171,7 +153,7 @@ export default defineComponent({
     })
 
     async function save () {
-      if (validate(refs, fields)) {
+      if (validate(refs, exclusaojudicialRequiredFields.toCreate)) {
         if (vars.register.id) {
           const { ok } = await api.post('exclusoesjudicias', vars.register)
           if (ok) return root.$router.push('/exclusao')
