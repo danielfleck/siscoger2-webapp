@@ -148,36 +148,8 @@ import { getAndamento, getSobrestamento } from 'src/utils'
 import { Fatd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
-const fields = [
-  'id_andamento',
-  'id_andamentocoger',
-  'sjd_ref',
-  'sjd_ref_ano',
-  'fato_data',
-  'abertura_data',
-  'sintese_txt',
-  'cdopm',
-  'doc_tipo',
-  'doc_numero',
-  'doc_origem_txt',
-  'despacho_numero',
-  'portaria_data',
-  'fato_file',
-  'relatorio_file',
-  'sol_cmt_file',
-  'sol_cg_file',
-  'rec_ato_file',
-  'rec_cmt_file',
-  'rec_crpm_file',
-  'rec_cg_file',
-  'opm_meta4',
-  'notapunicao_file',
-  'publicacaonp',
-  'prioridade',
-  'situacao_fatd',
-  'motivo_fatd',
-  'motivo_outros'
-]
+import { fatdRequiredFields } from 'src/rules'
+
 export default defineComponent({
   name: 'Form',
   components: {
@@ -246,8 +218,12 @@ export default defineComponent({
       situacaoFATD
     })
 
+    function getRequiredFields () {
+      return vars.register.id_andamento === 13 ? fatdRequiredFields.toFinalize : fatdRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -271,7 +247,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`fatd/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {

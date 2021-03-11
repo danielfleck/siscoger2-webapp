@@ -108,37 +108,7 @@ import DivForm from 'src/components/form/DivForm.vue'
 import { motivoFATD, situacaoFATD } from 'src/config'
 import { Fatd } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'id_andamento',
-  'id_andamentocoger',
-  'sjd_ref',
-  'sjd_ref_ano',
-  'fato_data',
-  'abertura_data',
-  'sintese_txt',
-  'cdopm',
-  'doc_tipo',
-  'doc_numero',
-  'doc_origem_txt',
-  'despacho_numero',
-  'portaria_data',
-  'fato_file',
-  'relatorio_file',
-  'sol_cmt_file',
-  'sol_cg_file',
-  'rec_ato_file',
-  'rec_cmt_file',
-  'rec_crpm_file',
-  'rec_cg_file',
-  'opm_meta4',
-  'notapunicao_file',
-  'publicacaonp',
-  'prioridade',
-  'situacao_fatd',
-  'motivo_fatd',
-  'motivo_outros'
-]
+import { fatdRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -204,7 +174,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, fatdRequiredFields.toCreate)) {
         const { ok, data } = await api.post('fatd', vars.register, { silent: true, debug: true })
         if (ok) {
           const fatd = data as Fatd
@@ -216,7 +186,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, fatdRequiredFields.toCreate)) {
         const { ok } = await api.put(`fatd/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -226,7 +196,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, fatdRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {
