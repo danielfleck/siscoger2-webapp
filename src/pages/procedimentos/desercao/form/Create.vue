@@ -105,24 +105,7 @@ import Portaria from 'components/form/Portaria.vue'
 import { andamentoCogerDesercao, termoExclusaoAgregacao, termoApresentacaoCaptura, desercaoPericia, termoInclusaoReversao } from 'src/config'
 import { Desercao } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
-
-const fields = [
-  'decorrenciaconselho',
-  'cdopm',
-  'fato_data',
-  'doc_tipo',
-  'doc_numero',
-  'termo_exclusao',
-  'termo_exclusao_pub',
-  'termo_captura',
-  'termo_captura_pub',
-  'pericia',
-  'pericia_pub',
-  'termo_inclusao',
-  'termo_inclusao_pub',
-  'opm_meta4',
-  'referenciavajme'
-]
+import { desercaoRequiredFields } from 'src/rules'
 
 export default defineComponent({
   name: 'Form',
@@ -184,7 +167,7 @@ export default defineComponent({
     })
 
     async function create () {
-      if (validate(refs, fields)) {
+      if (validate(refs, desercaoRequiredFields.toCreate)) {
         const { ok, data } = await api.post('desercoes', vars.register, { silent: true, debug: true })
         if (ok) {
           const desercao = data as Desercao
@@ -196,7 +179,7 @@ export default defineComponent({
     }
 
     async function update (id: number) {
-      if (validate(refs, fields)) {
+      if (validate(refs, desercaoRequiredFields.toCreate)) {
         const { ok } = await api.put(`desercoes/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
@@ -206,7 +189,7 @@ export default defineComponent({
     }
 
     async function finalize () {
-      if (validate(refs, fields)) {
+      if (validate(refs, desercaoRequiredFields.toCreate)) {
         const validateSubforms = await subforms()
 
         if (validateSubforms && vars.register.id) {

@@ -60,7 +60,7 @@
             <InputText label="Sintese do fato" v-model="register.sintese_txt" ref="sintese_txt" :minLength="200" autogrow required :lorem="200"/>
           </div-form>
         <template v-if="register.id">
-          <Membro label="Presidente" ref="presidente" required :data="{ situacao: 'presidente', id_apfd: register.id }"/>
+          <Membro label="Presidente" ref="Presidente" required :data="{ situacao: 'Presidente', id_apfd: register.id }"/>
           <Membro label="Condutor" ref="condutor" required :data="{ situacao: 'condutor', id_apfd: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_apfd: register.id }"/>
           <Acusado label="Acusado" :data="{ situacao: 'acusado', id_apfd: register.id }"/>
@@ -228,9 +228,9 @@ export default defineComponent({
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Presidente = refs.Presidente.getState()
+      if (Presidente === 'toInsert') {
+        errorNotify('Insira o Presidente')
         return false
       }
       return true

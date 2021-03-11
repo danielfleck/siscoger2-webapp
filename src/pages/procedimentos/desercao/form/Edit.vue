@@ -75,7 +75,7 @@
             <InputText tooltip="Nº do processo, vara" label="Referencia VAJME" v-model="register.referenciavajme" ref="referenciavajme" required/>
           </div-form>
         <template v-if="register.id">
-          <Acusado label="Desertor" :data="{ situacao: 'desertor', id_desercao: register.id }"/>
+          <Acusado label="Desertor" :data="{ situacao: 'Desertor', id_desercao: register.id }"/>
           <!-- <FileUpload label="Solução do Comandante" :data="{ proc: 'desercao', campo: 'solucao_cmt_file', id_proc: register.id}"/> -->
         </template>
         <q-btn @click="update" color="primary" label="Salvar" class="full-width"/>
@@ -130,24 +130,8 @@ import { andamentoCogerDesercao, termoExclusaoAgregacao, termoApresentacaoCaptur
 import { Desercao } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
+import { desercaoRequiredFields } from 'src/rules'
 
-const fields = [
-  'decorrenciaconselho',
-  'cdopm',
-  'fato_data',
-  'doc_tipo',
-  'doc_numero',
-  'termo_exclusao',
-  'termo_exclusao_pub',
-  'termo_captura',
-  'termo_captura_pub',
-  'pericia',
-  'pericia_pub',
-  'termo_inclusao',
-  'termo_inclusao_pub',
-  'opm_meta4',
-  'referenciavajme'
-]
 export default defineComponent({
   name: 'Form',
   components: {
@@ -211,8 +195,13 @@ export default defineComponent({
       termoInclusaoReversao
     })
 
+    function getRequiredFields () {
+      // return vars.register.id_andamento === 10 ? apfdRequiredFields.toFinalize : apfdRequiredFields.toEdit
+      return desercaoRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -224,7 +213,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`desercoes/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
@@ -241,9 +230,9 @@ export default defineComponent({
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Desertor = refs.Desertor.getState()
+      if (Desertor === 'toInsert') {
+        errorNotify('Insira o Desertor')
         return false
       }
       return true
