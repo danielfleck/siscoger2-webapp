@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.57.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.57.0...v0.57.1) (2021-03-11)
+
+
+### Bug Fixes
+
+* solve divForm imports ([93ad08c](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/93ad08c25c8b592f98ecb0bad8544ef31dfece26))
+
 ## [0.57.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.56.2...v0.57.0) (2021-03-11)
 
 
