@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.59.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.58.0...v0.59.0) (2021-03-11)
+
+
+### Features
+
+* finalize cj module ([f3c1c83](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/f3c1c833904e2c64c4bb36a98244c82497b2ffef))
+
 ## [0.58.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.57.1...v0.58.0) (2021-03-11)
 
 
