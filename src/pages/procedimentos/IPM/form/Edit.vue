@@ -88,9 +88,9 @@
         </div-form>
         <template v-if="register.id">
           <ProcedOrigem type="ipm" :data="{ id_ipm: register.id }"/>
-          <Membro label="Sindicante" ref="sindicante" required :data="{ situacao: 'sindicante', id_ipm: register.id }"/>
+          <Membro label="Encarregado" ref="Encarregado" required :data="{ situacao: 'Encarregado', id_ipm: register.id }"/>
           <Membro label="Escrivão" ref="escrivao" :data="{ situacao: 'escrivao', id_ipm: register.id }"/>
-          <Acusado label="Sindicado" :data="{ situacao: 'sindicado', id_ipm: register.id }"/>
+          <Acusado label="Indiciados" :data="{ situacao: 'indiciado', id_ipm: register.id }"/>
           <Vitima :data="{ id_ipm: register.id }"/>
           <FileUpload label="Conclusão do encarregado" :data="{ proc: 'ipm', campo: 'relato_enc_file', id_proc: register.id}"/>
           <FileUpload label="Solução do Comandante" :data="{ proc: 'ipm', campo: 'relato_cmtopm_file', id_proc: register.id}"/>
@@ -149,48 +149,8 @@ import InputSelect from 'src/components/form/InputSelect.vue'
 import { getDense } from 'src/store/utils'
 import { Ipm } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
+import { ipmRequiredFields } from 'src/rules'
 
-const fields = [
-  'id_andamento',
-  'id_andamentocoger',
-  'id_municipio',
-  'id_situacao',
-  'cdopm',
-  'opm_sigla',
-  'opm_ref',
-  'opm_ref_ano',
-  'sjd_ref',
-  'sjd_ref_ano',
-  'abertura_data',
-  'fato_data',
-  'autuacao_data',
-  'crime',
-  'tentado',
-  'crime_especificar',
-  'sintese_txt',
-  'relato_enc',
-  'relato_enc_data',
-  'relato_cmtopm',
-  'relato_cmtopm_data',
-  'relato_cmtgeral',
-  'relato_cmtgeral_data',
-  'vajme_ref',
-  'justicacomum_ref',
-  'vitima',
-  'confronto_armado_bl',
-  'vitima_qtdd',
-  'julgamento',
-  'portaria_numero',
-  'exclusao_txt',
-  'relato_enc_file',
-  'relato_cmtopm_file',
-  'relato_cmtgeral_file',
-  'defensor_oab',
-  'defensor_nome',
-  'relcomplementar_file',
-  'relcomplementar_data',
-  'opm_meta4'
-]
 export default defineComponent({
   name: 'Form',
   components: {
@@ -270,8 +230,13 @@ export default defineComponent({
       } as Ipm
     })
 
+    function getRequiredFields () {
+      // return vars.register.id_andamento === 10 ? ipmRequiredFields.toFinalize : ipmRequiredFields.toEdit
+      return ipmRequiredFields.toEdit
+    }
+
     async function update () {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
@@ -283,7 +248,7 @@ export default defineComponent({
     }
 
     async function validateNavigation (tab: string) {
-      if (validate(refs, fields)) {
+      if (validate(refs, getRequiredFields())) {
         const { ok } = await api.put(`ipms/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
@@ -300,9 +265,9 @@ export default defineComponent({
     }
 
     function subforms () {
-      const sindicante = refs.sindicante.getState()
-      if (sindicante === 'toInsert') {
-        errorNotify('Insira o sindicante')
+      const Encarregado = refs.Encarregado.getState()
+      if (Encarregado === 'toInsert') {
+        errorNotify('Insira o Encarregado')
         return false
       }
       return true
