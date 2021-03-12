@@ -144,7 +144,7 @@ export default defineComponent({
         solucaoautoridade_file: '',
         solucaoautoridade_data: new Date(),
         prioridade: false,
-        completo: false,
+        completo: false
       } as Iso,
       cdopm: getUserCdopm()
     })

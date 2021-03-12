@@ -7,13 +7,15 @@
         Data de referência: HOJE ({{ today }})
       </template>
     </q-banner>
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/fatd/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(fatdRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/fatd/inserir"/>
     <Table
       data-cy="table"
       label="Prazos"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(fatdRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(fatdRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -30,9 +32,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Fatd, Columns } from 'src/types'
+import { fatdRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Prazos',
@@ -53,8 +55,10 @@ export default defineComponent({
         { name: 'motivo_sobrestado', label: 'Motivo Sobrest.', field: 'motivo_sobrestado', format: (val, row) => getPrazoDecorrido(val, row), sortable: true },
         { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      fatdRules
     })
+
     async function loadData () {
       const { data } = await api.get('fatd/andamento')
       vars.data = Object.freeze(data as Fatd[])
@@ -75,6 +79,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

@@ -6,13 +6,15 @@
         Data de referência: HOJE ({{ today }})
       </template>
     </q-banner>
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(ipmRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
     <Table
       data-cy="table"
       label="Prazos"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(ipmRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(ipmRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -30,8 +32,9 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode } from 'src/filters'
 import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl } from 'src/services'
 import { Ipm, Columns } from 'src/types'
+import { ipmRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Prazos',
@@ -50,8 +53,10 @@ export default defineComponent({
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
         { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      ipmRules
     })
+
     async function loadData () {
       const { data } = await api.get('ipms/andamento')
       vars.data = Object.freeze(data as Ipm[])
@@ -72,6 +77,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/desercao/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(desercaoRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/desercao/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(desercaoRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(desercaoRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(desercaoRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -24,8 +26,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getOpmByCode } from 'src/filters'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { Desercao, Columns } from 'src/types'
+import { desercaoRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -41,7 +44,8 @@ export default defineComponent({
         { name: 'desertor', label: 'desertor*', field: 'desertor', sortable: true },
         { name: 'documento', label: 'documento*', field: 'documento', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      desercaoRules
     })
     async function loadData () {
       const { data } = await api.get('desercoes/deleted')
@@ -70,6 +74,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

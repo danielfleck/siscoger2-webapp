@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/recursos/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(recursoRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/recursos/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(recursoRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(recursoRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(recursoRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -24,8 +26,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getOpmByCode } from 'src/filters'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { Recurso, Columns } from 'src/types'
+import { recursoRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -40,8 +43,10 @@ export default defineComponent({
         { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
         { name: 'datahora', label: 'Data-hora recebimento', field: 'datahora' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      recursoRules
     })
+
     async function loadData () {
       const { data } = await api.get('recursos/deleted')
       vars.data = Object.freeze(data as Recurso[])
@@ -69,6 +74,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="rel_situacao">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/apfd/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(apfdRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/apfd/inserir"/>
     <Table
       data-cy="table"
       label="Rel. Situação"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(apfdRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(apfdRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -22,8 +24,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl } from 'src/services'
 import { Apfd, Columns } from 'src/types'
+import { apfdRules } from 'src/rules'
 import { changeDate } from 'src/filters'
 
 export default defineComponent({
@@ -42,7 +45,8 @@ export default defineComponent({
         { name: 'publicacao', label: 'Publicacao*', field: 'publicacao_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'andamento', label: 'Andamento*', field: 'andamento', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      apfdRules
     })
     async function loadData () {
       const { data } = await api.get('apfd')
@@ -64,6 +68,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

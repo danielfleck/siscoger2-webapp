@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="list">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/apfd/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(apfdRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/apfd/inserir"/>
     <Table
       data-cy="table"
       label="Lista"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(apfdRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(apfdRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -22,9 +24,10 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl } from 'src/services'
 import { Apfd, Columns } from 'src/types'
-import { getOpmByCode } from 'src/utils'
+import { apfdRules } from 'src/rules'
+import { getOpmByCode } from 'src/filters'
 
 export default defineComponent({
   name: 'List',
@@ -39,7 +42,8 @@ export default defineComponent({
         { name: 'cdopm', label: 'OPM', field: 'cdopm', format: (val) => getOpmByCode(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      apfdRules
     })
     async function loadData () {
       const { data } = await api.get('apfd/andamento')
@@ -61,6 +65,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

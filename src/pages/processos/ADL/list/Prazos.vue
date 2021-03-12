@@ -7,13 +7,15 @@
         Data de referência: HOJE ({{ today }})
       </template>
     </q-banner>
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(adlRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
     <Table
       data-cy="table"
       label="Prazos"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(adlRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(adlRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -28,11 +30,12 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+
 import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getPrazoDecorrido } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api, errorNotify } from 'src/services'
+import { api, acl, confirmMsg, errorNotify } from 'src/services'
 import { Adl, Columns } from 'src/types'
+import { adlRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Prazos',
@@ -52,8 +55,10 @@ export default defineComponent({
         { name: 'motivo_sobrestado', label: 'Motivo Sobrest.', field: 'motivo_sobrestado', format: (val, row) => getPrazoDecorrido(val, row), sortable: true },
         { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      adlRules
     })
+
     async function loadData () {
       const { data } = await api.get('adl/andamento')
       vars.data = Object.freeze(data as Adl[])
@@ -76,6 +81,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

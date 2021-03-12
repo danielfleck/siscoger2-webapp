@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(adlRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(adlRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(adlRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(adlRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -24,8 +26,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getMotivoConselho } from 'src/filters'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { Adl, Columns } from 'src/types'
+import { adlRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -39,8 +42,10 @@ export default defineComponent({
         { name: 'motivo', label: 'Motivo', field: 'id_motivoconselho', format: (val) => getMotivoConselho(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      adlRules
     })
+
     async function loadData () {
       const { data } = await api.get('adl/deleted')
       vars.data = Object.freeze(data as Adl[])
@@ -68,6 +73,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

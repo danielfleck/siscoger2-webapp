@@ -7,17 +7,18 @@
         Data de referência: HOJE ({{ today }})
       </template>
     </q-banner>
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancias/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(sindicanciaRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/sindicancia/inserir"/>
     <Table
       data-cy="table"
       label="Prazos"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(sindicanciaRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(sindicanciaRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
-  </q-tab-panel>
 </template>
 
 <script lang="ts">
@@ -30,9 +31,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate, getCurrentDate, getOpmByCode, getPrazoDecorrido } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
+import { sindicanciaRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Prazos',
@@ -53,8 +54,10 @@ export default defineComponent({
         { name: 'motivo_sobrestado', label: 'Motivo Sobrest.', field: 'motivo_sobrestado', format: (val, row) => getPrazoDecorrido(val, row), sortable: true },
         { name: 'prazo_decorrido', label: 'Prazo decorrido', field: 'prazo_decorrido', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      sindicanciaRules
     })
+
     async function loadData () {
       const { data } = await api.get('sindicancias/andamento')
       vars.data = Object.freeze(data as Sindicancia[])
@@ -75,6 +78,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

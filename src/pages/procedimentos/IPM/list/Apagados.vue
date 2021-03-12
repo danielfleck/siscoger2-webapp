@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(ipmRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(ipmRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(ipmRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(ipmRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -23,8 +25,9 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { Ipm, Columns } from 'src/types'
+import { ipmRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -38,8 +41,10 @@ export default defineComponent({
         { name: 'cdopm', label: 'OPM', field: 'cdopm' },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      ipmRules
     })
+
     async function loadData () {
       const { data } = await api.get('ipms/deleted')
       vars.data = Object.freeze(data as Ipm[])
@@ -67,6 +72,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="rel_situacao">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/cj/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(cjRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/cj/inserir"/>
     <Table
       data-cy="table"
       label="Rel. Situação"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(cjRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(cjRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -21,10 +23,10 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Cj, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
+import { cjRules } from 'src/rules'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -44,8 +46,10 @@ export default defineComponent({
         { name: 'decisao_file', label: 'Decisão', field: 'decisao_file', format: (val) => val ? 'Sim' : 'Não', sortable: true },
         { name: 'rec_ato_file', label: 'Rec. Ato', field: 'rec_ato_file', format: (val) => val ? 'Sim' : 'Não', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      cjRules
     })
+
     async function loadData () {
       const { data } = await api.get('cj')
       vars.data = Object.freeze(data as Cj[])
@@ -66,6 +70,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

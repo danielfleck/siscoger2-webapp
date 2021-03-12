@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="resultado">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/cj/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(cjRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
     <Table
       data-cy="table"
       label="Resultado"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(cjRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(cjRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -22,9 +24,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Cj, Columns } from 'src/types'
+import { cjRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Resultado',
@@ -40,8 +42,10 @@ export default defineComponent({
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'exclusao_text', label: 'Julgamento', field: 'exclusao_text', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      cjRules
     })
+
     async function loadData () {
       const { data } = await api.get('cj/julgamento')
       vars.data = Object.freeze(data as Cj[])
@@ -62,6 +66,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

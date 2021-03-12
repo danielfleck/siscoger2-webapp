@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="rel_situacao">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(ipmRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
     <Table
       data-cy="table"
       label="Rel. Situação"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(ipmRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(ipmRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -21,10 +23,10 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Ipm, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
+import { ipmRules } from 'src/rules'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -43,8 +45,10 @@ export default defineComponent({
         { name: 'relato_cmtopm_data', label: 'Rel. OPM', field: 'relato_cmtopm_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'relato_cmtgeral_data', label: 'Sol. CG', field: 'sol_cmtgeral_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      ipmRules
     })
+
     async function loadData () {
       const { data } = await api.get('ipms')
       vars.data = Object.freeze(data as Ipm[])
@@ -65,6 +69,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

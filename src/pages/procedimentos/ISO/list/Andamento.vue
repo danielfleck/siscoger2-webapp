@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="andamento">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/iso/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(isoRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/iso/inserir"/>
       <Table
       data-cy="table"
       label="Andamento"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(isoRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(isoRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -20,11 +22,12 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+
 import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Iso, Columns } from 'src/types'
+import { isoRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Andamento',
@@ -41,7 +44,8 @@ export default defineComponent({
         { name: 'andamento', label: 'Andamento', field: 'andamento', sortable: true },
         { name: 'andamentocoger', label: 'And. COGER', field: 'andamentocoger', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      isoRules
     })
 
     async function loadData () {
@@ -64,6 +68,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

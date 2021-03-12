@@ -201,12 +201,12 @@ export default defineComponent({
       if (validate(refs, procoutroRequiredFields.toCreate)) {
         // const validateSubforms = await subforms()
 
-        // if (validateSubforms && vars.register.id) {
+        if (vars.register.id) {
           vars.register.completo = true
           await api.put(`procoutros/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
           return root.$router.push('/proc_outros')
-        // }
+        }
       }
     }
 
@@ -220,14 +220,14 @@ export default defineComponent({
       incompleteProc(root, String(_id))
     }
 
-    async function subforms () {
-      const Envolvido = await refs.Envolvido.getState()
-      if (Envolvido === 'toInsert') {
-        errorNotify('Insira o Envolvido')
-        return false
-      }
-      return true
-    }
+    // async function subforms () {
+    //   const Envolvido = await refs.Envolvido.getState()
+    //   if (Envolvido === 'toInsert') {
+    //     errorNotify('Insira o Envolvido')
+    //     return false
+    //   }
+    //   return true
+    // }
 
     const next = () => refs.stepper.next()
     const previous = () => refs.stepper.previous()

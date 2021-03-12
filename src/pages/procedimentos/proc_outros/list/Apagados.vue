@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/proc_outros/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(procOutrosRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/proc_outros/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(procOutrosRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(procOutrosRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(procOutrosRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -24,8 +26,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getOpmByCode } from 'src/filters'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { ProcOutros, Columns } from 'src/types'
+import { procoutroRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -42,8 +45,10 @@ export default defineComponent({
         { name: 'motivo_abertura', label: 'Motivo Principal', field: 'motivo_abertura', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'doc_origem', label: 'Dpcumento Origem', field: 'doc_origem', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      procoutroRules
     })
+
     async function loadData () {
       const { data } = await api.get('procoutros/deleted')
       vars.data = Object.freeze(data as ProcOutros[])
@@ -71,6 +76,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

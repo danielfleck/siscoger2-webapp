@@ -142,7 +142,7 @@ export default defineComponent({
     BannerDeleted,
     DivForm
   },
-  setup(_, { refs, root }) {
+  setup (_, { refs, root }) {
     const vars = reactive({
       step: 1,
       tab: 'main',
@@ -169,7 +169,7 @@ export default defineComponent({
         solucaoautoridade_file: '',
         solucaoautoridade_data: new Date(),
         prioridade: false,
-        completo: false,
+        completo: false
       } as Iso
     })
 

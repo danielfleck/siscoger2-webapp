@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="resultado">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/adl/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(adlRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/ipm/inserir"/>
     <Table
       data-cy="table"
       label="Resultado"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(adlRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(adlRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -20,11 +22,12 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+
 import Table from 'components/pages/Table.vue'
 import { changeDate } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api, errorNotify } from 'src/services'
+import { api, acl, confirmMsg, errorNotify } from 'src/services'
 import { Adl, Columns } from 'src/types'
+import { adlRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Resultado',
@@ -42,8 +45,10 @@ export default defineComponent({
         { name: 'parecer_cmtgeral', label: 'Cmt. Geral', field: 'parecer_cmtgeral', sortable: true },
         { name: 'julgamento', label: 'julgamento*', field: 'julgamento', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      adlRules
     })
+
     async function loadData () {
       const { data } = await api.get('adl/resultado')
       vars.data = Object.freeze(data as Adl[])
@@ -66,6 +71,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

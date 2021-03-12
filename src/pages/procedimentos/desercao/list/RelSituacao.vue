@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="rel_situacao">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/desercao/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(desercaoRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/desercao/inserir"/>
     <Table
       data-cy="table"
       label="Rel. Situação"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(desercaoRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(desercaoRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -22,9 +24,10 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl } from 'src/services'
 import { Desercao, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
+import { desercaoRules } from 'src/rules'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -41,7 +44,8 @@ export default defineComponent({
         { name: 'termo_captura', label: 'termo_captura', field: 'termo_captura', sortable: true },
         { name: 'termo_inclusao', label: 'termo_inclusao', field: 'termo_inclusao', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      desercaoRules
     })
     async function loadData () {
       const { data } = await api.get('desercoes')
@@ -63,6 +67,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

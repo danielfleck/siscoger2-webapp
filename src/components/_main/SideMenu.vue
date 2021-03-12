@@ -165,8 +165,8 @@
 </template>
 
 <script lang="ts">
-import MenuItem from 'components/_main/SideMenu/MenuItem.vue'
-import SubMenu from 'components/_main/SideMenu/SubMenu.vue'
+import MenuItem from 'src/components/_main/MenuItem.vue'
+import SubMenu from 'src/components/_main/SubMenu.vue'
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { getMenu } from 'src/store/utils'
 import { acl as ACL } from 'src/services'

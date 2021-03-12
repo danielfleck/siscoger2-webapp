@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="envolvidos">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/proc_outros/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(procOutrosRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/proc_outros/inserir"/>
     <Table
       data-cy="table"
       label="Envolvidos"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(procOutrosRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(procOutrosRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -21,10 +23,10 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { ProcOutros, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
+import { procoutroRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Envolvidos',
@@ -42,8 +44,10 @@ export default defineComponent({
         { name: 'envolvidos', label: 'Envolvidos*', field: 'envolvidos', sortable: true },
         { name: 'ofendidos', label: 'Ofendidos*', field: 'ofendidos', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      procoutroRules
     })
+
     async function loadData () {
       const { data } = await api.get('procoutros')
       vars.data = Object.freeze(data as ProcOutros[])
@@ -64,6 +68,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

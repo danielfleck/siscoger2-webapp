@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="list">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/cj/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(cjRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/cj/inserir"/>
     <Table
       data-cy="table"
       label="Lista"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(cjRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(cjRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -22,9 +24,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { getMotivoConselho } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Cj, Columns } from 'src/types'
+import { cjRules } from 'src/rules'
 
 export default defineComponent({
   name: 'List',
@@ -38,8 +40,10 @@ export default defineComponent({
         { name: 'motivo', label: 'Motivo', field: 'id_motivoconselho', format: (val) => getMotivoConselho(val) },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      cjRules
     })
+
     async function loadData () {
       const { data } = await api.get('cj')
       vars.data = Object.freeze(data as Cj[])
@@ -60,6 +64,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

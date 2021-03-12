@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/exclusao/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(exclusaoRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/exclusao/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(exclusaoRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(exclusaoRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(exclusaoRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -24,8 +26,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { ExclusaoJudicial, Columns } from 'src/types'
+import { exclusaojudicialRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -42,8 +45,10 @@ export default defineComponent({
         { name: 'portaria_numero', label: 'Portaria CG', field: 'portaria_numero', sortable: true },
         { name: 'bg_numero', label: 'Boletim Geral', field: 'bg_numero', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      exclusaojudicialRules
     })
+
     async function loadData () {
       const { data } = await api.get('exclusoesjudicias/deleted')
       vars.data = Object.freeze(data as ExclusaoJudicial[])
@@ -71,6 +76,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

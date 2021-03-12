@@ -1,12 +1,14 @@
 <template>
   <q-tab-panel name="rel_situacao">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/fatd/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(fatdRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/fatd/inserir"/>
     <Table
       data-cy="table"
       label="Rel. Situação"
       :data="data"
       :columns="columns"
       actions
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(fatdRules.toDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(fatdRules.toEdit)"
       @delete="onDelete"
       @edit="onEdit"
     />
@@ -21,10 +23,10 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { Fatd, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
+import { fatdRules } from 'src/rules'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -43,8 +45,10 @@ export default defineComponent({
         { name: 'solucao', label: 'solucao*', field: 'solucao', sortable: true },
         { name: 'n_punicao', label: 'n_punicao*', field: 'n_punicao', sortable: true },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      fatdRules
     })
+
     async function loadData () {
       const { data } = await api.get('fatd')
       vars.data = Object.freeze(data as Fatd[])
@@ -65,6 +69,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onDelete
     }

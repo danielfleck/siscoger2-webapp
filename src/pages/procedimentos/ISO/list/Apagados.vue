@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/iso/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(isoRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/iso/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(isoRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(isoRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(isoRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -22,9 +24,11 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
+
 import Table from 'components/pages/Table.vue'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { Iso, Columns } from 'src/types'
+import { isoRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -38,8 +42,10 @@ export default defineComponent({
         { name: 'cdopm', label: 'OPM', field: 'cdopm' },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      isoRules
     })
+
     async function loadData () {
       const { data } = await api.get('iso/deleted')
       vars.data = Object.freeze(data as Iso[])
@@ -67,6 +73,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete

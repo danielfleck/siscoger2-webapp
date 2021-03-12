@@ -1,13 +1,15 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/pad/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(padRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/pad/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
       :data="data"
       :columns="columns"
       actions
-      actionButtonRestore
+      :actionButtonRestore="acl.hasAnyRoleOrPermission(padRules.toRestore)"
+      :actionButtonDelete="acl.hasAnyRoleOrPermission(padRules.toForceDelete)"
+      :actionButtonEdit="acl.hasAnyRoleOrPermission(padRules.toEdit)"
       @delete="onDelete"
       @restore="onRestore"
       @edit="onEdit"
@@ -24,8 +26,9 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate, getOpmByCode } from 'src/filters'
-import { api, confirm } from 'src/services'
+import { api, acl, confirm } from 'src/services'
 import { Pad, Columns } from 'src/types'
+import { padRules } from 'src/rules'
 
 export default defineComponent({
   name: 'Apagados',
@@ -42,8 +45,10 @@ export default defineComponent({
         { name: 'abertura', label: 'Abertura', field: 'abertura_data', format: (val) => changeDate(val, 'pt-br'), sortable: true },
         { name: 'sintese_txt', label: 'Síntese do fato', field: 'sintese_txt', align: 'left', style: 'white-space: pre-wrap' },
         { name: 'actions', label: 'Ações', field: 'actions' }
-      ] as Columns[]
+      ] as Columns[],
+      padRules
     })
+
     async function loadData () {
       const { data } = await api.get('pad/deleted')
       vars.data = Object.freeze(data as Pad[])
@@ -71,6 +76,7 @@ export default defineComponent({
 
     return {
       ...toRefs(vars),
+      acl,
       onEdit,
       onRestore,
       onDelete
