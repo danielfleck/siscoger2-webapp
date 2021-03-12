@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.69.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.68.2...v0.69.0) (2021-03-12)
+
+
+### Features
+
+* add acl in proc lists ([5bf2868](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/5bf2868443cbb2da1f09cfcb27b275eeab181c18))
+
 ### [0.68.2](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.68.1...v0.68.2) (2021-03-11)
 
 
