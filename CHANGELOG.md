@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.70.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.69.0...v0.70.0) (2021-03-15)
+
+
+### Features
+
+* add lists of prioridades, sobrestamentos and deploy.sh ([5b39cec](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/5b39cece3a052904ec8d1025ee76bcd42d9f5aca))
+
 ## [0.69.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.68.2...v0.69.0) (2021-03-12)
 
 
