@@ -4,10 +4,15 @@ export default [
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [
-      { path: '', component: () => import('pages/relatorios/prioritarios/List.vue'), meta: { auth: true, roles: [], permissions: [] } },
-      { path: 'inserir', component: () => import('pages/relatorios/prioritarios/Form.vue'), meta: { auth: true, roles: [], permissions: [] } },
-      { path: 'editar/:id', component: () => import('pages/relatorios/prioritarios/Form.vue'), meta: { auth: true, roles: [], permissions: [] } }
+      {
+        path: '',
+        component: () => import('src/pages/relatorios/prioritarios/Index.vue'),
+        meta: { auth: true, roles: [], permissions: [] },
+        children: [
+          { path: '', component: () => import('src/pages/relatorios/prioritarios/processos/Index.vue'), meta: { auth: true, roles: [], permissions: [] } },
+          { path: 'procedimentos', component: () => import('src/pages/relatorios/prioritarios/procedimentos/Index.vue'), meta: { auth: true, roles: [], permissions: [] } }
+        ]
+      }
     ]
-
   }
 ]

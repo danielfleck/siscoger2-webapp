@@ -19,6 +19,7 @@
       @delete="onDelete"
       @edit="onEdit"
     />
+  </q-tab-panel>
 </template>
 
 <script lang="ts">

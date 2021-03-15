@@ -97,7 +97,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { ProcOutros } from 'src/types'
-import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
+import { addPendence, api, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import InputAno from 'src/components/form/InputAno.vue'
 import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { procoutroRequiredFields } from 'src/rules'

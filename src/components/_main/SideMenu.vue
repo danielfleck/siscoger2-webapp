@@ -33,7 +33,7 @@
       <menu-item title="Dados Unidade" link="/dados_unidade" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9"/>
     </sub-menu>
     <sub-menu icon="fa fa-chart-line" group="menu" :content-inset-level="contentInsetLevel" label="Relatórios" v-if="acl({ roles: [], permissions: []})" class="bg-grey-10">
-      <menu-item title="Pendências" link="/pendencias" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9"/>
+      <menu-item title="Pendências" link="/" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9"/>
       <menu-item title="Pendências - Geral" link="/pendencias_geral" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9"/>
       <menu-item title="Prioritários" link="/prioritarios" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9"/>
       <menu-item title="Sobrestamentos" link="/sobrestamentos" v-if="acl({ roles: [], permissions: []})" class="bg-grey-9"/>

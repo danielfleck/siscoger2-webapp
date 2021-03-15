@@ -1,19 +1,15 @@
 <template>
-  <under-construction/>
-  <!-- <page :breadcrumbs="[
-    { label: 'Lista', link: '/recursos' },
+  <page :breadcrumbs="[
+    { label: 'Lista', link: '/pendencias_geral' },
     ]">
-    <q-btn data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/recursos/inserir"/>
+    OBS: Implementar listagem Backend
     <Table
       data-cy="table"
-      label="Lista recursos"
+      label="Pendencias no SISCOGER (PMPR)"
       :data="data"
       :columns="columns"
-      actions
-      @delete="onDelete"
-      @edit="onEdit"
     />
-  </page> -->
+  </page>
 </template>
 <script lang="ts">
 /* eslint-disable no-void */
@@ -23,7 +19,7 @@ import Page from 'components/pages/Page.vue'
 import Table from 'components/pages/Table.vue'
 import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
 
-import { api, confirmMsg } from 'src/services'
+import { api } from 'src/services'
 
 export default defineComponent({
   name: 'MODULEList',
@@ -32,37 +28,32 @@ export default defineComponent({
     Table,
     UnderConstruction
   },
-  setup (_, { root }) {
+  setup () {
     const vars = reactive({
       data: [] as readonly string[],
       columns: [
-        // { name: 'ref', label: 'Ref', field: 'sjd_ref', sortable: true },
-        // { name: 'ano', label: 'Ano', field: 'sjd_ref_ano', sortable: true },
-        { name: 'actions', label: 'Ações', field: 'actions' }
+        { name: 'opm', label: 'opm', field: 'cdopm', sortable: true },
+        { name: 'comportamento', label: 'comportamento', field: 'comportamento', sortable: true },
+        { name: 'punicoes', label: 'punicoes', field: 'punicoes', sortable: true },
+        { name: 'fatd_punicao', label: 'fatd_punicao', field: 'fatd_punicao', sortable: true },
+        { name: 'fatd_prazo', label: 'fatd_prazo', field: 'fatd_prazo', sortable: true },
+        { name: 'fatd_abertura', label: 'fatd_abertura', field: 'fatd_abertura', sortable: true },
+        { name: 'ipm_prazo', label: 'ipm_prazo', field: 'ipm_prazo', sortable: true },
+        { name: 'ipm_abertura', label: 'ipm_abertura', field: 'ipm_abertura', sortable: true },
+        { name: 'sindicancia_prazo', label: 'sindicancia_prazo', field: 'sindicancia_prazo', sortable: true },
+        { name: 'sindicancia_abertura', label: 'sindicancia_abertura', field: 'sindicancia_abertura', sortable: true }
       ]
     })
 
-    const functions = {
-      async loadData () {
-        const data = await api.get('MODULE')
-        vars.data = Object.freeze(data as unknown as readonly string[])
-      },
-      onEdit (row: { id: number }) {
-        return root.$router.push(`/recursos/editar/${String(row.id)}`)
-      },
-      onDelete (row: { id: number }) {
-        root.$q.dialog(confirmMsg).onOk(async () => {
-          const { ok } = await api.delete(`recursos/${String(row.id)}`)
-          if (ok) await this.loadData()
-        })
-      }
+    async function loadData () {
+      const data = await api.get('pendencias/geral')
+      vars.data = Object.freeze(data as unknown as readonly string[])
     }
 
-    // void functions.loadData()
+    void loadData()
 
     return {
-      ...toRefs(vars),
-      ...functions
+      ...toRefs(vars)
     }
   }
 })

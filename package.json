@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "start": "quasar dev",
+    "build": "quasar build",
     "lint": "eslint --ext .js,.ts,.vue ./src --fix",
     "release:major": "standard-version --release-as major",
     "release:minor": "standard-version --release-as minor",
