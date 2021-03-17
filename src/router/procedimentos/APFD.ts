@@ -1,8 +1,9 @@
+import { apfdRoute } from 'src/routenames'
 import { apfdRules } from 'src/rules'
 
 export default [
   {
-    path: '/apfd',
+    path: `/${apfdRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...apfdRules.toShow },
     children: [
@@ -18,7 +19,7 @@ export default [
     ]
   },
   {
-    path: '/apfd',
+    path: `/${apfdRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

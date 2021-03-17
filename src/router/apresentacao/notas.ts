@@ -1,6 +1,8 @@
+import { notacogerRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/notas_coger',
+    path: `/${notacogerRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

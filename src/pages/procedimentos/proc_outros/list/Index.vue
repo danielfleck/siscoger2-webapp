@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { procoutroRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,12 +55,12 @@ export default defineComponent({
       module: 'proc_outros',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/proc_outros', label: 'Consulta' },
-        { link: '/proc_outros/envolvidos', label: 'Envolvidos' },
-        { link: '/proc_outros/andamento', label: 'Andamento' },
-        { link: '/proc_outros/resultado', label: 'Resultado' },
-        { link: '/proc_outros/prazos', label: 'Prazos' },
-        { link: '/proc_outros/apagados', label: 'Apagados' }
+        { link: `/${procoutroRoute}`, label: 'Consulta' },
+        { link: `/${procoutroRoute}/envolvidos`, label: 'Envolvidos' },
+        { link: `/${procoutroRoute}/andamento`, label: 'Andamento' },
+        { link: `/${procoutroRoute}/resultado`, label: 'Resultado' },
+        { link: `/${procoutroRoute}/prazos`, label: 'Prazos' },
+        { link: `/${procoutroRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -74,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/proc_outros', label: 'Lista' })
+    functions.load({ link: `/${procoutroRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

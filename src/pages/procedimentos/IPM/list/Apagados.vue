@@ -28,6 +28,7 @@ import Table from 'components/pages/Table.vue'
 import { api, acl, confirm } from 'src/services'
 import { Ipm, Columns } from 'src/types'
 import { ipmRules } from 'src/rules'
+import { ipmRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -46,24 +47,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('ipms/deleted')
+      const { data } = await api.get(`${ipmRoute}/deleted`)
       vars.data = Object.freeze(data as Ipm[])
     }
 
     function onEdit (row: Ipm) {
-      void root.$router.push(`/ipm/editar/${row.id}`)
+      void root.$router.push(`/${ipmRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Ipm) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`ipms/${row.id}/restore`, {})
+        const { ok } = await api.put(`${ipmRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Ipm) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`ipms/${row.id}/force`)
+        const { ok } = await api.delete(`${ipmRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

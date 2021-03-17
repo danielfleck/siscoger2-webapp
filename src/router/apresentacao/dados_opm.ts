@@ -1,6 +1,8 @@
+import { dadosunidadeRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/dados_unidade',
+    path: `/${dadosunidadeRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

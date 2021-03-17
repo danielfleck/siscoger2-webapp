@@ -1,6 +1,8 @@
+import { modificarsenhaRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/modificar_senha',
+    path: `/${modificarsenhaRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true },
     children: [

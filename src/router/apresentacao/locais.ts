@@ -1,6 +1,8 @@
+import { localapresentacaoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/locais',
+    path: `/${localapresentacaoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

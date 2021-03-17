@@ -22,6 +22,7 @@ export type Iso = {
   solucaoautoridade_data: Date
   prioridade: boolean
   completo: boolean
+  deletedAt?: Date
 };
 
 export const cleanIso = {

@@ -41,6 +41,7 @@ import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
 import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
+import { apfdRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -55,9 +56,9 @@ export default defineComponent({
       module: 'apfd',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/apfd', label: 'Consulta' },
-        { link: '/apfd/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/apfd/apagados', label: 'Apagados' }
+        { link: `/${apfdRoute}`, label: 'Consulta' },
+        { link: `/${apfdRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${apfdRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -72,7 +73,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/apfd', label: 'Lista' })
+    functions.load({ link: `/${apfdRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

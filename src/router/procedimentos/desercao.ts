@@ -1,8 +1,9 @@
+import { desercaoRoute } from 'src/routenames'
 import { desercaoRules } from 'src/rules'
 
 export default [
   {
-    path: '/desercao',
+    path: `/${desercaoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...desercaoRules.toShow },
     children: [
@@ -17,7 +18,7 @@ export default [
     ]
   },
   {
-    path: '/desercao',
+    path: `/${desercaoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

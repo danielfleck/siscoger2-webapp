@@ -1,6 +1,8 @@
+import { manualRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/manual',
+    path: `/${manualRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

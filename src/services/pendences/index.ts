@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { LocalStorage } from 'quasar'
+import { pendenciasRoute } from 'src/routenames'
 import { Pendencia } from 'src/types'
 import { api } from '../api'
 import { getUserCdopm } from '../auth'
@@ -23,7 +24,7 @@ interface AddPendence {
 }
 
 export async function getPendenceById (id: string, debug = false): Promise<any[] | undefined> {
-  const { data, ok } = await api.get(`pendencias/${id}`, { silent: true, debug })
+  const { data, ok } = await api.get(`${pendenciasRoute}/${id}`, { silent: true, debug })
   if (ok) {
     const { state } = data as Pendencia
     return state ?? []
@@ -42,14 +43,14 @@ export async function addPendence ({ pendencias, proc, register, state, cdopm }:
     pendencias,
     state
   }
-  const { data } = await api.post('pendencias', pendencia, { silent: true, debug })
+  const { data } = await api.post(pendenciasRoute, pendencia, { silent: true, debug })
   const response = data as Pendencia
 
   return response
 }
 
 export async function removePendence (id: string, debug = false) {
-  const { ok } = await api.delete(`pendencias/${id}`, { silent: true, debug })
+  const { ok } = await api.delete(`${pendenciasRoute}/${id}`, { silent: true, debug })
   if (ok) LocalStorage.remove('incompleto')
 }
 

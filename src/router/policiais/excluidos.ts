@@ -1,6 +1,8 @@
+import { policialexcluidoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/policiais_excluidos',
+    path: `/${policialexcluidoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

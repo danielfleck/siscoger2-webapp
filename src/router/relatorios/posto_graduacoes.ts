@@ -1,6 +1,8 @@
+import { postosgraduacaoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/postos_graduacoes',
+    path: `/${postosgraduacaoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

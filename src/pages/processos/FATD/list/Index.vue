@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { fatdRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,12 +55,12 @@ export default defineComponent({
       module: 'fatd',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/fatd', label: 'Consulta' },
-        { link: '/fatd/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/fatd/andamento', label: 'Andamento' },
-        { link: '/fatd/resultado', label: 'Resultado' },
-        { link: '/fatd/prazos', label: 'Prazos' },
-        { link: '/fatd/apagados', label: 'Apagados' }
+        { link: `/${fatdRoute}`, label: 'Consulta' },
+        { link: `/${fatdRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${fatdRoute}/andamento`, label: 'Andamento' },
+        { link: `/${fatdRoute}/resultado`, label: 'Resultado' },
+        { link: `/${fatdRoute}/prazos`, label: 'Prazos' },
+        { link: `/${fatdRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -74,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/fatd', label: 'Lista' })
+    functions.load({ link: `/${fatdRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

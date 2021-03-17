@@ -1,6 +1,8 @@
+import { historiaRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/historia',
+    path: `/${historiaRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

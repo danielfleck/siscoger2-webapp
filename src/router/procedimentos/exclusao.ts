@@ -1,8 +1,9 @@
+import { exclusaojudicialRoute } from 'src/routenames'
 import { exclusaojudicialRules } from 'src/rules'
 
 export default [
   {
-    path: '/exclusao',
+    path: `/${exclusaojudicialRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...exclusaojudicialRules.toShow },
     children: [
@@ -17,7 +18,7 @@ export default [
     ]
   },
   {
-    path: '/exclusao',
+    path: `/${exclusaojudicialRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

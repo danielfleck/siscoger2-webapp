@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { padRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,8 +55,8 @@ export default defineComponent({
       module: 'pad',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/pad', label: 'Consulta' },
-        { link: '/pad/apagados', label: 'Apagados' }
+        { link: `/${padRoute}`, label: 'Consulta' },
+        { link: `/${padRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -70,7 +71,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/pad', label: 'Lista' })
+    functions.load({ link: `/${padRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/desercao' },
-    { label: 'Criar', link: '/desercao/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -106,6 +103,12 @@ import { andamentoCogerDesercao, termoExclusaoAgregacao, termoApresentacaoCaptur
 import { Desercao } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { desercaoRequiredFields } from 'src/rules'
+import { desercaoRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${desercaoRoute}` },
+  { label: 'Criar', link: `/${desercaoRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -158,6 +161,7 @@ export default defineComponent({
         prioridade: false,
         deletedAt: undefined
       } as Desercao,
+      breadcrumbs,
       cdopm: getUserCdopm(),
       andamentoCogerDesercao,
       termoExclusaoAgregacao,
@@ -168,7 +172,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, desercaoRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('desercoes', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(desercaoRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const desercao = data as Desercao
           vars.register.id = Number(desercao.id)
@@ -180,7 +184,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, desercaoRequiredFields.toCreate)) {
-        const { ok } = await api.put(`desercoes/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${desercaoRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -194,9 +198,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`desercoes/${vars.register.id}`, vars.register)
+          await api.put(`${desercaoRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/desercao')
+          return root.$router.push(`/${desercaoRoute}`)
         }
       }
     }

@@ -1,6 +1,8 @@
+import { prioritarioRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/prioritarios',
+    path: `/${prioritarioRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

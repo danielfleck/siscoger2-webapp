@@ -1,8 +1,9 @@
+import { adlRoute } from 'src/routenames'
 import { adlRules } from 'src/rules'
 
 export default [
   {
-    path: '/adl',
+    path: `/${adlRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...adlRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/adl',
+    path: `/${adlRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

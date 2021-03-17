@@ -27,6 +27,7 @@ import { changeDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
 import { sindicanciaRules } from 'src/rules'
+import { sindicanciaRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Andamento',
@@ -48,17 +49,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('sindicancias')
+      const { data } = await api.get(sindicanciaRoute)
       vars.data = Object.freeze(data as Sindicancia[])
     }
 
     function onEdit (row: Sindicancia) {
-      void root.$router.push(`/sindicancias/editar/${row.id}`)
+      void root.$router.push(`/${sindicanciaRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Sindicancia) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`sindicancias/${row.id}`)
+        const { ok } = await api.delete(`${sindicanciaRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

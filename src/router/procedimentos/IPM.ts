@@ -1,8 +1,9 @@
+import { ipmRoute } from 'src/routenames'
 import { ipmRules } from 'src/rules'
 
 export default [
   {
-    path: '/ipm',
+    path: `/${ipmRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...ipmRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/ipm',
+    path: `/${ipmRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/iso' },
-    { label: 'Criar', link: '/iso/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -93,6 +90,12 @@ import { Iso } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { isoRequiredFields } from 'src/rules'
 import DivForm from 'src/components/form/DivForm.vue'
+import { isoRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${isoRoute}` },
+  { label: 'Criar', link: `/${isoRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -146,12 +149,13 @@ export default defineComponent({
         prioridade: false,
         completo: false
       } as Iso,
+      breadcrumbs,
       cdopm: getUserCdopm()
     })
 
     async function create () {
       if (validate(refs, isoRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('isos', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(isoRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const iso = data as Iso
           vars.register.id = Number(iso.id)
@@ -163,7 +167,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, isoRequiredFields.toCreate)) {
-        const { ok } = await api.put(`isos/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${isoRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -177,9 +181,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`isos/${vars.register.id}`, vars.register)
+          await api.put(`${isoRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/iso')
+          return root.$router.push(`/${isoRoute}`)
         }
       }
     }

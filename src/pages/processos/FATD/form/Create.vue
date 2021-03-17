@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/fatd' },
-    { label: 'Criar', link: '/fatd/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -109,6 +106,12 @@ import { motivoFATD, situacaoFATD } from 'src/config'
 import { Fatd } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { fatdRequiredFields } from 'src/rules'
+import { fatdRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${fatdRoute}` },
+  { label: 'Criar', link: `/${fatdRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -168,6 +171,7 @@ export default defineComponent({
         motivo_outros: '',
         deletedAt: undefined
       } as Fatd,
+      breadcrumbs,
       cdopm: getUserCdopm(),
       motivoFATD,
       situacaoFATD
@@ -175,7 +179,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, fatdRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('fatd', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(fatdRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const fatd = data as Fatd
           vars.register.id = Number(fatd.id)
@@ -187,7 +191,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, fatdRequiredFields.toCreate)) {
-        const { ok } = await api.put(`fatd/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${fatdRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -201,9 +205,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`fatd/${vars.register.id}`, vars.register)
+          await api.put(`${fatdRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/fatd')
+          return root.$router.push(`/${fatdRoute}`)
         }
       }
     }
@@ -241,8 +245,6 @@ export default defineComponent({
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       getPendence()
     }
-
-    console.log(root.$route.fullPath)
 
     return {
       ...toRefs(vars),

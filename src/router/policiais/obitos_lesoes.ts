@@ -1,6 +1,8 @@
+import { falecimentoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/policiais_obitos_lesoes',
+    path: `/${falecimentoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

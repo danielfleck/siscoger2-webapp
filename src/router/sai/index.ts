@@ -1,6 +1,8 @@
+import { saiRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/sai',
+    path: `/${saiRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

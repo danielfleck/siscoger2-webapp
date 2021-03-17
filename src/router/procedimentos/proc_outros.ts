@@ -1,8 +1,9 @@
+import { procoutroRoute } from 'src/routenames'
 import { procoutroRules } from 'src/rules'
 
 export default [
   {
-    path: '/proc_outros',
+    path: `/${procoutroRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...procoutroRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/proc_outros',
+    path: `/${procoutroRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

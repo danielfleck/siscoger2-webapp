@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { cjRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,12 +55,12 @@ export default defineComponent({
       module: 'cj',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/cj', label: 'Consulta' },
-        { link: '/cj/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/cj/andamento', label: 'Andamento' },
-        { link: '/cj/julgamento', label: 'Julgamento' },
-        { link: '/cj/prazos', label: 'Prazos' },
-        { link: '/cj/apagados', label: 'Apagados' }
+        { link: `/${cjRoute}`, label: 'Consulta' },
+        { link: `/${cjRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${cjRoute}/andamento`, label: 'Andamento' },
+        { link: `/${cjRoute}/julgamento`, label: 'Julgamento' },
+        { link: `/${cjRoute}/prazos`, label: 'Prazos' },
+        { link: `/${cjRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -74,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/cj', label: 'Lista' })
+    functions.load({ link: `/${cjRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

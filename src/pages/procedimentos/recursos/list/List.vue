@@ -28,6 +28,7 @@ import { api, acl, confirmMsg } from 'src/services'
 import { Recurso, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 import { recursoRules } from 'src/rules'
+import { recursoRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'List',
@@ -47,17 +48,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('recursos')
+      const { data } = await api.get(recursoRoute)
       vars.data = Object.freeze(data as Recurso[])
     }
 
     function onEdit (row: Recurso) {
-      void root.$router.push(`/recursos/editar/${row.id}`)
+      void root.$router.push(`/${recursoRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Recurso) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`recursos/${row.id}`)
+        const { ok } = await api.delete(`${recursoRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

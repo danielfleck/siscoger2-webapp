@@ -28,6 +28,7 @@ import Table from 'components/pages/Table.vue'
 import { api, acl, confirm } from 'src/services'
 import { Sindicancia, Columns } from 'src/types'
 import { sindicanciaRules } from 'src/rules'
+import { sindicanciaRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -46,24 +47,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('sindicancias/deleted')
+      const { data } = await api.get(`${sindicanciaRoute}/deleted`)
       vars.data = Object.freeze(data as Sindicancia[])
     }
 
     function onEdit (row: Sindicancia) {
-      void root.$router.push(`/sindicancias/editar/${row.id}`)
+      void root.$router.push(`/${sindicanciaRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Sindicancia) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`sindicancias/${row.id}/restore`, {})
+        const { ok } = await api.put(`${sindicanciaRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Sindicancia) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`sindicancias/${row.id}/force`)
+        const { ok } = await api.delete(`${sindicanciaRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

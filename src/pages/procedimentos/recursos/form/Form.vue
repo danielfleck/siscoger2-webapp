@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/recursos' },
-  { label: 'Editar', link: '/recursos/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <div-form full>
       <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="recursos"/>
     </div-form>
@@ -60,6 +57,12 @@ import DivForm from 'src/components/form/DivForm.vue'
 import { Recurso } from 'src/types'
 import { api, getUserCdopm, validate } from 'src/services'
 import { recursoRequiredFields } from 'src/rules'
+import { recursoRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${recursoRoute}` },
+  { label: 'Criar', link: `/${recursoRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -103,17 +106,18 @@ export default defineComponent({
         datahora: new Date(), // datetime
         id_movimento: 0,
         deletedAt: undefined
-      } as Recurso
+      } as Recurso,
+      breadcrumbs
     })
 
     async function save () {
       if (validate(refs, recursoRequiredFields.toCreate)) {
         if (vars.register.id) {
-          const { ok } = await api.put(`recursos/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/recursos')
+          const { ok } = await api.put(`${recursoRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${recursoRoute}`)
         } else {
-          const { ok } = await api.post('recursos', vars.register)
-          if (ok) return root.$router.push('/recursos')
+          const { ok } = await api.post(recursoRoute, vars.register)
+          if (ok) return root.$router.push(`/${recursoRoute}`)
         }
       }
     }
@@ -121,7 +125,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`recursos/${id}`)
+        const { data, ok } = await api.get(`${recursoRoute}/${id}`)
         if (ok) vars.register = data as Recurso
       }
     }

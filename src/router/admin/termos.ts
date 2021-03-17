@@ -1,6 +1,8 @@
+import { termoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/admin/termos',
+    path: `/admin/${termoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

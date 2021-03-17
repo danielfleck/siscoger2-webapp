@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/apfd' },
-    { label: 'Criar', link: '/apfd/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -96,6 +93,12 @@ import { andamentoCogerAPFD, crime, tipoApfd } from 'src/config'
 import { Apfd } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { apfdRequiredFields } from 'src/rules'
+import { apfdRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${apfdRoute}` },
+  { label: 'Criar', link: `/${apfdRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -147,6 +150,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Apfd,
       cdopm: getUserCdopm(),
+      breadcrumbs,
       andamentoCogerAPFD,
       crime,
       tipoApfd
@@ -154,7 +158,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, apfdRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('apfd', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(apfdRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const apfd = data as Apfd
           vars.register.id = Number(apfd.id)
@@ -166,7 +170,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, apfdRequiredFields.toCreate)) {
-        const { ok } = await api.put(`apfd/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${apfdRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -180,9 +184,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`apfd/${vars.register.id}`, vars.register)
+          await api.put(`${apfdRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/apfd')
+          return root.$router.push(`/${apfdRoute}`)
         }
       }
     }

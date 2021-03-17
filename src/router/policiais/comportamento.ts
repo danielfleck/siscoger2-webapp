@@ -1,6 +1,8 @@
+import { policialcomportamentoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/policiais_comportamentos',
+    path: `/${policialcomportamentoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

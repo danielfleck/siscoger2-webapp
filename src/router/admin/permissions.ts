@@ -1,6 +1,8 @@
+import { permissionRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/admin/permissoes',
+    path: `/admin/${permissionRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

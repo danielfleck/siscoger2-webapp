@@ -1,6 +1,8 @@
+import { buscapmRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/busca_pm',
+    path: `/${buscapmRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

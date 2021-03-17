@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/cd' },
-  { label: 'Editar', link: '/cd/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -149,6 +146,12 @@ import { getAndamento, getSobrestamento } from 'src/utils'
 import { Cd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import { cdRequiredFields } from 'src/rules'
+import { cdRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${cdRoute}` },
+  { label: 'Criar', link: `/${cdRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -213,6 +216,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Cd,
       cdopm: getUserCdopm(),
+      breadcrumbs,
       parecerComissao,
       parecerCmtgeral,
       motivoConselho,
@@ -230,8 +234,8 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`cd/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/cd')
+          const { ok } = await api.put(`${cdRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`${cdRoute}`)
         }
       }
     }
@@ -241,16 +245,16 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('cd')
-        const { ok } = await api.put(`cd/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${cdRoute}/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('cd')
-      await api.put(`cd/${id}`, vars.register, { silent: true })
+      await api.put(`${cdRoute}/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`cd/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${cdRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -260,7 +264,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`cd/${id}`)
+        const { data, ok } = await api.get(`${cdRoute}/${id}`)
         if (ok) vars.register = data as Cd
       }
     }

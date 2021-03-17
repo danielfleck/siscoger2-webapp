@@ -29,6 +29,7 @@ import Table from 'components/pages/Table.vue'
 import { api, acl, confirm } from 'src/services'
 import { Iso, Columns } from 'src/types'
 import { isoRules } from 'src/rules'
+import { isoRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -47,17 +48,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('iso/deleted')
+      const { data } = await api.get(`${isoRoute}/deleted`)
       vars.data = Object.freeze(data as Iso[])
     }
 
     function onEdit (row: Iso) {
-      void root.$router.push(`/iso/editar/${row.id}`)
+      void root.$router.push(`/${isoRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Iso) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`isos/${row.id}/restore`, {})
+        const { ok } = await api.put(`${isoRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }

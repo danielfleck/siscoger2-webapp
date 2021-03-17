@@ -1,7 +1,7 @@
 <template>
   <q-card class="col-12" flat>
     <q-card-section>
-      Defensor
+      Defensor TODO
     </q-card-section>
   </q-card>
 </template>

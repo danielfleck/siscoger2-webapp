@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { sindicanciaRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,12 +55,12 @@ export default defineComponent({
       module: 'sindicancias',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/sindicancias', label: 'Consulta' },
-        { link: '/sindicancias/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/sindicancias/andamento', label: 'Andamento' },
-        { link: '/sindicancias/resultado', label: 'Resultado' },
-        { link: '/sindicancias/prazos', label: 'Prazos' },
-        { link: '/sindicancias/apagados', label: 'Apagados' }
+        { link: `/${sindicanciaRoute}`, label: 'Consulta' },
+        { link: `/${sindicanciaRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${sindicanciaRoute}/andamento`, label: 'Andamento' },
+        { link: `/${sindicanciaRoute}/resultado`, label: 'Resultado' },
+        { link: `/${sindicanciaRoute}/prazos`, label: 'Prazos' },
+        { link: `/${sindicanciaRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -74,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/sindicancias', label: 'Lista' })
+    functions.load({ link: `/${sindicanciaRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

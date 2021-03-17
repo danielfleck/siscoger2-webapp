@@ -87,10 +87,9 @@ import InputDate from 'components/form/InputDate.vue'
 import InputText from 'components/form/InputText.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { getDense } from 'src/store/utils'
-import { deleteData, post } from 'src/libs/api'
+import { api, errorNotify, confirmMsg } from 'src/services'
 import { changeDate } from 'src/filters'
-import { errorNotify } from 'src/libs/notify'
-import { confirmMsg } from 'src/libs/dialog'
+import { uploadRoute } from 'src/routenames'
 
 export interface Register{
   _id?: number
@@ -104,7 +103,7 @@ export interface Register{
   obs: string
   data_arquivo: string
 }
-const moduleName = 'uploads'
+const moduleName = uploadRoute
 export default defineComponent({
   name: 'FileUpload',
   components: { InputDate, InputText, BtnStack },
@@ -196,8 +195,8 @@ export default defineComponent({
         const found = vars.registers.findIndex(f => f._id === register._id)
         root.$q.dialog(confirmMsg).onOk(async () => {
           const id = register._id || 0
-          await deleteData(`${moduleName}/${id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       },
       getIcon (file: any) {
@@ -234,8 +233,8 @@ export default defineComponent({
           formData.append(key, val)
         })
         this.showProgress()
-        const response = await post(moduleName, formData, { complete: true, file: true })
-        if (response.returntype === 'success') {
+        const { ok } = await api.post(moduleName, formData, { file: true })
+        if (ok) {
           vars.register = this.cleanRegister()
           vars.files = []
           vars.uploadProgress = []
@@ -243,8 +242,8 @@ export default defineComponent({
         }
       },
       async loadData () {
-        const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = response
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = data as Register[]
       },
 
       showProgress () {

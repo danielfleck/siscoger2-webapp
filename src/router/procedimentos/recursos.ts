@@ -1,8 +1,9 @@
+import { recursoRoute } from 'src/routenames'
 import { recursoRules } from 'src/rules'
 
 export default [
   {
-    path: '/recursos',
+    path: `/${recursoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...recursoRules.toShow },
     children: [
@@ -17,7 +18,7 @@ export default [
     ]
   },
   {
-    path: '/recursos',
+    path: `/${recursoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

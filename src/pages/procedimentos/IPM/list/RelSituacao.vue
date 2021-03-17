@@ -27,6 +27,7 @@ import { api, acl, confirmMsg } from 'src/services'
 import { Ipm, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
 import { ipmRules } from 'src/rules'
+import { ipmRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -50,7 +51,7 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('ipms')
+      const { data } = await api.get(ipmRoute)
       vars.data = Object.freeze(data as Ipm[])
     }
 
@@ -60,7 +61,7 @@ export default defineComponent({
 
     function onDelete (row: Ipm) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`ipms/${row.id}`)
+        const { ok } = await api.delete(`${ipmRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

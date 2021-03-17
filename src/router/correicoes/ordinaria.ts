@@ -1,6 +1,8 @@
+import { correicaoordinariaRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/correicao_ordinaria',
+    path: `/${correicaoordinariaRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

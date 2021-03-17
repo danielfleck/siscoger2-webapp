@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/apfd' },
-  { label: 'Editar', link: '/apfd/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -122,6 +119,12 @@ import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import DivForm from 'src/components/form/DivForm.vue'
 import InputSelect from 'src/components/form/InputSelect.vue'
 import { apfdRequiredFields } from 'src/rules'
+import { apfdRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${apfdRoute}` },
+  { label: 'Criar', link: `/${apfdRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -176,6 +179,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Apfd,
       cdopm: getUserCdopm(),
+      breadcrumbs,
       andamentoCogerAPFD,
       crime,
       tipoApfd
@@ -192,8 +196,8 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`apfd/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/apfd')
+          const { ok } = await api.put(`${apfdRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${apfdRoute}`)
         }
       }
     }
@@ -203,16 +207,16 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('apfd')
-        const { ok } = await api.put(`apfd/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${apfdRoute}/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('apfd')
-      await api.put(`apfd/${id}`, vars.register, { silent: true })
+      await api.put(`${apfdRoute}/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`apfd/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${apfdRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -222,7 +226,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`apfd/${id}`)
+        const { data, ok } = await api.get(`${apfdRoute}/${id}`)
         if (ok) vars.register = data as Apfd
       }
     }

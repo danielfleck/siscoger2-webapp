@@ -29,6 +29,7 @@ import { getMotivoConselho } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { Adl, Columns } from 'src/types'
 import { adlRules } from 'src/rules'
+import { adlRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -47,24 +48,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('adl/deleted')
+      const { data } = await api.get(`${adlRoute}/deleted`)
       vars.data = Object.freeze(data as Adl[])
     }
 
     function onEdit (row: Adl) {
-      void root.$router.push(`/adl/editar/${row.id}`)
+      void root.$router.push(`/${adlRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Adl) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`adl/${row.id}/restore`, {})
+        const { ok } = await api.put(`${adlRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Adl) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`adl/${row.id}/force`)
+        const { ok } = await api.delete(`${adlRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

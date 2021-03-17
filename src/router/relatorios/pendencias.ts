@@ -1,6 +1,8 @@
+import { pendenciasgeralRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/pendencias',
+    path: `/${pendenciasgeralRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

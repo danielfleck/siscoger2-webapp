@@ -1,6 +1,8 @@
+import { fdiRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/ficha_tramitacao',
+    path: `/${fdiRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

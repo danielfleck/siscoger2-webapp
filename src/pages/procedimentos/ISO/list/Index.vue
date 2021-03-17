@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { isoRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,10 +55,10 @@ export default defineComponent({
       module: 'iso',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/iso', label: 'Consulta' },
-        { link: '/iso/andamento', label: 'Andamento' },
-        { link: '/iso/prazos', label: 'Prazos' },
-        { link: '/iso/apagados', label: 'Apagados' }
+        { link: `/${isoRoute}`, label: 'Consulta' },
+        { link: `/${isoRoute}/andamento`, label: 'Andamento' },
+        { link: `/${isoRoute}/prazos`, label: 'Prazos' },
+        { link: `/${isoRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })

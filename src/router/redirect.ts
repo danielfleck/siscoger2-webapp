@@ -1,4 +1,5 @@
 import { LocalStorage } from 'quasar'
+import { homeRoute, loginRoute, termosRoute } from 'src/routenames'
 import { errorNotify } from 'src/services/alert/notify'
 import { User } from 'src/types'
 import { Route } from 'vue-router'
@@ -6,20 +7,20 @@ import { Route } from 'vue-router'
 export type Next = (arg0?: string | undefined) => void
 export interface Meta { meta: { auth: boolean | undefined, roles: string[] | undefined, permissions: string[] | undefined} }
 
-// const routeLogin = (to: Route, from: Route) => from.path !== '/login' || to.path !== '/login'
+// const routeLogin = (to: Route, from: Route) => from.path !== `/${loginRoute}` || to.path !== `/${loginRoute}`
 
 export function checkIfIsLogged (next: Next) {
   const logged = LocalStorage.getItem('token')
   if (!logged) {
     errorNotify('Não autenticado')
-    next('/login')
+    next(`/${loginRoute}`)
   }
 }
 
 export function checkIfHasTerms (next: Next) {
   const user = LocalStorage.getItem('user') as unknown as User
   if (!user.terms) {
-    return next('/termos')
+    return next(`/${termosRoute}`)
   }
 }
 
@@ -64,6 +65,6 @@ export function checkPermissions (to: Meta, next: Next) {
 }
 
 export function notAuthorized (next: Next) {
-  next('/')
+  next(`/${homeRoute}`)
   errorNotify('Acesso não autorizado!')
 }

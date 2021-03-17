@@ -1,6 +1,8 @@
+import { ofendidoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/ofendidos',
+    path: `/${ofendidoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

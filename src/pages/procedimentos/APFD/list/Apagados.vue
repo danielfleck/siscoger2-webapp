@@ -1,6 +1,6 @@
 <template>
   <q-tab-panel name="apagados">
-    <q-btn v-if="acl.hasAnyRoleOrPermission(apfdRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/apfd/inserir"/>
+    <q-btn v-if="acl.hasAnyRoleOrPermission(apfdRules.toCreate)" data-cy="button" color="primary" icon="fa fa-plus" class="full-width" label="Inserir novo" to="/${apfdRoute}/inserir"/>
     <Table
       data-cy="table"
       label="Apagados"
@@ -28,6 +28,7 @@ import Table from 'components/pages/Table.vue'
 import { api, acl, confirm } from 'src/services'
 import { Apfd, Columns } from 'src/types'
 import { apfdRules } from 'src/rules'
+import { apfdRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -46,24 +47,24 @@ export default defineComponent({
       apfdRules
     })
     async function loadData () {
-      const { data } = await api.get('apfd/deleted')
+      const { data } = await api.get(`${apfdRoute}/deleted`)
       vars.data = Object.freeze(data as Apfd[])
     }
 
     function onEdit (row: Apfd) {
-      void root.$router.push(`/apfd/editar/${row.id}`)
+      void root.$router.push(`/${apfdRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Apfd) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`apfd/${row.id}/restore`, {})
+        const { ok } = await api.put(`${apfdRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Apfd) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`apfd/${row.id}/force`)
+        const { ok } = await api.delete(`${apfdRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/exclusao' },
-  { label: register.id ? 'Editar' : 'Inserir', link: '/exclusao/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
 
     <div-form full>
       <BannerDeleted v-if="register.deletedAt" :id="register.id" proc="exclusao"/>
@@ -97,6 +94,12 @@ import ProcedTipos from 'src/components/form/ProcedTipos.vue'
 import DivForm from 'src/components/form/DivForm.vue'
 import { exclusaojudicialRequiredFields } from 'src/rules'
 import InputAno from 'src/components/form/InputAno.vue'
+import { exclusaojudicialRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${exclusaojudicialRoute}` },
+  { label: 'Criar', link: `/${exclusaojudicialRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -151,7 +154,8 @@ export default defineComponent({
         bg_ano: 0,
         prioridade: 0,
         deletedAt: undefined
-      } as ExclusaoJudicial
+      } as ExclusaoJudicial,
+      breadcrumbs
     })
 
     function cast () {
@@ -166,11 +170,11 @@ export default defineComponent({
     async function save () {
       if (validate(refs, exclusaojudicialRequiredFields.toCreate)) {
         if (!vars.register.id) {
-          const { ok } = await api.post('exclusoesjudicias', cast())
-          if (ok) return root.$router.push('/exclusao')
+          const { ok } = await api.post(exclusaojudicialRoute, cast())
+          if (ok) return root.$router.push(`/${exclusaojudicialRoute}`)
         } else {
           const { ok } = await api.put(`exclusoesjudicias/${String(vars.register.id)}`, vars.register)
-          if (ok) return root.$router.push('/exclusao')
+          if (ok) return root.$router.push(`/${exclusaojudicialRoute}`)
         }
       }
     }
@@ -178,7 +182,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`exclusoesjudicias/${id}`)
+        const { data, ok } = await api.get(`${exclusaojudicialRoute}/${id}`)
         if (ok) vars.register = data as ExclusaoJudicial
       }
     }

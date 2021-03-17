@@ -1,6 +1,8 @@
+import { userRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/admin/usuarios',
+    path: `/admin/${userRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

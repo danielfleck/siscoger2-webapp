@@ -1,6 +1,8 @@
+import { homeRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/',
+    path: homeRoute,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

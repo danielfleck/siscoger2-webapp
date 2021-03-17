@@ -1,8 +1,9 @@
+import { cjRoute } from 'src/routenames'
 import { cjRules } from 'src/rules'
 
 export default [
   {
-    path: '/cj',
+    path: `/${cjRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...cjRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/cj',
+    path: `/${cjRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

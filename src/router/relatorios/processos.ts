@@ -1,6 +1,8 @@
+import { processoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/processos',
+    path: `/${processoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

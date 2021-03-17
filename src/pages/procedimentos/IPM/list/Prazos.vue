@@ -35,6 +35,7 @@ import { confirmMsg } from 'src/libs/dialog'
 import { api, acl } from 'src/services'
 import { Ipm, Columns } from 'src/types'
 import { ipmRules } from 'src/rules'
+import { ipmRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Prazos',
@@ -58,17 +59,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('ipms/andamento')
+      const { data } = await api.get(`${ipmRoute}/andamento`)
       vars.data = Object.freeze(data as Ipm[])
     }
 
     function onEdit (row: Ipm) {
-      void root.$router.push(`/ipm/editar/${row.id}`)
+      void root.$router.push(`/${ipmRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Ipm) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`ipms/${row.id}`)
+        const { ok } = await api.delete(`${ipmRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

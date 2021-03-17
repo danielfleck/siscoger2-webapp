@@ -1,6 +1,8 @@
+import { buscatramitacaoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/busca_tramitacao',
+    path: `/${buscatramitacaoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

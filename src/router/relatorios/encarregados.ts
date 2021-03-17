@@ -1,6 +1,8 @@
+import { encarregadoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/encarregados',
+    path: `/${encarregadoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

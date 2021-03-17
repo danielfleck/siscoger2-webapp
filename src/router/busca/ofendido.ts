@@ -1,6 +1,8 @@
+import { buscaofendidoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/busca_ofendido',
+    path: `/${buscaofendidoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

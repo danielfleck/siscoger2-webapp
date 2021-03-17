@@ -41,6 +41,7 @@ import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
 import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
+import { ipmRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -55,12 +56,12 @@ export default defineComponent({
       module: 'ipm',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/ipm', label: 'Consulta' },
-        { link: '/ipm/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/ipm/andamento', label: 'Andamento' },
-        { link: '/ipm/resultado', label: 'Resultado' },
-        { link: '/ipm/prazos', label: 'Prazos' },
-        { link: '/ipm/apagados', label: 'Apagados' }
+        { link: `/${ipmRoute}`, label: 'Consulta' },
+        { link: `/${ipmRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${ipmRoute}/andamento`, label: 'Andamento' },
+        { link: `/${ipmRoute}/resultado`, label: 'Resultado' },
+        { link: `/${ipmRoute}/prazos`, label: 'Prazos' },
+        { link: `/${ipmRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -75,7 +76,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/ipm', label: 'Lista' })
+    functions.load({ link: `/${ipmRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

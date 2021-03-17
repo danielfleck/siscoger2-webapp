@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/cd' },
-  { label: 'Editar', link: '/cd/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -139,6 +136,12 @@ import { getAndamento, getSobrestamento } from 'src/utils'
 import { Cj } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import { cjRequiredFields } from 'src/rules'
+import { cjRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${cjRoute}` },
+  { label: 'Criar', link: `/${cjRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -208,6 +211,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Cj,
       cdopm: getUserCdopm(),
+      breadcrumbs,
       motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
@@ -218,14 +222,13 @@ export default defineComponent({
     }
 
     async function update () {
-      console.log('here')
       if (validate(refs, getRequiredFields())) {
         const validateSubforms = subforms()
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`cj/${String(vars.register.id)}`, vars.register)
-          if (ok) return root.$router.push('/cj')
+          const { ok } = await api.put(`${cjRoute}/${String(vars.register.id)}`, vars.register)
+          if (ok) return root.$router.push(`/${cjRoute}`)
         }
       }
     }
@@ -235,16 +238,16 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('cj')
-        const { ok } = await api.put(`cj/${String(id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${cjRoute}/${String(id)}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('cj')
-      await api.put(`cj/${String(id)}`, vars.register, { silent: true })
+      await api.put(`${cjRoute}/${String(id)}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`cj/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${cjRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -254,7 +257,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`cj/${id}`)
+        const { data, ok } = await api.get(`${cjRoute}/${id}`)
         if (ok) vars.register = data as Cj
       }
     }

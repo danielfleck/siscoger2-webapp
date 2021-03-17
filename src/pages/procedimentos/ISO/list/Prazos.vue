@@ -35,6 +35,7 @@ import { changeDate, getCurrentDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { Iso, Columns } from 'src/types'
 import { isoRules } from 'src/rules'
+import { isoRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Prazos',
@@ -57,17 +58,17 @@ export default defineComponent({
       isoRules
     })
     async function loadData () {
-      const { data } = await api.get('isos/andamento')
+      const { data } = await api.get(`${isoRoute}/andamento`)
       vars.data = Object.freeze(data as Iso[])
     }
 
     function onEdit (row: Iso) {
-      void root.$router.push(`/iso/editar/${row.id}`)
+      void root.$router.push(`/${isoRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Iso) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`isos/${row.id}`)
+        const { ok } = await api.delete(`${isoRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

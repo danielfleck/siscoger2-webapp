@@ -11,6 +11,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Table from 'components/pages/Table.vue'
+import { cdRoute } from 'src/routenames'
 
 import { api } from 'src/services'
 
@@ -29,7 +30,7 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const data = await api.get('cds/sobrestados')
+      const data = await api.get(`${cdRoute}/sobrestados`)
       vars.data = Object.freeze(data as unknown as readonly string[])
     }
 

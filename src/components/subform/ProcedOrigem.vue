@@ -61,8 +61,7 @@ import ProcedTipos from 'components/form/ProcedTipos.vue'
 import InputText from 'components/form/InputText.vue'
 import InputAno from 'components/form/InputAno.vue'
 import BtnStack from 'components/form/BtnStack.vue'
-import { deleteData, post, put } from 'src/libs/api'
-import { confirmMsg } from 'src/libs/dialog'
+import { api, confirmMsg } from 'src/services'
 import { getDense } from 'src/store/utils'
 
 const fields = ['origem_proc', 'origem_sjd_ref', 'origem_sjd_ref_ano']
@@ -116,13 +115,14 @@ export default defineComponent({
     const functions = {
       async loadData (): Promise<void> {
         // resetValidation(refs, fields)
-        vars.registers = await post(`${moduleName}/search`, props.data, { silent: true })
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = data as Register[]
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
           const data = { ...props.data, ...vars.register }
-          const response = await post(moduleName, data)
+          const response = await api.post(moduleName, data)
           if (response) {
             vars.register = cleanRegister
             await this.loadData()
@@ -136,8 +136,8 @@ export default defineComponent({
         if (validate(refs, fields)) {
           vars.register.origem_sjd_ref = Number(vars.register.origem_sjd_ref)
           const data = { ...props.data, ...register }
-          const response = await put(`${moduleName}/${register?.id}`, data)
-          if (response) {
+          const { ok } = await api.put(`${moduleName}/${register?.id}`, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -146,8 +146,8 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register.id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${register.id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       }
     }

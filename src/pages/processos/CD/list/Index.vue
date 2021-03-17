@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { cdRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,12 +55,12 @@ export default defineComponent({
       module: 'cd',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/cd', label: 'Consulta' },
-        { link: '/cd/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/cd/andamento', label: 'Andamento' },
-        { link: '/cd/julgamento', label: 'Julgamento' },
-        { link: '/cd/prazos', label: 'Prazos' },
-        { link: '/cd/apagados', label: 'Apagados' }
+        { link: `/${cdRoute}`, label: 'Consulta' },
+        { link: `/${cdRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${cdRoute}/andamento`, label: 'Andamento' },
+        { link: `/${cdRoute}/julgamento`, label: 'Julgamento' },
+        { link: `/${cdRoute}/prazos`, label: 'Prazos' },
+        { link: `/${cdRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -74,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/cd', label: 'Lista' })
+    functions.load({ link: `/${cdRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

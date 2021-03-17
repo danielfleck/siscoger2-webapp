@@ -29,6 +29,7 @@ import { getMotivoConselho } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { Cj, Columns } from 'src/types'
 import { cjRules } from 'src/rules'
+import { cjRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -47,24 +48,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('cj/deleted')
+      const { data } = await api.get(`${cjRoute}/deleted`)
       vars.data = Object.freeze(data as Cj[])
     }
 
     function onEdit (row: Cj) {
-      void root.$router.push(`/cj/editar/${row.id}`)
+      void root.$router.push(`/${cjRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Cj) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`cj/${row.id}/restore`, {})
+        const { ok } = await api.put(`${cjRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Cj) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`cj/${row.id}/force`)
+        const { ok } = await api.delete(`${cjRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

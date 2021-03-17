@@ -35,6 +35,7 @@ import { changeDate, getCurrentDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { ProcOutros, Columns } from 'src/types'
 import { procoutroRules } from 'src/rules'
+import { procoutroRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Prazos',
@@ -64,17 +65,17 @@ export default defineComponent({
       procoutroRules
     })
     async function loadData () {
-      const { data } = await api.get('procoutros/andamento')
+      const { data } = await api.get(`${procoutroRoute}/andamento`)
       vars.data = Object.freeze(data as ProcOutros[])
     }
 
     function onEdit (row: ProcOutros) {
-      void root.$router.push(`/proc_outros/editar/${row.id}`)
+      void root.$router.push(`/${procoutroRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: ProcOutros) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`procoutros/${row.id}`)
+        const { ok } = await api.delete(`${procoutroRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

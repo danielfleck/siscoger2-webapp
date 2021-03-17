@@ -1,8 +1,9 @@
+import { sindicanciaRoute } from 'src/routenames'
 import { sindicanciaRules } from 'src/rules'
 
 export default [
   {
-    path: '/sindicancias',
+    path: `/${sindicanciaRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...sindicanciaRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/sindicancias',
+    path: `/${sindicanciaRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

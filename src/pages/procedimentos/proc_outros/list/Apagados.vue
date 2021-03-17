@@ -29,6 +29,7 @@ import { getOpmByCode } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { ProcOutros, Columns } from 'src/types'
 import { procoutroRules } from 'src/rules'
+import { procoutroRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -50,24 +51,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('procoutros/deleted')
+      const { data } = await api.get(`${procoutroRoute}/deleted`)
       vars.data = Object.freeze(data as ProcOutros[])
     }
 
     function onEdit (row: ProcOutros) {
-      void root.$router.push(`/proc_outros/editar/${row.id}`)
+      void root.$router.push(`/${procoutroRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: ProcOutros) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`procoutros/${row.id}/restore`, {})
+        const { ok } = await api.put(`${procoutroRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: ProcOutros) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`procoutros/${row.id}/force`)
+        const { ok } = await api.delete(`${procoutroRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

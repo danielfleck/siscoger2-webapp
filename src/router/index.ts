@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { route } from 'quasar/wrappers'
+import { loginRoute, termosRoute } from 'src/routenames'
 // import VueRouter from 'vue-router'
 import VueRouter, { Route } from 'vue-router'
 import { Store } from 'vuex'
@@ -41,17 +42,17 @@ export default route<Store<StateInterface>>(function ({ Vue }) {
     }
 
     if (
-      from.path !== '/login' &&
-        to.path !== '/login' &&
-        to.path !== '/termos'
+      from.path !== `/${loginRoute}` &&
+        to.path !== `/${loginRoute}` &&
+        to.path !== `/${termosRoute}`
     ) {
       checkIfHasTerms(next)
     }
 
     if (
-      from.path !== '/login' &&
-        to.path !== '/login' &&
-        to.path !== '/termos'
+      from.path !== `/${loginRoute}` &&
+        to.path !== `/${loginRoute}` &&
+        to.path !== `/${termosRoute}`
     ) {
       checkIfHasIncomplete(to, from, next)
     }

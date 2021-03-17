@@ -1,6 +1,8 @@
+import { linksuteisRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/links_uteis',
+    path: `/${linksuteisRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

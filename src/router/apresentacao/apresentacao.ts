@@ -1,6 +1,8 @@
+import { apresentacaoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/apresentacoes',
+    path: `/${apresentacaoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

@@ -1,6 +1,8 @@
+import { biRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/bi',
+    path: `/${biRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

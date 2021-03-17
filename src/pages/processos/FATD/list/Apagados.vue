@@ -28,6 +28,7 @@ import Table from 'components/pages/Table.vue'
 import { api, acl, confirm } from 'src/services'
 import { Fatd, Columns } from 'src/types'
 import { fatdRules } from 'src/rules'
+import { fatdRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -46,24 +47,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('fatd/deleted')
+      const { data } = await api.get(`${fatdRoute}/deleted`)
       vars.data = Object.freeze(data as Fatd[])
     }
 
     function onEdit (row: Fatd) {
-      void root.$router.push(`/fatd/editar/${row.id}`)
+      void root.$router.push(`/${fatdRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Fatd) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`fatd/${row.id}/restore`, {})
+        const { ok } = await api.put(`${fatdRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Fatd) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`fatd/${row.id}/force`)
+        const { ok } = await api.delete(`${fatdRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

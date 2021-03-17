@@ -29,6 +29,7 @@ import { changeDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { Pad, Columns } from 'src/types'
 import { padRules } from 'src/rules'
+import { padRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -50,24 +51,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('pad/deleted')
+      const { data } = await api.get(`${padRoute}/deleted`)
       vars.data = Object.freeze(data as Pad[])
     }
 
     function onEdit (row: Pad) {
-      void root.$router.push(`/pad/editar/${row.id}`)
+      void root.$router.push(`/${padRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Pad) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`pad/${row.id}/restore`, {})
+        const { ok } = await api.put(`${padRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Pad) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`pad/${row.id}/force`)
+        const { ok } = await api.delete(`${padRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/adl' },
-    { label: 'Criar', link: '/adl/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -109,6 +106,12 @@ import { Adl } from 'src/types'
 import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { adlRequiredFields } from 'src/rules'
+import { adlRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${adlRoute}` },
+  { label: 'Criar', link: `/${adlRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -167,6 +170,7 @@ export default defineComponent({
         prioridade: false,
         deletedAt: undefined
       } as Adl,
+      breadcrumbs,
       motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
@@ -174,7 +178,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, adlRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('adl', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(adlRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const adl = data as Adl
           vars.register.id = Number(adl.id)
@@ -186,7 +190,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, adlRequiredFields.toEdit)) {
-        const { ok } = await api.put(`adl/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${adlRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -200,9 +204,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`adl/${vars.register.id}`, vars.register)
+          await api.put(`${adlRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/adl')
+          return root.$router.push(`/${adlRoute}`)
         }
       }
     }

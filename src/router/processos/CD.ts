@@ -1,8 +1,9 @@
+import { cdRoute } from 'src/routenames'
 import { cdRules } from 'src/rules'
 
 export default [
   {
-    path: '/cd',
+    path: `/${cdRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...cdRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/cd',
+    path: `/${cdRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

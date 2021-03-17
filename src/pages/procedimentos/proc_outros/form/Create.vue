@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/proc_outros' },
-    { label: 'Criar', link: '/proc_outros/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -102,6 +99,12 @@ import InputAno from 'src/components/form/InputAno.vue'
 import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { procoutroRequiredFields } from 'src/rules'
 import DivForm from 'src/components/form/DivForm.vue'
+import { procoutroRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${procoutroRoute}` },
+  { label: 'Criar', link: `/${procoutroRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -170,6 +173,7 @@ export default defineComponent({
         limite_data: new Date(),
         deletedAt: undefined
       } as ProcOutros,
+      breadcrumbs,
       cdopm: getUserCdopm(),
       docOrigemProcOutros,
       motivoAberturaProcOutros
@@ -177,10 +181,10 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, procoutroRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('procoutros', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(procoutroRoute, vars.register, { silent: true, debug: true })
         if (ok) {
-          const procOutros = data as ProcOutros
-          vars.register.id = Number(procOutros.id)
+          const procoutro = data as ProcOutros
+          vars.register.id = Number(procoutro.id)
           await handlePendence()
           return next()
         }
@@ -189,7 +193,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, procoutroRequiredFields.toCreate)) {
-        const { ok } = await api.put(`procoutros/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${procoutroRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -199,13 +203,11 @@ export default defineComponent({
 
     async function finalize () {
       if (validate(refs, procoutroRequiredFields.toCreate)) {
-        // const validateSubforms = await subforms()
-
         if (vars.register.id) {
           vars.register.completo = true
-          await api.put(`procoutros/${vars.register.id}`, vars.register)
+          await api.put(`${procoutroRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/proc_outros')
+          return root.$router.push(`/${procoutroRoute}`)
         }
       }
     }

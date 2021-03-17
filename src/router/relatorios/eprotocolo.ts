@@ -1,6 +1,8 @@
+import { eprotocoloRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/eprotocolo',
+    path: `/${eprotocoloRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/cd' },
-    { label: 'Criar', link: '/cd/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -110,6 +107,12 @@ import { Cd } from 'src/types'
 import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { cdRequiredFields } from 'src/rules'
+import { cdRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${cdRoute}` },
+  { label: 'Criar', link: `/${cdRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -169,6 +172,7 @@ export default defineComponent({
         deletedAt: undefined
       } as Cd,
       cdopm: getUserCdopm(),
+      breadcrumbs,
       motivoConselho,
       decorrenciaConselho,
       situacaoServicoOuFora
@@ -176,7 +180,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, cdRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('cd', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(cdRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const cd = data as Cd
           vars.register.id = Number(cd.id)
@@ -188,7 +192,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, cdRequiredFields.toCreate)) {
-        const { ok } = await api.put(`cd/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${cdRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -204,7 +208,7 @@ export default defineComponent({
           vars.register.completo = true
           await api.put(`cd/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/cd')
+          return root.$router.push(`/${cdRoute}`)
         }
       }
     }

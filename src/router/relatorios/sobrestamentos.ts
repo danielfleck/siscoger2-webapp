@@ -1,6 +1,8 @@
+import { sobrestamentoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/sobrestamentos',
+    path: `/${sobrestamentoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

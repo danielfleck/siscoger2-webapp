@@ -36,6 +36,7 @@ import { changeDate, getCurrentDate, getPrazoDecorrido } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { Cd, Columns } from 'src/types'
 import { cdRules } from 'src/rules'
+import { cdRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Prazos',
@@ -60,17 +61,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('cd/andamento')
+      const { data } = await api.get(`${cdRoute}/andamento`)
       vars.data = Object.freeze(data as Cd[])
     }
 
     function onEdit (row: Cd) {
-      void root.$router.push(`/cd/editar/${row.id}`)
+      void root.$router.push(`/${cdRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Cd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`cd/${row.id}`)
+        const { ok } = await api.delete(`${cdRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

@@ -1,6 +1,8 @@
+import { emailagendadoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/emails_agendados',
+    path: `/${emailagendadoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

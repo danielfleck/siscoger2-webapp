@@ -1,6 +1,8 @@
+import { buscanominalRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/busca_nominal',
+    path: `/${buscanominalRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

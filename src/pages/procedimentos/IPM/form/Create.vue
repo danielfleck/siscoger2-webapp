@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/ipm' },
-    { label: 'Criar', link: '/ipm/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -128,6 +125,12 @@ import DivForm from 'src/components/form/DivForm.vue'
 import { ipmRequiredFields } from 'src/rules'
 import City from 'src/components/form/City.vue'
 import InputAno from 'src/components/form/InputAno.vue'
+import { ipmRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${ipmRoute}` },
+  { label: 'Criar', link: `/${ipmRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -206,13 +209,14 @@ export default defineComponent({
         deletedAt: undefined
       } as Ipm,
       cdopm: getUserCdopm(),
+      breadcrumbs,
       andamentoCogerIPM,
       andamentoIPM
     })
 
     async function create () {
       if (validate(refs, ipmRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('ipms', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(ipmRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const ipm = data as Ipm
           vars.register.id = Number(ipm.id)
@@ -224,7 +228,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, ipmRequiredFields.toCreate)) {
-        const { ok } = await api.put(`ipms/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${ipmRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -238,9 +242,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`ipms/${vars.register.id}`, vars.register)
+          await api.put(`${ipmRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/ipm')
+          return root.$router.push(`/${ipmRoute}`)
         }
       }
     }

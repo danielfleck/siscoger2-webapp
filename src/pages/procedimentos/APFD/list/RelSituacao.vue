@@ -28,6 +28,7 @@ import { api, acl } from 'src/services'
 import { Apfd, Columns } from 'src/types'
 import { apfdRules } from 'src/rules'
 import { changeDate } from 'src/filters'
+import { apfdRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -49,17 +50,17 @@ export default defineComponent({
       apfdRules
     })
     async function loadData () {
-      const { data } = await api.get('apfd')
+      const { data } = await api.get(apfdRoute)
       vars.data = Object.freeze(data as Apfd[])
     }
 
     function onEdit (row: Apfd) {
-      void root.$router.push(`/apfd/editar/${row.id}`)
+      void root.$router.push(`/${apfdRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Apfd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`apfd/${row.id}`)
+        const { ok } = await api.delete(`${apfdRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

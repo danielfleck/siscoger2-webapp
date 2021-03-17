@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/sindicancias' },
-    { label: 'Criar', link: '/sindicancias/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -105,6 +102,12 @@ import { andamentoCogerSindicancia, andamentoSindicancia, motivoAberturaSindican
 import { Sindicancia } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { sindicanciaRequiredFields } from 'src/rules'
+import { sindicanciaRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${sindicanciaRoute}` },
+  { label: 'Criar', link: `/${sindicanciaRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -166,6 +169,7 @@ export default defineComponent({
         prazo_decorrido: 0,
         deletedAt: undefined
       },
+      breadcrumbs,
       cdopm: getUserCdopm(),
       andamentoCogerSindicancia,
       andamentoSindicancia,
@@ -176,7 +180,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, sindicanciaRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('sindicancias', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(sindicanciaRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const sindicancia = data as Sindicancia
           vars.register.id = Number(sindicancia.id)
@@ -188,7 +192,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, sindicanciaRequiredFields.toCreate)) {
-        const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${sindicanciaRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -202,9 +206,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`sindicancias/${vars.register.id}`, vars.register)
+          await api.put(`${sindicanciaRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/sindicancias')
+          return root.$router.push(`/${sindicanciaRoute}`)
         }
       }
     }

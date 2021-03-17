@@ -36,6 +36,7 @@ import { changeDate, getCurrentDate, getPrazoDecorrido } from 'src/filters'
 import { api, acl, confirmMsg, errorNotify } from 'src/services'
 import { Adl, Columns } from 'src/types'
 import { adlRules } from 'src/rules'
+import { adlRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Prazos',
@@ -60,19 +61,19 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('adl/andamento')
+      const { data } = await api.get(`${adlRoute}/andamento`)
       vars.data = Object.freeze(data as Adl[])
     }
 
     function onEdit (row: Adl) {
       if (!row.id) return errorNotify('Sem id')
-      void root.$router.push(`/adl/editar/${row.id}`)
+      void root.$router.push(`/${adlRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Adl) {
       if (!row.id) return errorNotify('Sem id')
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`adl/${row.id}`)
+        const { ok } = await api.delete(`${adlRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

@@ -28,6 +28,7 @@ import { api, acl } from 'src/services'
 import { Desercao, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
 import { desercaoRules } from 'src/rules'
+import { desercaoRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'RelSituacao',
@@ -48,17 +49,17 @@ export default defineComponent({
       desercaoRules
     })
     async function loadData () {
-      const { data } = await api.get('desercoes')
+      const { data } = await api.get(desercaoRoute)
       vars.data = Object.freeze(data as Desercao[])
     }
 
     function onEdit (row: Desercao) {
-      void root.$router.push(`/desercao/editar/${row.id}`)
+      void root.$router.push(`/${desercaoRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Desercao) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`desercoes/${row.id}`)
+        const { ok } = await api.delete(`${desercaoRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

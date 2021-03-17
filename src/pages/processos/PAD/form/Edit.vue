@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/pad' },
-  { label: 'Editar', link: '/pad/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -120,6 +117,12 @@ import { getAndamento, getSobrestamento } from 'src/utils'
 import { Pad } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 import { padRequiredFields } from 'src/rules'
+import { padRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${padRoute}` },
+  { label: 'Criar', link: `/${padRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -170,7 +173,8 @@ export default defineComponent({
         solucao_file: '',
         prioridade: 0,
         deletedAt: undefined
-      } as Pad
+      } as Pad,
+      breadcrumbs
     })
 
     function getRequiredFields () {
@@ -183,8 +187,8 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`pad/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/pad')
+          const { ok } = await api.put(`${padRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${padRoute}`)
         }
       }
     }
@@ -194,16 +198,16 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('pad')
-        const { ok } = await api.put(`pad/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${padRoute}/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('pad')
-      await api.put(`pad/${id}`, vars.register, { silent: true })
+      await api.put(`${padRoute}/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`pad/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${padRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -213,7 +217,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`pad/${id}`)
+        const { data, ok } = await api.get(`${padRoute}/${id}`)
         if (ok) vars.register = data as Pad
       }
     }

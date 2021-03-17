@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/fatd' },
-  { label: 'Editar', link: '/fatd/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -149,6 +146,12 @@ import { Fatd } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
 import { fatdRequiredFields } from 'src/rules'
+import { fatdRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${fatdRoute}` },
+  { label: 'Criar', link: `/${fatdRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -213,6 +216,7 @@ export default defineComponent({
         motivo_outros: '',
         deletedAt: undefined
       } as Fatd,
+      breadcrumbs,
       cdopm: getUserCdopm(),
       motivoFATD,
       situacaoFATD
@@ -228,8 +232,8 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`fatd/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/fatd')
+          const { ok } = await api.put(`${fatdRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${fatdRoute}`)
         }
       }
     }
@@ -239,16 +243,16 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('fatd')
-        const { ok } = await api.put(`fatd/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${fatdRoute}/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('fatd')
-      await api.put(`fatd/${id}`, vars.register, { silent: true })
+      await api.put(`${fatdRoute}/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`fatd/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${fatdRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -258,7 +262,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`fatd/${id}`)
+        const { data, ok } = await api.get(`${fatdRoute}/${id}`)
         if (ok) vars.register = data as Fatd
       }
     }

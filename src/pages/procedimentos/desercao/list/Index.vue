@@ -41,6 +41,7 @@ import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
 import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
+import { desercaoRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -55,9 +56,9 @@ export default defineComponent({
       module: 'desercao',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/desercao', label: 'Consulta' },
-        { link: '/desercao/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/desercao/apagados', label: 'Apagados' }
+        { link: `/${desercaoRoute}`, label: 'Consulta' },
+        { link: `/${desercaoRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${desercaoRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -72,7 +73,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/desercao', label: 'Lista' })
+    functions.load({ link: `/${desercaoRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

@@ -27,6 +27,7 @@ import { changeDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { Ipm, Columns } from 'src/types'
 import { ipmRules } from 'src/rules'
+import { ipmRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Andamento',
@@ -48,17 +49,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('ipms')
+      const { data } = await api.get(ipmRoute)
       vars.data = Object.freeze(data as Ipm[])
     }
 
     function onEdit (row: Ipm) {
-      void root.$router.push(`/ipm/editar/${row.id}`)
+      void root.$router.push(`/${ipmRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Ipm) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`ipms/${row.id}`)
+        const { ok } = await api.delete(`${ipmRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

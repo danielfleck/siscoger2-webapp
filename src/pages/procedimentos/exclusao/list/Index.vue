@@ -41,6 +41,7 @@ import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
 import UnderConstruction from 'src/components/pages/UnderConstruction.vue'
+import { exclusaojudicialRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -55,8 +56,8 @@ export default defineComponent({
       module: 'exclusao',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/exclusao', label: 'Consulta' },
-        { link: '/exclusao/apagados', label: 'Apagados' }
+        { link: `/${exclusaojudicialRoute}`, label: 'Consulta' },
+        { link: `/${exclusaojudicialRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -71,7 +72,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/exclusao', label: 'Lista' })
+    functions.load({ link: `/${exclusaojudicialRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

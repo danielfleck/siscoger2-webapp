@@ -50,15 +50,15 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { confirmMsg } from 'src/libs/dialog'
 import { validate } from 'src/libs/validator'
 
-import { deleteData, post, put } from 'src/libs/api'
+import { api, confirmMsg } from 'src/services'
 
 import InputText from 'components/form/InputText.vue'
 import InputDate from 'components/form/InputDate.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { changeDate } from 'src/filters'
+import { movimentoRoute } from 'src/routenames'
 
 export interface Register{
   id: number
@@ -77,7 +77,7 @@ const cleanRegister = {
 }
 
 const fields = ['data', 'descricao']
-const moduleName = 'movimentos'
+const moduleName = movimentoRoute
 export default defineComponent({
   name: 'Movimento',
   components: { InputText, InputDate, BtnStack },
@@ -110,14 +110,14 @@ export default defineComponent({
     const functions = {
       async loadData (): Promise<void> {
         // resetValidation(refs, fields)
-        const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = response
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = data as Register[]
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...vars.register }
-          const response = await post(moduleName, data, { complete: true })
-          if (response.returntype === 'success') {
+          const { ok } = await api.post(moduleName, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -129,8 +129,8 @@ export default defineComponent({
       async update (register: Register): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...register }
-          const response = await put(`${moduleName}/${register?.id}`, data, { complete: true })
-          if (response.returntype === 'success') {
+          const { ok } = await api.put(`${moduleName}/${register?.id}`, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -139,8 +139,8 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register.id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${register.id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       }
     }

@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/proc_outros' },
-  { label: 'Editar', link: '/proc_outros/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -125,6 +122,12 @@ import { ProcOutros } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
 import { procoutroRequiredFields } from 'src/rules'
+import { procoutrosRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${procoutrosRoute}` },
+  { label: 'Criar', link: `/${procoutrosRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -195,6 +198,7 @@ export default defineComponent({
         limite_data: new Date(),
         deletedAt: undefined
       } as ProcOutros,
+      breadcrumbs,
       docOrigemProcOutros,
       motivoAberturaProcOutros
     })
@@ -209,15 +213,15 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`procoutros/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/proc_outros')
+          const { ok } = await api.put(`${procoutrosRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${procoutrosRoute}`)
         }
       }
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`procoutros/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${procoutrosRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -227,7 +231,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`procoutros/${id}`)
+        const { data, ok } = await api.get(`${procoutrosRoute}/${id}`)
         if (ok) vars.register = data as ProcOutros
       }
     }

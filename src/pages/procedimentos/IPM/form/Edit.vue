@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/ipm' },
-  { label: 'Editar', link: '/ipm/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -150,6 +147,12 @@ import { getDense } from 'src/store/utils'
 import { Ipm } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 import { ipmRequiredFields } from 'src/rules'
+import { ipmRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${ipmRoute}` },
+  { label: 'Criar', link: `/${ipmRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -227,7 +230,8 @@ export default defineComponent({
         bou_numero: 0,
         prioridade: false,
         deletedAt: undefined
-      } as Ipm
+      } as Ipm,
+      breadcrumbs
     })
 
     function getRequiredFields () {
@@ -241,15 +245,15 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`ipms/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/ipm')
+          const { ok } = await api.put(`${ipmRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${ipmRoute}`)
         }
       }
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`ipms/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${ipmRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -259,7 +263,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`ipms/${id}`)
+        const { data, ok } = await api.get(`${ipmRoute}/${id}`)
         if (ok) vars.register = data as Ipm
       }
     }

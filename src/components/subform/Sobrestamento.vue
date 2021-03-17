@@ -71,17 +71,17 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { confirmMsg } from 'src/libs/dialog'
 import { validate } from 'src/libs/validator'
 import { motivoSobrestamento } from 'src/config/selects'
 
-import { deleteData, post, put } from 'src/libs/api'
+import { api, confirmMsg } from 'src/services'
 
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 import InputDate from 'components/form/InputDate.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { changeDate } from 'src/filters'
+import { sobrestamentoRoute } from 'src/routenames'
 
 export interface Register{
   id: number
@@ -113,7 +113,7 @@ const cleanRegister = {
 
 const fields = ['motivo', 'motivo_outros', 'inicio_data', 'doc_controle_inicio', 'publicacao_inicio']
 const fieldsUpdate = [...fields, 'termino_data', 'doc_controle_termino', 'publicacao_termino']
-const moduleName = 'sobrestamentos'
+const moduleName = sobrestamentoRoute
 export default defineComponent({
   name: 'Sobrestamentos',
   components: { InputText, InputSelect, InputDate, BtnStack },
@@ -155,9 +155,9 @@ export default defineComponent({
     const functions = {
       async loadData (): Promise<void> {
         // resetValidation(refs, fields)
-        const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = this.getOlds(response)
-        vars.register = this.getCurrent(response)
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = this.getOlds(data as Register[])
+        vars.register = this.getCurrent(data as Register[])
       },
       getCurrent (response: Register[]):Register {
         if (!response.length) return cleanRegister
@@ -180,8 +180,8 @@ export default defineComponent({
         if (validate(refs, fields)) {
           const data = { ...props.data, ...vars.register }
           emit('submit', vars.register)
-          const response = await post(moduleName, data, { complete: true })
-          if (response.returntype === 'success') {
+          const { ok } = await api.post(moduleName, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -194,8 +194,8 @@ export default defineComponent({
         if (validate(refs, fieldsUpdate)) {
           const data = { ...props.data, ...register }
           emit('submit', vars.register)
-          const response = await put(`${moduleName}/${register?.id}`, data, { complete: true })
-          if (response.returntype === 'success') {
+          const { ok } = await api.put(`${moduleName}/${register?.id}`, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -204,8 +204,8 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register.id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${register.id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       }
     }

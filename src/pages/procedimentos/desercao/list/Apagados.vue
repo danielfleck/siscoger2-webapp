@@ -29,6 +29,7 @@ import { getOpmByCode } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { Desercao, Columns } from 'src/types'
 import { desercaoRules } from 'src/rules'
+import { desercaoRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -48,24 +49,24 @@ export default defineComponent({
       desercaoRules
     })
     async function loadData () {
-      const { data } = await api.get('desercoes/deleted')
+      const { data } = await api.get(`${desercaoRoute}/deleted`)
       vars.data = Object.freeze(data as Desercao[])
     }
 
     function onEdit (row: Desercao) {
-      void root.$router.push(`/desercao/editar/${row.id}`)
+      void root.$router.push(`/${desercaoRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Desercao) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`desercoes/${row.id}/restore`, {})
+        const { ok } = await api.put(`${desercaoRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Desercao) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`desercoes/${row.id}/force`)
+        const { ok } = await api.delete(`${desercaoRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

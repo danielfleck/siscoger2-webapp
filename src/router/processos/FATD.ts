@@ -1,8 +1,9 @@
+import { fatdRoute } from 'src/routenames'
 import { fatdRules } from 'src/rules'
 
 export default [
   {
-    path: '/fatd',
+    path: `/${fatdRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...fatdRules.toShow },
     children: [
@@ -21,7 +22,7 @@ export default [
     ]
   },
   {
-    path: '/fatd',
+    path: `/${fatdRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

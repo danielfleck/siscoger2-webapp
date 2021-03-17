@@ -1,8 +1,9 @@
+import { isoRoute } from 'src/routenames'
 import { isoRules } from 'src/rules'
 
 export default [
   {
-    path: '/iso',
+    path: `/${isoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...isoRules.toShow },
     children: [
@@ -19,7 +20,7 @@ export default [
     ]
   },
   {
-    path: '/iso',
+    path: `/${isoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

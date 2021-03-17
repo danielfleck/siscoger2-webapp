@@ -1,6 +1,8 @@
+import { presosoutrosRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/presos_outros',
+    path: `/${presosoutrosRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

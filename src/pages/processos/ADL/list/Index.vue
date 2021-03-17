@@ -40,6 +40,7 @@
 import Breadcrumbs from 'components/pages/Breadcrumbs.vue'
 import { defineComponent, toRefs, reactive, computed } from '@vue/composition-api'
 import { getFab } from 'src/store/utils'
+import { adlRoute } from 'src/routenames'
 
 type Link = {
   link: string | undefined
@@ -54,12 +55,12 @@ export default defineComponent({
       module: 'adl',
       breadcrumbs: [] as Link[],
       tabs: [
-        { link: '/adl', label: 'Consulta' },
-        { link: '/adl/rel_situacao', label: 'Rel.  Situação' },
-        { link: '/adl/andamento', label: 'Andamento' },
-        { link: '/adl/resultado', label: 'Resultado' },
-        { link: '/adl/prazos', label: 'Prazos' },
-        { link: '/adl/apagados', label: 'Apagados' }
+        { link: `/${adlRoute}`, label: 'Consulta' },
+        { link: `/${adlRoute}/rel_situacao`, label: 'Rel.  Situação' },
+        { link: `/${adlRoute}/andamento`, label: 'Andamento' },
+        { link: `/${adlRoute}/resultado`, label: 'Resultado' },
+        { link: `/${adlRoute}/prazos`, label: 'Prazos' },
+        { link: `/${adlRoute}/apagados`, label: 'Apagados' }
       ] as Link[],
       tab: 'Lista'
     })
@@ -74,7 +75,7 @@ export default defineComponent({
       }
     }
 
-    functions.load({ link: '/adl', label: 'Lista' })
+    functions.load({ link: `/${adlRoute}`, label: 'Lista' })
 
     return {
       ...toRefs(vars),

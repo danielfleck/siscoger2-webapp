@@ -1,7 +1,9 @@
+import { termosRoute } from 'src/routenames'
+
 // import This from 'components/'
 export default [
   {
-    path: '/termos',
+    path: `/${termosRoute}`,
     meta: { auth: true },
     component: () => import('layouts/LoginLayout.vue'),
     children: [

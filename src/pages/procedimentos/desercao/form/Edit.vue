@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/desercao' },
-  { label: 'Editar', link: '/desercao/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -128,6 +125,12 @@ import { Desercao } from 'src/types'
 import { api, errorNotify, getUserCdopm, validate } from 'src/services'
 import InputSelect from 'src/components/form/InputSelect.vue'
 import { desercaoRequiredFields } from 'src/rules'
+import { desercaoRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${desercaoRoute}` },
+  { label: 'Criar', link: `/${desercaoRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -184,6 +187,7 @@ export default defineComponent({
         prioridade: false,
         deletedAt: undefined
       } as Desercao,
+      breadcrumbs,
       cdopm: getUserCdopm(),
       andamentoCogerDesercao,
       termoExclusaoAgregacao,
@@ -203,15 +207,15 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`desercoes/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/desercao')
+          const { ok } = await api.put(`${desercaoRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${desercaoRoute}`)
         }
       }
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`desercoes/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${desercaoRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -221,7 +225,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`desercoes/${id}`)
+        const { data, ok } = await api.get(`${desercaoRoute}/${id}`)
         if (ok) vars.register = data as Desercao
       }
     }

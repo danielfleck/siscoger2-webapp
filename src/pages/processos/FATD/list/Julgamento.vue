@@ -27,6 +27,7 @@ import { changeDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { Fatd, Columns } from 'src/types'
 import { fatdRules } from 'src/rules'
+import { fatdRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Resultado',
@@ -48,17 +49,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('fatd/resultado')
+      const { data } = await api.get(`${fatdRoute}/resultado`)
       vars.data = Object.freeze(data as Fatd[])
     }
 
     function onEdit (row: Fatd) {
-      void root.$router.push(`/fatd/editar/${row.id}`)
+      void root.$router.push(`/${fatdRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Fatd) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`fatd/${row.id}`)
+        const { ok } = await api.delete(`${fatdRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

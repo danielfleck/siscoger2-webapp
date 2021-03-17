@@ -1,6 +1,8 @@
+import { feriadoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/admin/feriados',
+    path: `/admin/${feriadoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

@@ -92,8 +92,8 @@ import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { getDense } from 'src/store/utils'
-import { confirmMsg } from 'src/libs/dialog'
-import { deleteData, post, put } from 'src/libs/api'
+import { api, confirmMsg } from 'src/services'
+import { ofendidoRoute } from 'src/routenames'
 
 const fields = ['rg', 'nome']
 
@@ -123,7 +123,7 @@ const cleanRegister = {
   situacao: ''
 }
 
-const moduleName = 'ofendidos'
+const moduleName = ofendidoRoute
 export default defineComponent({
   name: 'Name',
   components: {
@@ -167,13 +167,14 @@ export default defineComponent({
     const functions = {
       async loadData (): Promise<void> {
         // resetValidation(refs, fields)
-        vars.registers = await post(`${moduleName}/search`, props.data, { silent: true })
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = data as Register[]
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...vars.register }
-          const response = await post(moduleName, data)
-          if (response) {
+          const { ok } = await api.post(moduleName, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -185,16 +186,18 @@ export default defineComponent({
       async update (register: Register): Promise<void> {
         if (validate(refs, fields)) {
           const data = { ...props.data, ...register }
-          await put(`${moduleName}/${register?.id}`, data)
-          vars.register = cleanRegister
-          await this.loadData()
+          const { ok } = await api.put(`${moduleName}/${register?.id}`, data)
+          if (ok) {
+            vars.register = cleanRegister
+            await this.loadData()
+          }
         }
       },
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register.id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${register.id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       }
     }

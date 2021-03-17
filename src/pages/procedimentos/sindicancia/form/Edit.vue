@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-  { label: 'Lista', link: '/sindicancias' },
-  { label: 'Editar', link: '/sindicancias/editar' },
-  ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-tabs
       v-model="tab"
       dense
@@ -132,6 +129,12 @@ import { getAndamento, getSobrestamento } from 'src/utils'
 import { Sindicancia } from 'src/types'
 import { api, errorNotify, validate } from 'src/services'
 import { sindicanciaRequiredFields } from 'src/rules'
+import { sindicanciaRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${sindicanciaRoute}` },
+  { label: 'Criar', link: `/${sindicanciaRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -195,6 +198,7 @@ export default defineComponent({
         prazo_decorrido: 0,
         deletedAt: undefined
       } as Sindicancia,
+      breadcrumbs,
       andamentoCogerSindicancia,
       andamentoSindicancia,
       motivoAberturaSindicancia,
@@ -212,8 +216,8 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          const { ok } = await api.put(`sindicancias/${vars.register.id}`, vars.register)
-          if (ok) return root.$router.push('/sindicancias')
+          const { ok } = await api.put(`${sindicanciaRoute}/${vars.register.id}`, vars.register)
+          if (ok) return root.$router.push(`/${sindicanciaRoute}`)
         }
       }
     }
@@ -223,16 +227,16 @@ export default defineComponent({
       const { id } = vars.register
       if (!sobrestamento.termino_data) {
         vars.register.id_andamento = getSobrestamento('sindicancia')
-        const { ok } = await api.put(`sindicancias/${id}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${sindicanciaRoute}/${id}`, vars.register, { silent: true })
         if (ok) return
       }
       vars.register.id_andamento = getAndamento('sindicancia')
-      await api.put(`sindicancias/${id}`, vars.register, { silent: true })
+      await api.put(`${sindicanciaRoute}/${id}`, vars.register, { silent: true })
     }
 
     async function validateNavigation (tab: string) {
       if (validate(refs, getRequiredFields())) {
-        const { ok } = await api.put(`sindicancias/${String(vars.register.id)}`, vars.register, { silent: true })
+        const { ok } = await api.put(`${sindicanciaRoute}/${String(vars.register.id)}`, vars.register, { silent: true })
         if (ok) vars.tab = tab
       } else {
         vars.tab = 'main'
@@ -242,7 +246,7 @@ export default defineComponent({
     async function loadData () {
       const { id } = root.$route.params
       if (id) {
-        const { data, ok } = await api.get(`sindicancias/${id}`)
+        const { data, ok } = await api.get(`${sindicanciaRoute}/${id}`)
         if (ok) vars.register = data as Sindicancia
       }
     }

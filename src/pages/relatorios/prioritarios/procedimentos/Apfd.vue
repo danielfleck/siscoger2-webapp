@@ -11,6 +11,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Table from 'components/pages/Table.vue'
+import { apfdRoute } from 'src/routenames'
 
 import { api } from 'src/services'
 
@@ -33,8 +34,8 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const data = await api.post('apfd/search', {
-        complete: true
+      const data = await api.post(`${apfdRoute}/search`, {
+        prioridade: true
       }, { silent: true })
       vars.data = Object.freeze(data as unknown as readonly string[])
     }

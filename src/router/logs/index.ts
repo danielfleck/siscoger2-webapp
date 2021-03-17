@@ -1,6 +1,8 @@
+import { logRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/log',
+    path: `/${logRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

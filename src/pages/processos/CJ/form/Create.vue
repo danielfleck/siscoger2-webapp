@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/cj' },
-    { label: 'Criar', link: '/cj/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -108,6 +105,12 @@ import { Cj } from 'src/types'
 import { motivoConselho, situacaoServicoOuFora, decorrenciaConselho } from 'src/config'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { cjRequiredFields } from 'src/rules'
+import { cjRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${cjRoute}` },
+  { label: 'Criar', link: `/${cjRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -171,6 +174,7 @@ export default defineComponent({
         prioridade: false,
         deletedAt: undefined
       } as Cj,
+      breadcrumbs,
       cdopm: getUserCdopm(),
       motivoConselho,
       decorrenciaConselho,
@@ -179,7 +183,7 @@ export default defineComponent({
 
     async function create () {
       if (validate(refs, cjRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('cj', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(cjRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const cj = data as Cj
           vars.register.id = Number(cj.id)
@@ -191,7 +195,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, cjRequiredFields.toEdit)) {
-        const { ok } = await api.put(`cj/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${cjRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -205,9 +209,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`cj/${vars.register.id}`, vars.register)
+          await api.put(`${cjRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/cj')
+          return root.$router.push(`/${cjRoute}`)
         }
       }
     }

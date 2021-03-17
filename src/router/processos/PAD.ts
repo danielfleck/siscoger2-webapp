@@ -1,8 +1,9 @@
+import { padRoute } from 'src/routenames'
 import { padRules } from 'src/rules'
 
 export default [
   {
-    path: '/pad',
+    path: `/${padRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, ...padRules.toShow },
     children: [
@@ -17,7 +18,7 @@ export default [
     ]
   },
   {
-    path: '/pad',
+    path: `/${padRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

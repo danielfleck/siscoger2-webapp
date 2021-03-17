@@ -1,6 +1,8 @@
+import { buscaenvolvidoRoute } from 'src/routenames'
+
 export default [
   {
-    path: '/busca_envolvido',
+    path: `/${buscaenvolvidoRoute}`,
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true, roles: [], permissions: [] },
     children: [

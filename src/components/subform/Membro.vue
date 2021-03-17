@@ -61,14 +61,13 @@
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { postograd } from 'src/config/selects'
 import { validate } from 'src/libs/validator'
-import { deleteData, post, put } from 'src/libs/api'
+import { api, confirmMsg } from 'src/services'
 
 import InputRG from 'components/form/InputRG.vue'
 import InputText from 'components/form/InputText.vue'
 import PostoGrad from 'components/form/PostoGrad.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { getDense } from 'src/store/utils'
-import { confirmMsg } from 'src/libs/dialog'
 
 const fields = ['rg', 'nome', 'cargo']
 
@@ -180,9 +179,9 @@ export default defineComponent({
         return []
       },
       async loadData (): Promise<void> {
-        const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = this.getReplaced(response)
-        vars.register = this.getCurrent(response)
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = this.getReplaced(data as Register[])
+        vars.register = this.getCurrent(data as Register[])
         // console.log(vars.register)
       },
       async create () {
@@ -190,11 +189,12 @@ export default defineComponent({
         vars.situation = 'inserted'
 
         const data = { ...vars.register, ...props.data }
-        const response = await post(moduleName, data, { silent: true, complete: true, debug: true })
-        if (response.returntype === 'success') {
-          vars.register.id = response.data.id
+        const { ok, data: response } = await api.post(moduleName, data, { silent: true, debug: true })
+        if (ok) {
+          const responseData = response as Register
+          vars.register.id = responseData.id
           await this.loadData()
-          return response.data
+          return responseData
         }
         await this.loadData()
         return false
@@ -205,9 +205,9 @@ export default defineComponent({
           const { id } = vars.substituted
           vars.substituted.rg_substituto = substitute.rg
           const data = { ...vars.substituted, ...props.data }
-          const response = await put(`${moduleName}/${id}`, data, { silent: true, complete: true, debug: true })
-          await this.loadData()
-          return response.returntype === 'success' ?? false
+          const { ok } = await api.put(`${moduleName}/${id}`, data, { silent: true, debug: true })
+          if (ok) await this.loadData()
+          return ok
         }
         await this.loadData()
         return false
@@ -224,8 +224,8 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register.id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${register.id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       }
     }

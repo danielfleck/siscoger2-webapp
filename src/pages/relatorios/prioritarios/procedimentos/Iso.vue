@@ -11,6 +11,7 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 
 import Table from 'components/pages/Table.vue'
+import { isoRoute } from 'src/routenames'
 
 import { api } from 'src/services'
 
@@ -33,8 +34,8 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const data = await api.post('isos/search', {
-        complete: true
+      const data = await api.post(`${isoRoute}/search`, {
+        prioridade: true
       }, { silent: true })
       vars.data = Object.freeze(data as unknown as readonly string[])
     }

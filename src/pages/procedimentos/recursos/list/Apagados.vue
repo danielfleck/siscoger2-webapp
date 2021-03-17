@@ -29,6 +29,7 @@ import { getOpmByCode } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { Recurso, Columns } from 'src/types'
 import { recursoRules } from 'src/rules'
+import { recursoRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -48,24 +49,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('recursos/deleted')
+      const { data } = await api.get(`${recursoRoute}/deleted`)
       vars.data = Object.freeze(data as Recurso[])
     }
 
     function onEdit (row: Recurso) {
-      void root.$router.push(`/recursos/editar/${row.id}`)
+      void root.$router.push(`/${recursoRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Recurso) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`recursos/${row.id}/restore`, {})
+        const { ok } = await api.put(`${recursoRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Recurso) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`recursos/${row.id}/force`)
+        const { ok } = await api.delete(`${recursoRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }

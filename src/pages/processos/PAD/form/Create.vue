@@ -1,8 +1,5 @@
 <template>
-  <page :breadcrumbs="[
-    { label: 'Lista', link: '/pad' },
-    { label: 'Criar', link: '/pad/inserir' },
-    ]">
+  <page :breadcrumbs="breadcrumbs">
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
 
       <q-step :name="1" title="Dados principais" icon="settings" :done="step > 1">
@@ -98,6 +95,12 @@ import DivForm from 'src/components/form/DivForm.vue'
 import { Pad } from 'src/types'
 import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import { padRequiredFields } from 'src/rules'
+import { padRoute } from 'src/routenames'
+
+const breadcrumbs = [
+  { label: 'Lista', link: `/${padRoute}` },
+  { label: 'Criar', link: `/${padRoute}/inserir` }
+]
 
 export default defineComponent({
   name: 'Form',
@@ -147,12 +150,13 @@ export default defineComponent({
         prioridade: 0,
         deletedAt: undefined
       } as Pad,
+      breadcrumbs,
       cdopm: getUserCdopm()
     })
 
     async function create () {
       if (validate(refs, padRequiredFields.toCreate)) {
-        const { ok, data } = await api.post('pad', vars.register, { silent: true, debug: true })
+        const { ok, data } = await api.post(padRoute, vars.register, { silent: true, debug: true })
         if (ok) {
           const pad = data as Pad
           vars.register.id = Number(pad.id)
@@ -164,7 +168,7 @@ export default defineComponent({
 
     async function update (id: number) {
       if (validate(refs, padRequiredFields.toCreate)) {
-        const { ok } = await api.put(`pad/${id}`, vars.register, { silent: true, debug: true })
+        const { ok } = await api.put(`${padRoute}/${id}`, vars.register, { silent: true, debug: true })
 
         if (ok) {
           refs.stepper.next()
@@ -178,9 +182,9 @@ export default defineComponent({
 
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
-          await api.put(`pad/${vars.register.id}`, vars.register)
+          await api.put(`${padRoute}/${vars.register.id}`, vars.register)
           await removePendence(vars.incompleto)
-          return root.$router.push('/pad')
+          return root.$router.push(`/${padRoute}`)
         }
       }
     }

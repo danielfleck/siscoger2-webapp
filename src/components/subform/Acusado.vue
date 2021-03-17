@@ -68,8 +68,8 @@ import PostoGrad from 'components/form/PostoGrad.vue'
 import ResultadoAcusado from 'components/form/ResultadoAcusado.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { getDense } from 'src/store/utils'
-import { confirmMsg } from 'src/libs/dialog'
-import { deleteData, post, put } from 'src/libs/api'
+import { api, confirmMsg } from 'src/services'
+import { envolvidoRoute } from 'src/routenames'
 
 const fields = ['rg', 'nome', 'cargo']
 
@@ -89,7 +89,7 @@ const cleanRegister = {
   resultado: ''
 }
 
-const moduleName = 'envolvidos'
+const moduleName = envolvidoRoute
 export default defineComponent({
   name: 'Acusado',
   components: { InputText, PostoGrad, ResultadoAcusado, BtnStack },
@@ -147,15 +147,15 @@ export default defineComponent({
       },
       async loadData (): Promise<void> {
         // resetValidation(refs, fields)
-        const response = await post(`${moduleName}/search`, props.data, { silent: true })
-        vars.registers = response
+        const { data } = await api.post(`${moduleName}/search`, props.data, { silent: true })
+        vars.registers = data as Register[]
       },
       async create (): Promise<void> {
         if (validate(refs, fields)) {
           vars.situation = 'inserted'
           const data = { ...props.data, ...vars.register }
-          const response = await post(moduleName, data, { complete: true })
-          if (response.returntype === 'success') {
+          const { ok } = await api.post(moduleName, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -169,8 +169,8 @@ export default defineComponent({
         if (validate(refs, fields)) {
           vars.situation = 'inserted'
           const data = { ...props.data, ...register }
-          const response = await put(`${moduleName}/${register?.id}`, data, { complete: true })
-          if (response.returntype === 'success') {
+          const { ok } = await api.put(`${moduleName}/${register?.id}`, data)
+          if (ok) {
             vars.register = cleanRegister
             await this.loadData()
           }
@@ -179,8 +179,8 @@ export default defineComponent({
       remove (register: Register): void {
         const found = vars.registers.findIndex(f => f.id === register.id)
         root.$q.dialog(confirmMsg).onOk(async () => {
-          await deleteData(`${moduleName}/${register.id}`)
-          vars.registers.splice(found, 1)
+          const { ok } = await api.delete(`${moduleName}/${register.id}`)
+          if (ok) vars.registers.splice(found, 1)
         })
       }
     }

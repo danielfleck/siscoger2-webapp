@@ -28,6 +28,7 @@ import { api, acl, confirmMsg } from 'src/services'
 import { Pad, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 import { padRules } from 'src/rules'
+import { padRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'List',
@@ -49,17 +50,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('pad')
+      const { data } = await api.get(padRoute)
       vars.data = Object.freeze(data as Pad[])
     }
 
     function onEdit (row: Pad) {
-      void root.$router.push(`/pad/editar/${row.id}`)
+      void root.$router.push(`/${padRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Pad) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`pad/${row.id}`)
+        const { ok } = await api.delete(`${padRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

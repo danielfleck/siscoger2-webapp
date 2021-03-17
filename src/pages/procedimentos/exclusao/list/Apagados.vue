@@ -29,6 +29,7 @@ import { changeDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { ExclusaoJudicial, Columns } from 'src/types'
 import { exclusaojudicialRules } from 'src/rules'
+import { exclusaojudicialRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -50,17 +51,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('exclusoesjudicias/deleted')
+      const { data } = await api.get(`${exclusaojudicialRoute}/deleted`)
       vars.data = Object.freeze(data as ExclusaoJudicial[])
     }
 
     function onEdit (row: ExclusaoJudicial) {
-      void root.$router.push(`/exclusao/editar/${row.id}`)
+      void root.$router.push(`/${exclusaojudicialRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: ExclusaoJudicial) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`exclusoesjudicias/${row.id}/restore`, {})
+        const { ok } = await api.put(`${exclusaojudicialRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }

@@ -24,11 +24,11 @@
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import { changeDate } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api, acl } from 'src/services'
+import { api, acl, confirmMsg } from 'src/services'
 import { ExclusaoJudicial, Columns } from 'src/types'
 import { getOpmByCode } from 'src/utils'
 import { exclusaojudicialRules } from 'src/rules'
+import { exclusaojudicialRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'List',
@@ -50,17 +50,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('exclusoesjudicias')
+      const { data } = await api.get(exclusaojudicialRoute)
       vars.data = Object.freeze(data as ExclusaoJudicial[])
     }
 
     function onEdit (row: ExclusaoJudicial) {
-      void root.$router.push(`/exclusao/editar/${row.id}`)
+      void root.$router.push(`/${exclusaojudicialRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: ExclusaoJudicial) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`exclusoesjudicias/${row.id}`)
+        const { ok } = await api.delete(`${exclusaojudicialRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

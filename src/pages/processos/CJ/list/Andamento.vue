@@ -27,6 +27,7 @@ import { changeDate, getOpmByCode } from 'src/filters'
 import { api, acl, confirmMsg } from 'src/services'
 import { Cj, Columns } from 'src/types'
 import { cjRules } from 'src/rules'
+import { cjRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Andamento',
@@ -50,17 +51,17 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('cj')
+      const { data } = await api.get(cjRoute)
       vars.data = Object.freeze(data as Cj[])
     }
 
     function onEdit (row: Cj) {
-      void root.$router.push(`/cj/editar/${row.id}`)
+      void root.$router.push(`/${cjRoute}/editar/${row.id}`)
     }
 
     function onDelete (row: Cj) {
       root.$q.dialog(confirmMsg).onOk(async () => {
-        const { ok } = await api.delete(`cj/${row.id}`)
+        const { ok } = await api.delete(`${cjRoute}/${row.id}`)
         if (ok) void loadData()
       })
     }

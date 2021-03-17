@@ -29,6 +29,7 @@ import { getMotivoConselho } from 'src/filters'
 import { api, acl, confirm } from 'src/services'
 import { Cd, Columns } from 'src/types'
 import { cdRules } from 'src/rules'
+import { cdRoute } from 'src/routenames'
 
 export default defineComponent({
   name: 'Apagados',
@@ -47,24 +48,24 @@ export default defineComponent({
     })
 
     async function loadData () {
-      const { data } = await api.get('cd/deleted')
+      const { data } = await api.get(`${cdRoute}/deleted`)
       vars.data = Object.freeze(data as Cd[])
     }
 
     function onEdit (row: Cd) {
-      void root.$router.push(`/cd/editar/${row.id}`)
+      void root.$router.push(`/${cdRoute}/editar/${row.id}`)
     }
 
     function onRestore (row: Cd) {
       root.$q.dialog(confirm({ message: 'Tem certeza que deseja restaurar?' })).onOk(async () => {
-        const { ok } = await api.put(`cd/${row.id}/restore`, {})
+        const { ok } = await api.put(`${cdRoute}/${row.id}/restore`, {})
         if (ok) void loadData()
       })
     }
 
     function onDelete (row: Cd) {
       root.$q.dialog(confirm({ message: 'Tem certeza? essa ação é irreversível' })).onOk(async () => {
-        const { ok } = await api.delete(`cd/${row.id}/force`)
+        const { ok } = await api.delete(`${cdRoute}/${row.id}/force`)
         if (ok) void loadData()
       })
     }
