@@ -19,11 +19,11 @@ import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
 import Page from 'src/components/pages/Page.vue'
 import { changeDate } from 'src/filters'
-import { confirmMsg } from 'src/libs/dialog'
-import { api } from 'src/services'
+import { feriadoRoute } from 'src/routenames'
+import { api, confirmMsg } from 'src/services'
 import { Columns, Feriado } from 'src/types'
 
-const moduleName = 'feriados'
+const moduleName = feriadoRoute
 const FeriadoPage = defineComponent({
   name: 'Feriados',
   components: { Table, Page },

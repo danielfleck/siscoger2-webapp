@@ -1,6 +1,6 @@
 import { Loading } from 'quasar'
 import { transations } from 'src/config'
-import { errorNotify, successNotify } from '../../libs/notify'
+import { errorNotify, successNotify } from '..'
 
 declare interface NotifyOptions {
   msg?: string

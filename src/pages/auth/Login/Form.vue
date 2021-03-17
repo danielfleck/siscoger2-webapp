@@ -43,10 +43,7 @@
 <script lang="ts">
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { errorNotify, successNotify } from 'src/libs/notify'
-import { api, setStore } from 'src/services'
-
-import { validate } from 'src/libs/validator'
+import { api, errorNotify, successNotify, validate, setStore } from 'src/services'
 import InputText from 'src/components/form/InputText.vue'
 import InputPassword from 'src/components/form/InputPassword.vue'
 import Ldap from './Ldap.vue'

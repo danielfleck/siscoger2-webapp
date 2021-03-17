@@ -85,14 +85,12 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { ofendidoResultado, ofendidoSexo, ofendidoEscolaridade, ofendidoSituacao } from 'src/config/selects'
-import { validate } from 'src/libs/validator'
-
 import InputRG from 'components/form/InputRG.vue'
 import InputText from 'components/form/InputText.vue'
 import InputSelect from 'components/form/InputSelect.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { getDense } from 'src/store/utils'
-import { api, confirmMsg } from 'src/services'
+import { api, confirmMsg, validate } from 'src/services'
 import { ofendidoRoute } from 'src/routenames'
 
 const fields = ['rg', 'nome']

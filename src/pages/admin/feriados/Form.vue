@@ -26,18 +26,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { get, post, put } from 'src/libs/api'
-import { validate } from 'src/libs/validator'
+import { api, validate } from 'src/services'
 import Page from 'components/pages/Page.vue'
 import InputText from 'components/form/InputText.vue'
 import InputDate from 'components/form/InputDate.vue'
 import { Feriado } from 'src/types'
+import { feriadoRoute } from 'src/routenames'
 
 const fields: string[] = [
   'data',
   'feriado'
 ]
-const moduleName = 'feriados'
+const moduleName = feriadoRoute
 const FeriadoForm = defineComponent({
   name: 'Form',
   components: { Page, InputText, InputDate },
@@ -53,25 +53,26 @@ const FeriadoForm = defineComponent({
     const functions = {
       async create () {
         if (validate(refs, fields)) {
-          const response = await post(moduleName, vars.register, { complete: true, debug: true })
-          if (response.returntype === 'success') {
-            root.$router.push('/admin/feriados')
+          const { ok } = await api.post(moduleName, vars.register, { debug: true })
+          if (ok) {
+            root.$router.push(`/admin/${moduleName}`)
           }
         }
       },
       async update (id: number) {
         if (validate(refs, fields)) {
-          const response = await put(`${moduleName}/${id}`, vars.register, { complete: true, debug: true })
+          const { ok } = await api.put(`${moduleName}/${id}`, vars.register, { debug: true })
 
-          if (response.returntype === 'success') {
-            root.$router.push('/admin/feriados')
+          if (ok) {
+            root.$router.push(`/admin/${moduleName}`)
           }
         }
       },
       async loadData () {
         const { id } = root.$route.params
         if (id) {
-          vars.register = await get(`${moduleName}/${id}`)
+          const { data } = await api.get(`${moduleName}/${id}`)
+          vars.register = data as Feriado
         }
       }
     }

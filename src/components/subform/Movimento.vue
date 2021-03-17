@@ -50,9 +50,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
-import { validate } from 'src/libs/validator'
-
-import { api, confirmMsg } from 'src/services'
+import { api, confirmMsg, validate } from 'src/services'
 
 import InputText from 'components/form/InputText.vue'
 import InputDate from 'components/form/InputDate.vue'

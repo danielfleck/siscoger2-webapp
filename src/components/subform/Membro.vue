@@ -60,8 +60,7 @@
 /* eslint-disable camelcase */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { postograd } from 'src/config/selects'
-import { validate } from 'src/libs/validator'
-import { api, confirmMsg } from 'src/services'
+import { api, validate, confirmMsg } from 'src/services'
 
 import InputRG from 'components/form/InputRG.vue'
 import InputText from 'components/form/InputText.vue'

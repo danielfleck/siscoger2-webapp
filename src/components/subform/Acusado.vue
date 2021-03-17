@@ -61,14 +61,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { resultadoAcusado, postograd } from 'src/config/selects'
-import { validate } from 'src/libs/validator'
-
 import InputText from 'components/form/InputText.vue'
 import PostoGrad from 'components/form/PostoGrad.vue'
 import ResultadoAcusado from 'components/form/ResultadoAcusado.vue'
 import BtnStack from 'components/form/BtnStack.vue'
 import { getDense } from 'src/store/utils'
-import { api, confirmMsg } from 'src/services'
+import { api, confirmMsg, validate } from 'src/services'
 import { envolvidoRoute } from 'src/routenames'
 
 const fields = ['rg', 'nome', 'cargo']

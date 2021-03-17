@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api'
 import { LocalStorage } from 'quasar'
-import { successNotify } from 'src/libs/notify'
+import { successNotify } from 'src/services'
 
 export default defineComponent({
   name: 'HeaderMenu',

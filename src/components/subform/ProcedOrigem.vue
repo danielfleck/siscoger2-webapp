@@ -55,13 +55,11 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
 import { procedTipos } from 'src/config/selects'
-import { validate } from 'src/libs/validator'
-
 import ProcedTipos from 'components/form/ProcedTipos.vue'
 import InputText from 'components/form/InputText.vue'
 import InputAno from 'components/form/InputAno.vue'
 import BtnStack from 'components/form/BtnStack.vue'
-import { api, confirmMsg } from 'src/services'
+import { api, confirmMsg, validate } from 'src/services'
 import { getDense } from 'src/store/utils'
 
 const fields = ['origem_proc', 'origem_sjd_ref', 'origem_sjd_ref_ano']
