@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.71.2](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.71.1...v0.71.2) (2021-03-19)
+
+
+### Bug Fixes
+
+* solve imports of rules and remove pendence when proc was created ([ee753a1](https://github.com/EmersonBraun/siscoger-frontend-v1/commit/ee753a1c7026d35f0a39cf52c17d07c325148457))
+
 ### [0.71.1](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.71.0...v0.71.1) (2021-03-17)
 
 ## [0.71.0](https://github.com/EmersonBraun/siscoger-frontend-v1/compare/v0.70.0...v0.71.0) (2021-03-17)
