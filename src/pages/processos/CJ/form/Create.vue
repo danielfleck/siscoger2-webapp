@@ -210,8 +210,9 @@ export default defineComponent({
         if (validateSubforms && vars.register.id) {
           vars.register.completo = true
           await api.put(`${cjRoute}/${vars.register.id}`, vars.register)
-          await removePendence(vars.incompleto)
-          return root.$router.push(`/${cjRoute}`)
+          const removedPendence = await removePendence(vars.incompleto)
+          if (removedPendence) return root.$router.push(`/${cjRoute}`)
+          else errorNotify('Erro ao finalizar!')
         }
       }
     }
@@ -224,6 +225,7 @@ export default defineComponent({
         state: [vars.register]
       })
       incompleteProc(root, String(_id))
+      vars.incompleto = String(_id)
     }
 
     async function subforms () {

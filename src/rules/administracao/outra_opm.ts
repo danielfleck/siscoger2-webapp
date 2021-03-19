@@ -1,45 +1,45 @@
 import { RequiredFields, Rules } from '..'
 
-export const buscaoofendidoRules: Rules = {
+export const listaroutaopmRules: Rules = {
   toShow: {
     permissions: [
-      /* 'listar-buscaofendido', 'ver-buscaofendido' */
+      /* 'listar-listaroutaOpm', 'ver-listaroutaOpm' */
     ],
     roles: []
   },
   toCreate: {
     permissions: [
-      /* 'criar-buscaofendido' */
+      /* 'criar-listaroutaOpm' */
     ],
     roles: []
   },
   toEdit: {
     permissions: [
-      /* 'editar-buscaofendido' */
+      /* 'editar-listaroutaOpm' */
     ],
     roles: []
   },
   toDelete: {
     permissions: [
-      /* 'apagar-buscaofendido' */
+      /* 'apagar-listaroutaOpm' */
     ],
     roles: []
   },
   toRestore: {
     permissions: [
-      /* 'restaurar-buscaofendido' */
+      /* 'restaurar-listaroutaOpm' */
     ],
     roles: []
   },
   toForceDelete: {
     permissions: [
-      /* 'apagar-definitivo-buscaofendido' */
+      /* 'apagar-definitivo-listaroutaOpm' */
     ],
     roles: []
   }
 }
 
-export const buscaofendidoRequiredFields: RequiredFields = {
+export const listaroutaOpmRequiredFields: RequiredFields = {
   toCreate: [],
   toEdit: [],
   toFinalize: []

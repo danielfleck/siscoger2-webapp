@@ -48,6 +48,7 @@ import InputText from 'src/components/form/InputText.vue'
 import InputPassword from 'src/components/form/InputPassword.vue'
 import Ldap from './Ldap.vue'
 import { Auth, AuthResponse, User } from 'src/types'
+import { homeRoute, termosRoute, userRoute } from 'src/routenames'
 
 const fields = ['rg', 'password', 'username']
 
@@ -103,7 +104,7 @@ export default defineComponent({
           errorNotify(`tentativa ${vars.atempts} de ${vars.totalAtemps}`)
           vars.atempts++
         } else {
-          const { ok, data } = await api.post('users/block', { rg: vars.registry.rg }, { noRedirect: true, silent: true })
+          const { ok, data } = await api.post(`${userRoute}/block`, { rg: vars.registry.rg }, { noRedirect: true, silent: true })
           const user = data as User
           if (ok) errorNotify(`Bloqueado usuário ${user.name}, entre em contato com SJD`)
         }
@@ -113,10 +114,10 @@ export default defineComponent({
       },
       redirectAfterLogin (terms: boolean, name: string) {
         if (!terms) {
-          root.$router.push('/termos')
+          root.$router.push(`/${termosRoute}`)
           return
         }
-        root.$router.push('/')
+        root.$router.push(`/${homeRoute}`)
         successNotify(`Bem vindo ${name}!`)
       }
     }

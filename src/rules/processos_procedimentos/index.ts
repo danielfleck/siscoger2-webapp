@@ -8,6 +8,7 @@ export const processosProcedimentosGroupRules: Rule = {
 export * from './andamento'
 export * from './andamentocoger'
 export * from './arquivo'
+export * from './it'
 export * from './ligacao'
 export * from './movimento'
 export * from './pj'

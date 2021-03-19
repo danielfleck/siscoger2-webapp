@@ -23,8 +23,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api, acl } from 'src/services'
+import { api, confirmMsg, acl } from 'src/services'
 import { Apfd, Columns } from 'src/types'
 import { apfdRules } from 'src/rules'
 import { getOpmByCode } from 'src/filters'

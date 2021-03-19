@@ -23,8 +23,7 @@
 /* eslint-disable no-void */
 import { defineComponent, reactive, toRefs } from '@vue/composition-api'
 import Table from 'components/pages/Table.vue'
-import { confirmMsg } from 'src/libs/dialog'
-import { api, acl } from 'src/services'
+import { api, confirmMsg, acl } from 'src/services'
 import { Desercao, Columns } from 'src/types'
 import { getOpmByCode, changeDate } from 'src/filters'
 import { desercaoRules } from 'src/rules'

@@ -94,7 +94,7 @@ import OPM from 'components/form/OPM.vue'
 import Portaria from 'components/form/Portaria.vue'
 
 import { ProcOutros } from 'src/types'
-import { addPendence, api, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
+import { addPendence, api, errorNotify, getPendenceById, getUserCdopm, incompleteProc, removePendence, validate } from 'src/services'
 import InputAno from 'src/components/form/InputAno.vue'
 import { docOrigemProcOutros, motivoAberturaProcOutros } from 'src/config'
 import { procoutroRequiredFields } from 'src/rules'
@@ -206,8 +206,9 @@ export default defineComponent({
         if (vars.register.id) {
           vars.register.completo = true
           await api.put(`${procoutroRoute}/${vars.register.id}`, vars.register)
-          await removePendence(vars.incompleto)
-          return root.$router.push(`/${procoutroRoute}`)
+          const removedPendence = await removePendence(vars.incompleto)
+          if (removedPendence) return root.$router.push(`/${procoutroRoute}`)
+          else errorNotify('Erro ao finalizar!')
         }
       }
     }
@@ -220,6 +221,7 @@ export default defineComponent({
         state: [vars.register]
       })
       incompleteProc(root, String(_id))
+      vars.incompleto = String(_id)
     }
 
     // async function subforms () {

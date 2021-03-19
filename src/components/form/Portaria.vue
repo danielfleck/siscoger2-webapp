@@ -49,10 +49,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable camelcase */
 import { defineComponent, computed, reactive, toRefs, watch } from '@vue/composition-api'
 import { toLowercase, ucFirst } from 'src/filters'
 import { getDense } from 'src/store/utils'
-import { post } from 'src/libs/api'
+import { api } from 'src/services'
+
+interface Portaria {
+  proc?: string;
+  sjd_ref: string;
+  sjd_ref_ano: string;
+}
 
 export default defineComponent({
   name: 'InputPortaria',
@@ -119,11 +126,12 @@ export default defineComponent({
       async checkDuplicated (value: string | number) {
         if (props.proc && props.cdopm && String(value).length > 3) {
           const proc = toLowercase(props.proc, true)
-          const response = await post(`${String(proc)}/portarias`, {
+          const { data } = await api.post(`${String(proc)}/portarias`, {
             cdopm: props.cdopm,
             portaria_numero: value
           }, { silent: true, load: false })
 
+          const response = data as Portaria
           if (response?.proc) {
             refs.dialog.show()
             vars.msg = {

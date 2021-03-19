@@ -1,6 +1,6 @@
 import { Rule } from '../..'
 
-export const apresentacaoEmJuizoGroup: Rule = {
+export const logProcessosProcedimentosGroupRules: Rule = {
   permissions: [],
   roles: []
 }

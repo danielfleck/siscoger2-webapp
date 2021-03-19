@@ -8,5 +8,6 @@ export const buscasGroupRules: Rule = {
 export * from './coger'
 export * from './envolvido'
 export * from './nominal'
+export * from './ofendido'
 export * from './pm'
 export * from './tramitacao'

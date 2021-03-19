@@ -52,10 +52,12 @@ export async function addPendence ({ pendencias, proc, register, state, cdopm }:
 export async function removePendence (id: string, debug = false) {
   const { ok } = await api.delete(`${pendenciasRoute}/${id}`, { silent: true, debug })
   if (ok) LocalStorage.remove('incompleto')
+  return ok
 }
 
 export function incompleteProc (root: any, incompleteId: string) {
   const actualRoute = root.$route.fullPath
   root.$router.push({ query: { incompleto: incompleteId } })
-  LocalStorage.set('incompleto', `${String(actualRoute)}?incompleto=${incompleteId}`)
+  const urlIncomplete = `${String(actualRoute)}?incompleto=${incompleteId}`
+  LocalStorage.set('incompleto', urlIncomplete)
 }

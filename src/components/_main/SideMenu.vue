@@ -27,7 +27,7 @@
     <menu-item title="Recursos" :link="`/${recursoRoute}`" v-if="acl(recursoRules.toShow)" class="bg-grey-10"/>
     <sub-menu icon="fa fa-balance-scale" group="menu" :content-inset-level="contentInsetLevel" label="Apresentação em Juízo" v-if="acl(apresentacaoEmJuizoGroup)" class="bg-grey-10">
       <menu-item title="Emails Agendados" :link="`/${emailagendadoRoute}`" v-if="acl(emailagendadoRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Notas COGER" :link="`/${notacogerRoute}`" v-if="acl(notacogeRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Notas COGER" :link="`/${notacogerRoute}`" v-if="acl(notacogerRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Apresentações" :link="`/${apresentacaoRoute}`" v-if="acl(apresentacaoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Locais" :link="`/${localapresentacaoRoute}`" v-if="acl(localapresentacaoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Dados Unidade" :link="`/${dadosunidadeRoute}`" v-if="acl(dadosunidadeRules.toShow)" class="bg-grey-9"/>
@@ -51,7 +51,7 @@
     <sub-menu icon="fa fa-search" group="menu" :content-inset-level="contentInsetLevel" label="Busca" v-if="acl(buscasGroupRules)" class="bg-grey-10">
       <menu-item title="PM" :link="`/${buscapmRoute}`" v-if="acl(buscapmRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Nominal" :link="`/${buscanominalRoute}`" v-if="acl(buscanominalRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Ofendido" :link="`/${buscaofendidoRoute}`" v-if="acl(buscaofendidoRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Ofendido" :link="`/${buscaofendidoRoute}`" v-if="acl(buscaoofendidoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Envolvido" :link="`/${buscaenvolvidoRoute}`" v-if="acl(buscaenvolvidoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Tramitação" :link="`/${buscatramitacaoRoute}`" v-if="acl(buscatramitacaoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Tramitação COGER" :link="`/${buscacogerRoute}`" v-if="acl(buscacogerRules.toShow)" class="bg-grey-9"/>
@@ -66,14 +66,14 @@
       <menu-item title="Elogios" :link="`/${policialelogioRoute}`" v-if="acl(policialelogioRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Excluídos" :link="`/${policialexcluidoRoute}`" v-if="acl(policialexcluidoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Punidos" :link="`/${policialpunidoRoute}`" v-if="acl(policialpunidoRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Reintegrados" :link="`/${policialreintegradoRoute}`" v-if="acl(policialreintegradoRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Denunciados" :link="`/${policialdenunciadoRoute}`" v-if="acl(policialdenunciadoRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Presos PM/BM" :link="`/${policialpresoRoute}`" v-if="acl(policialpresoRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Reintegrados" :link="`/${policialreintegradoRoute}`" v-if="acl(reintegradoRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Denunciados" :link="`/${policialdenunciadoRoute}`" v-if="acl(denunciacivilRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Presos PM/BM" :link="`/${policialpresoRoute}`" v-if="acl(presoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Presos Outros" :link="`/${presosoutrosRoute}`" v-if="acl(presosoutrosRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Procedimentos" :link="`/${policialprocedimentoRoute}`" v-if="acl(policialprocedimentoRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Comportamento" :link="`/${policialcomportamentoRoute}`" v-if="acl(policialcomportamentoRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Comportamento" :link="`/${policialcomportamentoRoute}`" v-if="acl(comportamentoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Respondendo" :link="`/${policialrespondendoRoute}`" v-if="acl(policialrespondendoRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Restrições" :link="`/${policialrestricaoRoute}`" v-if="acl(policialrestricaoRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Restrições" :link="`/${policialrestricaoRoute}`" v-if="acl(restricaoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Suspensos" :link="`/${policialsuspensoRoute}`" v-if="acl(policialsuspensoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Obitos e Lesões" :link="`/${falecimentoRoute}`" v-if="acl(falecimentoRules.toShow)" class="bg-grey-9"/>
     </sub-menu>
@@ -92,13 +92,13 @@
       <menu-item title="Papéis" :link="`/admin/${roleRoute}`" v-if="acl(roleRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Permissões" :link="`/admin/${permissionRoute}`" v-if="acl(permissionRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Controle SJD" :link="`/admin/${sjdRoute}`" v-if="acl(sjdRules.toShow)" class="bg-grey-9"/>
-      <menu-item title="Termos de compromisso" :link="`/admin/${termoRoute}`" v-if="acl(termoRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Termos de compromisso" :link="`/admin/${termosRoute}`" v-if="acl(termoRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Unidades" :link="`/admin/${dadosunidadeRoute}`" v-if="acl(dadosunidadeRules.toShow)" class="bg-grey-9"/>
       <menu-item title="Feriados" :link="`/admin/${feriadoRoute}`" v-if="acl(feriadoRules.toShow)" class="bg-grey-9"/>
     </sub-menu>
     <menu-item title="História SISCOGER" icon="fa fa-quote-left" :link="`/${historiaRoute}`" v-if="acl(historiaRules.toShow)" class="bg-grey-10"/>
     <sub-menu icon="fa fa-sync" group="menu" :content-inset-level="contentInsetLevel" label="Outras Unidades" class="bg-grey-10">
-      <menu-item title="Listar outra OPM" :link="`/admin/${listaroutraOpm}`" v-if="acl(listaroutaRules.toShow)" class="bg-grey-9"/>
+      <menu-item title="Listar outra OPM" :link="`/admin/${listaroutraOpmRoute}`" class="bg-grey-9"/>
       <menu-item title="Pendências Gerais" :link="`/admin/${pendenciasRoute}`" v-if="acl(pendenciaRules.toShow)" class="bg-grey-9"/>
     </sub-menu>
     <sub-menu icon="fa fa-bug" group="menu" :content-inset-level="contentInsetLevel" label="LOGS" v-if="acl(logGroupRules)" class="bg-grey-10">
@@ -122,8 +122,8 @@
       <sub-menu icon="fa fa-bug" group="submenu" :content-inset-level="contentInsetLevel" label="Apresentações em juizo" v-if="acl(logApresentacaoGroupRules)" class="bg-grey-9">
         <menu-item title="Notas COGER" :link="`/log/${notacogerRoute}`" v-if="acl(notacogerRules.toShow)" class="bg-grey-8"/>
         <menu-item title="Apresentação" :link="`/log/${apresentacaoRoute}`" v-if="acl(apresentacaoRules.toShow)" class="bg-grey-8"/>
-        <menu-item title="Locais" :link="`/log/${locaisRoute}`" v-if="acl(locaisRules.toShow)" class="bg-grey-8"/>
-        <menu-item title="Email" :link="`/log/${emailRoute}`" v-if="acl(emailRules.toShow)" class="bg-grey-8"/>
+        <menu-item title="Locais" :link="`/log/${locaisRoute}`" v-if="acl(localapresentacaoRules.toShow)" class="bg-grey-8"/>
+        <menu-item title="Email" :link="`/log/${emailRoute}`" v-if="acl(emailagendadoRules.toShow)" class="bg-grey-8"/>
       </sub-menu>
       <sub-menu icon="fa fa-bug" group="submenu" :content-inset-level="contentInsetLevel" label="Administração" v-if="acl(logAdministracaoGroupRules)" class="bg-grey-9">
         <menu-item title="Acessos" :link="`/log/${acessoRoute}`" v-if="acl(acessoRules.toShow)" class="bg-grey-8"/>
@@ -138,10 +138,10 @@
         <sub-menu icon="fa fa-bug" group="subsubmenu" :content-inset-level="contentInsetLevel" label="FDI" v-if="acl(logFDIGroupRules)" class="bg-grey-8">
           <menu-item title="Acesso FDI" :link="`/log/${fdiRoute}`" v-if="acl(fdiRules.toShow)" class="bg-grey-7"/>
           <menu-item title="Protocolo" :link="`/log/${policialeprotocoloRoute}`" v-if="acl(policialeprotocoloRules.toShow)" class="bg-grey-7"/>
-          <menu-item title="Comportamento PM" :link="`/log/${policialcomportamentoRoute}`" v-if="acl(policialcomportamentoRules.toShow)" class="bg-grey-7"/>
+          <menu-item title="Comportamento PM" :link="`/log/${policialcomportamentoRoute}`" v-if="acl(comportamentoRules.toShow)" class="bg-grey-7"/>
           <menu-item title="Denuncia Civil" :link="`/log/${denunciacivilRoute}`" v-if="acl(denunciacivilRules.toShow)" class="bg-grey-7"/>
           <menu-item title="Elogio" :link="`/log/${policialelogioRoute}`" v-if="acl(policialelogioRules.toShow)" class="bg-grey-7"/>
-          <menu-item title="Restrição" :link="`/log/${policialrestricaoRoute}`" v-if="acl(policialrestricaoRules.toShow)" class="bg-grey-7"/>
+          <menu-item title="Restrição" :link="`/log/${policialrestricaoRoute}`" v-if="acl(restricaoRules.toShow)" class="bg-grey-7"/>
           <menu-item title="Punição" :link="`/log/${policialpunidoRoute}`" v-if="acl(policialpunidoRules.toShow)" class="bg-grey-7"/>
           <menu-item title="Tramitação OPM" :link="`/log/${tramitacaoopmRoute}`" v-if="acl(tramitacaoopmRules.toShow)" class="bg-grey-7"/>
           <menu-item title="Tramitação COGER" :link="`/log/${tramitacaocogerRoute}`" v-if="acl(tramitacaocogerRules.toShow)" class="bg-grey-7"/>
@@ -163,8 +163,8 @@
 </template>
 
 <script lang="ts">
-import MenuItem from 'src/components/main/MenuItem.vue'
-import SubMenu from 'src/components/main/SubMenu.vue'
+import MenuItem from 'src/components/_main/MenuItem.vue'
+import SubMenu from 'src/components/_main/SubMenu.vue'
 import { computed, defineComponent, ref } from '@vue/composition-api'
 import { getMenu } from 'src/store/utils'
 import { acl as ACL } from 'src/services'

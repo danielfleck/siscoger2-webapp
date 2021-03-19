@@ -8,6 +8,7 @@ export const policiaisGroupRules: Rule = {
 export * from './comportamento'
 export * from './decorrenciaconselho'
 export * from './denunciacivil'
+export * from './elogio'
 export * from './envolvido'
 export * from './eprotocolo'
 export * from './excluido'
