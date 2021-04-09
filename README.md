@@ -2,25 +2,32 @@
 
 system for disciplinary administrative control
 
+## Requirements
+
+- node 14.16.1
+- yarn 1.22.10
+
 ## Install the dependencies
 ```bash
 yarn
 ```
+#### PS: Don't forget to duplicate _.env.example_ to _.env_ and edit it
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+#
+
+## Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
-quasar dev
+yarn start
 ```
 
-### Lint the files
+## Lint the files
 ```bash
-yarn run lint
+yarn lint
 ```
 
-### Build the app for production
+## Build the app for production
 ```bash
-quasar build
+yarn build
 ```
-
-### Customize the configuration
+## Customize the configuration
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
